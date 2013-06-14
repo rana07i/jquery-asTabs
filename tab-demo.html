@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>tabs</title>
+		<link rel="stylesheet" type="text/css" href="css/tab-css.css" />
+		<link rel="stylesheet" type="text/css" href="css/tab-skin1.css">
+	</head>
+	<body>
+
+		<div class="wrapper">
+			<h2>default(click)</h2>
+			<p>This is a demo description.</p>
+			<div class="demo1">
+				<ul class="tabs">
+					<li>tab1</li>
+					<li>tab2</li>
+					<li>tab3</li>
+				</ul>
+				<div class="panes">
+					<div>panes</div>
+					<div>panle2</div>
+					<div>panle3</div>
+				</div>
+			</div>
+
+			<h2>mouseover</h2>
+			<p>This is a demo description.</p>
+			<div class="demo2">
+				<ul class="tabs">
+					<li>tab1</li>
+					<li>tab2</li>
+					<li>tab3</li>
+				</ul>
+				<div class="panes">
+					<div>panes</div>
+					<div>panle2</div>
+					<div>panle3</div>
+				</div>
+			</div>
+
+			<h2>initialIndex</h2>
+			<p>This is a demo description.</p>
+			<div class="demo3">
+				<ul class="tabs">
+					<li>tab1</li>
+					<li>tab2</li>
+					<li>tab3</li>
+				</ul>
+				<div class="panes">
+					<div>panes</div>
+					<div>panle2</div>
+					<div>panle3</div>
+				</div>
+			</div>
+
+			<h2>skin</h2>
+			<p>This is a demo description.</p>
+			<div class="demo4">
+				<ul class="tabs">
+					<li>tab1</li>
+					<li>tab2</li>
+					<li>tab3</li>
+				</ul>
+				<div class="panes">
+					<div>panes</div>
+					<div>panle2</div>
+					<div>panle3</div>
+				</div>
+			</div>
+
+			<h2>test</h2>
+			<p>This is a demo description.</p>
+			<div "demo-test">
+				<button id="testGetTabs">Test Get Tabs</button>
+				<button id="testGetPanes">Test Get Panes</button>
+				<button id="testGetCurrentPane">Test Get Current Pane</button>
+				<button id="testGetCurrentTab">Test Current Tab</button>
+				<button id="testGetIndex">Test Get Index</button>
+				<button id="testNext">Test Next</button>
+				<button id="testPrev">Test Prev</button>
+				<button id="testDestroy">Test Destroy</button>
+			</div>
+		</div>
+
+		
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="js/tab-js.js"></script>
+		<script>
+			$(function(){
+				$('.demo1').tabs();
+				$('.demo2').tabs({
+					event:'mouseover'
+				});
+				$('.demo3').tabs({
+					initialIndex: 2
+				});
+				$('.demo4').tabs({
+					skin: 'skin-1'
+				});
+
+
+				$('#testGetTabs').click(function(){
+					console.info($('.demo4').tabs('getTabs'));
+				});
+
+				$('#testGetPanes').click(function(){
+					console.info($('.demo4').tabs('getPanes'));
+				});
+
+				$('#testGetIndex').click(function(){
+					console.info($('.demo4').tabs('getIndex'));
+				});
+
+				$('#testGetCurrentPane').click(function(){
+					console.info($('.demo4').tabs('getCurrentPane'));
+				});
+
+				$('#testGetCurrentTab').click(function(){
+					console.info($('.demo4').tabs('getCurrentTab'));
+				});
+
+				$('#testNext').click(function(){
+					console.info($('.demo4').tabs('next'));
+				});
+
+				$('#testPrev').click(function(){
+					console.info($('.demo4').tabs('prev'));
+				});
+
+				$('#testDestroy').click(function(){
+					console.info($('.demo4').tabs('destroy'));
+				});
+
+			});	
+		</script>
+	</body>
+</html>
