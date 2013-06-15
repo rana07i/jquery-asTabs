@@ -1,13 +1,7 @@
-/*
- * jquery-tabs
- * https://github.com/amazingSurge/jquery-tabs
- *
- * Copyright (c) 2013 Wowhoo
- * Licensed under the MIT license.
- */
-
-;
-(function(window, document, $, undefined) {
+/*! jQuery Tabs - v0.1.0 - 2013-06-15
+* https://github.com/amazingSurge/jquery-tabs
+* Copyright (c) 2013 Wowhoo; Licensed MIT */
+;(function(window, document, $, undefined) {
     "use strict";
 
     // Constructor
@@ -34,8 +28,8 @@
         this.classes.activeTab = this.options.namespace + '-active';
         this.classes.activePanes = this.options.namespace + '-active';
 
-        this.$tabs = this.$element.find(this.options.tabSelector);
-        this.$panes = this.$element.find(this.options.paneSelector);
+        this.$tabs = this.$element.find( this.options.tabSelector );
+        this.$panes = this.$element.find( this.options.paneSelector );
         this.$element.addClass(this.options.skin);
 
         var self = this;
@@ -53,9 +47,9 @@
                     self.active(index);
                 });
             },
-            another: function() {
-
-
+            another: function(){
+            
+            
             }
 
         });
@@ -80,14 +74,14 @@
 
         // pauseOnHover: 0, 
 
-        event: 'click'
+        event : 'click'
     };
 
     Tabs.prototype = {
         constructor: Tabs,
         // This is a public function that users can call
         // Prototype methods are shared across all elements
-        active: function(index) {
+        active: function(index){
             // this.$panes.eq(index).css('display','block').siblings().css('display','none');
             this.current = index;
 
@@ -96,11 +90,11 @@
             this.$panes.eq(index).addClass(this.classes.activePanes).siblings().removeClass(this.classes.activePanes);
         },
 
-        getTabs: function() {
+        getTabs: function(){
             return this.$tabs;
         },
 
-        getPanes: function() {
+        getPanes: function(){
             return this.$panes;
         },
 
@@ -109,19 +103,20 @@
         },
 
         getCurrentTab: function() {
-            return this.$tabs.eq(this.current);
+           return this.$tabs.eq(this.current);
         },
 
         getIndex: function() {
             return this.current;
-        },
+        }, 
 
         next: function() {
             var len = this.$tabs.length,
                 current = this.current;
-            if (current < len - 1) {
-                current++;
-            } else {
+            if (current < len-1) {
+                current++; 
+            } 
+            else {
                 current = 0;
             }
 
@@ -134,9 +129,10 @@
         prev: function() {
             var len = this.$tabs.length,
                 current = this.current;
-            if (current === 0) {
-                current = Math.abs(1 - len);
-            } else {
+            if (current === 0 ) {
+                current = Math.abs( 1 - len );
+            } 
+            else {
                 current = current - 1;
             }
 
@@ -158,7 +154,7 @@
             var method = options;
             var method_arguments = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : undefined;
 
-            if (/^(getTabs|getPanes|getCurrentPane|getCurrentTab|getIndex)$/.test(method)) {
+            if(/^(getTabs|getPanes|getCurrentPane|getCurrentTab|getIndex)$/.test(method)){
                 var api = this.first().data('tabs');
                 if (api && typeof api[method] === 'function') {
                     return api[method].apply(api, method_arguments);
