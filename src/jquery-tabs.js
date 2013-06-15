@@ -55,7 +55,7 @@
             another: function(){
             
             
-            },
+            }
 
         });
 
@@ -134,7 +134,7 @@
         prev: function() {
             var len = this.$tabs.length,
                 current = this.current;
-            if (current == 0 ) {
+            if (current === 0 ) {
                 current = Math.abs( 1 - len );
             } 
             else {
