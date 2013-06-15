@@ -1,6 +1,6 @@
 # jQuery Tabs
 
-The best jQuery plugin ever.
+The powerful jQuery plugin that creates a tab.
 
 ## Getting Started
 Download the [production version][min] or the [development version][max].
