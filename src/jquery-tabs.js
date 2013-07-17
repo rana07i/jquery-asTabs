@@ -13,7 +13,8 @@
     var css3Transition = true;
     // Constructor
     var Tabs = $.Tabs = function(element, options) {
-        
+        var self = this;
+
         this.element = element;
         this.$element = $(element);
 
@@ -37,13 +38,23 @@
             show: this.namespace + '-' + this.options.effect + '-show'
         };
 
-
         this.$tabs = this.$element.find(this.options.tabSelector);
         this.$panes = this.$element.find(this.options.paneSelector);
+        this.$panesBox = this.$element.children('div');
+        this.$loading = $('<span class="' + this.namespace + '-loading"></span>');
 
         this.$element.addClass(this.options.skin).addClass(this.classes.effect);
 
-        var self = this;
+        
+        if (this.options.ajax === true) {
+            this.ajax = [];
+            $.each(this.$tabs, function(i,v) {
+                var obj = {};
+                obj.href = $(v).data('href');
+                self.ajax.push(obj);
+            });
+        }
+
         $.extend(self, {
             init: function() {
                 self.current = this.options.initialIndex;
@@ -51,15 +62,12 @@
 
                 // Bind logic
                 self.$tabs.on(this.options.event, function(e, data) {
-                    e.stopPropagation();
-
                     var index = $(e.target).index();
-
                     self.active(index);
+                    return false;
                 });
             },
             another: function() {
-
 
             }
         });
@@ -77,11 +85,11 @@
 
         skin: null,
         initialIndex: 0,
-
-        //effect: 'default';//fade slide ajax
         
         effect: 'fade',
-        ajax: true,
+
+        ajax: false,
+        cached: false,
 
         event: 'click'
     };
@@ -93,6 +101,10 @@
         active: function(index) {
             var self = this;
 
+            if (this.options.ajax === true) {
+                this.ajaxLoad(index);
+            }
+
             // this.$panes.eq(index).css('display','block').siblings().css('display','none');
             this.current = index;
             this.$tabs.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
@@ -103,6 +115,32 @@
             setTimeout(function() {
                 self.$panes.eq(index).addClass(self.classes.show);
             }, 0);
+        },
+
+        ajaxLoad: function(index) {
+            var self = this, dtd;
+            if (this.options.cached === true && this.ajax[index].cached === true) {
+                return;
+            } else {
+                this.showLoading();
+                dtd = $.ajax({url: this.ajax[index].href});
+                dtd.done(function(data) {
+                    self.ajax[index].cached = true;
+                    self.hideLoading();
+                    self.$panes.eq(index).html(data);
+                });
+                dtd.fail(function() {
+                    self.hideLoading();
+                    self.$panes.eq(index).html('failed');
+                });
+            }
+        },
+
+        showLoading: function() {
+            this.$loading.appendTo(this.$panesBox);
+        },
+        hideLoading: function() {
+            this.$loading.remove();
         },
 
         getTabs: function() {

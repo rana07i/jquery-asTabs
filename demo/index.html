@@ -10,7 +10,7 @@
 		<div class="wrapper">
 			<h2>default(click)</h2>
 			<p>This is a demo description.</p>
-			<div class="demo1">
+			<div class="demo0">
 				<ul class="tabs">
 					<li>tab1</li>
 					<li>tab2</li>
@@ -22,6 +22,23 @@
 					<div>panlsafsafsafasdfdsfsdfsdfdsfdssssssssssssssfdfdfdfdfdddddddddddddddddddddddddddddddddddddddddddddddddde3</div>
 				</div>
 			</div>
+
+			<h2>ajax content</h2>
+			<p>This is a demo description.</p>
+			<div class="demo1">
+				<ul class="tabs">
+					<li data-href="ajax1.txt">tab1</li>
+					<li data-href="ajax2.txt">tab2</li>
+					<li data-href="ajax3.txt">tab3</li>
+				</ul>
+				<div class="panes">
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+
+
 
 			<h2>mouseover</h2>
 			<p>This is a demo description.</p>
@@ -87,7 +104,8 @@
 		<script type="text/javascript" src="../src/jquery-tabs.js"></script>
 		<script>
 			$(function(){
-				$('.demo1').tabs();
+				$('.demo0').tabs();
+				$('.demo1').tabs({ajax: true, cached: true});
 				$('.demo2').tabs({
 					event:'mouseover'
 				});
