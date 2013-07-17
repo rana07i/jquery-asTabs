@@ -10,9 +10,10 @@
 (function(window, document, $, undefined) {
     "use strict";
 
+    var css3Transition = true;
     // Constructor
     var Tabs = $.Tabs = function(element, options) {
-        // Attach element to the 'this' keyword
+        
         this.element = element;
         this.$element = $(element);
 
@@ -24,19 +25,23 @@
                 meta_data[k.toLowerCase().replace(re, '')] = v;
             }
         });
-        this.options = $.extend(true, {}, Tabs.defaults, options, meta_data);
 
-        // Namespacing
-        var namespace = this.options.namespace;
+        this.options = $.extend(true, {}, Tabs.defaults, options, meta_data);
+        this.namespace = this.options.namespace;
 
         // Class
-        this.classes = {};
-        this.classes.activeTab = this.options.namespace + '-active';
-        this.classes.activePanes = this.options.namespace + '-active';
+        this.classes = {
+            activeTab: this.namespace + '-tabs_active',
+            activePanes: this.namespace + '-panes_active',
+            effect: this.namespace + '-' + this.options.effect,
+            show: this.namespace + '-' + this.options.effect + '-show'
+        };
+
 
         this.$tabs = this.$element.find(this.options.tabSelector);
         this.$panes = this.$element.find(this.options.paneSelector);
-        this.$element.addClass(this.options.skin);
+
+        this.$element.addClass(this.options.skin).addClass(this.classes.effect);
 
         var self = this;
         $.extend(self, {
@@ -57,7 +62,6 @@
 
 
             }
-
         });
 
         self.init();
@@ -67,18 +71,17 @@
     // Default options for the plugin as a simple object
     Tabs.defaults = {
         namespace: 'tabs',
+
         tabSelector: '.tabs > li',
         paneSelector: '.panes > div',
+
         skin: null,
         initialIndex: 0,
 
-        // autoplay: 0,
-        // speed : 300,
-        // time : 400,
-
         //effect: 'default';//fade slide ajax
-
-        // pauseOnHover: 0, 
+        
+        effect: 'fade',
+        ajax: true,
 
         event: 'click'
     };
@@ -86,14 +89,20 @@
     Tabs.prototype = {
         constructor: Tabs,
         // This is a public function that users can call
-        // Prototype methods are shared across all elements
+        // Prototype methods are shared across all instances
         active: function(index) {
+            var self = this;
+
             // this.$panes.eq(index).css('display','block').siblings().css('display','none');
             this.current = index;
-
             this.$tabs.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
-
             this.$panes.eq(index).addClass(this.classes.activePanes).siblings().removeClass(this.classes.activePanes);
+
+            this.$panes.removeClass(this.classes.show);
+
+            setTimeout(function() {
+                self.$panes.eq(index).addClass(self.classes.show);
+            }, 0);
         },
 
         getTabs: function() {
@@ -128,7 +137,6 @@
             // (current < len-1) ? current++ : current = 0;
 
             this.active(current);
-
         },
 
         prev: function() {

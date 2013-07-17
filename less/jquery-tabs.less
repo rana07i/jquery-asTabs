@@ -48,7 +48,7 @@ div[class^="demo"] {
 	cursor: pointer;
 }
 
-.tabs li.tabs-active {
+.tabs .tabs-tabs_active {
 	background-color: #fff;
 	border-bottom-color: transparent;
 }
@@ -63,7 +63,23 @@ div[class^="demo"] {
 
 .panes > div {
 	display: none;
+	word-wrap: break-word;
 }
-.panes .tabs-active {
+.panes .tabs-panes_active {
 	display: block;
+}
+
+
+// effect
+.tabs-fade .panes > div {
+
+	opacity: 0;
+
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	transition: all 0.3s;
+}
+
+.tabs-fade .panes .tabs-fade-show {
+	opacity: 1;
 }
