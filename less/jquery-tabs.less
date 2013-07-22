@@ -48,12 +48,12 @@ div[class^="demo"] {
 	cursor: pointer;
 }
 
-.tabs .tabs-tabs_active {
+.tabs .tabs_active {
 	background-color: #fff;
 	border-bottom-color: transparent;
 }
 
-.panes {
+.panes0,.panes1,.panes2,.panes3,.panes4 {
 	padding: 15px;
 	border-right: 1px solid #252525;
 	border-bottom: 1px solid #252525;
@@ -61,11 +61,11 @@ div[class^="demo"] {
 	border-radius: 0 0 6px 6px;
 }
 
-.panes > div {
+.tabs-panes > div {
 	display: none;
 	word-wrap: break-word;
 }
-.panes .tabs-panes_active {
+.tabs-panes .tabs_active {
 	display: block;
 }
 
@@ -87,7 +87,7 @@ div[class^="demo"] {
 
 
 // effect
-.tabs-fade .panes > div {
+.tabs-fade .tabs-panes > div {
 
 	opacity: 0;
 
@@ -96,6 +96,6 @@ div[class^="demo"] {
 	transition: all 0.3s;
 }
 
-.tabs-fade .panes .tabs-fade-show {
+.tabs-fade .tabs-panes .tabs-fade-show {
 	opacity: 1;
 }

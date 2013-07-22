@@ -10,13 +10,13 @@
 		<div class="wrapper">
 			<h2>default(click)</h2>
 			<p>This is a demo description.</p>
-			<div class="demo0">
-				<ul class="tabs">
+			<div class="">
+				<ul class="demo0 tabs">
 					<li>tab1</li>
 					<li>tab2</li>
 					<li>tab3</li>
 				</ul>
-				<div class="panes">
+				<div class="panes0">
 					<div>panesasfsadfasdffffffffffffffffffffffffffffffffdsafdasdfsadfsadfsadfsadfsafsadfsadfsafdfsafasdfasdfsadfasfasdfasdfasdfasfdasfasfasfasfasdfsadfsdfasdfsafasfasdf</div>
 					<div>panlasfdasfasdfsafsafsafasdfe2</div>
 					<div>panlsafsafsafasdfdsfsdfsdfdsfdssssssssssssssfdfdfdfdfdddddddddddddddddddddddddddddddddddddddddddddddddde3</div>
@@ -25,13 +25,13 @@
 
 			<h2>ajax content</h2>
 			<p>This is a demo description.</p>
-			<div class="demo1">
-				<ul class="tabs">
+			<div class="">
+				<ul class="demo1 tabs">
 					<li data-href="ajax1.txt">tab1</li>
 					<li data-href="ajax2.txt">tab2</li>
 					<li data-href="ajax3.txt">tab3</li>
 				</ul>
-				<div class="panes">
+				<div class="panes1">
 					<div></div>
 					<div></div>
 					<div></div>
@@ -42,13 +42,13 @@
 
 			<h2>mouseover</h2>
 			<p>This is a demo description.</p>
-			<div class="demo2">
-				<ul class="tabs">
+			<div class="">
+				<ul class="demo2 tabs">
 					<li>tab1</li>
 					<li>tab2</li>
 					<li>tab3</li>
 				</ul>
-				<div class="panes">
+				<div class="panes2">
 					<div>panes</div>
 					<div>panle2</div>
 					<div>panle3</div>
@@ -57,13 +57,13 @@
 
 			<h2>initialIndex</h2>
 			<p>This is a demo description.</p>
-			<div class="demo3">
-				<ul class="tabs">
+			<div class="">
+				<ul class="demo3 tabs">
 					<li>tab1</li>
 					<li>tab2</li>
 					<li>tab3</li>
 				</ul>
-				<div class="panes">
+				<div class="panes3">
 					<div>panes</div>
 					<div>panle2</div>
 					<div>panle3</div>
@@ -72,13 +72,13 @@
 
 			<h2>skin</h2>
 			<p>This is a demo description.</p>
-			<div class="demo4">
-				<ul class="tabs">
+			<div class="">
+				<ul class="demo4 tabs">
 					<li>tab1</li>
 					<li>tab2</li>
 					<li>tab3</li>
 				</ul>
-				<div class="panes">
+				<div class="panes4">
 					<div>panes</div>
 					<div>panle2</div>
 					<div>panle3</div>
@@ -101,18 +101,22 @@
 
 		
 		<script type="text/javascript" src="js/vendor/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="js/vendor/jquery.history.js"></script>
 		<script type="text/javascript" src="../src/jquery-tabs.js"></script>
 		<script>
 			$(function(){
-				$('.demo0').tabs();
-				$('.demo1').tabs({ajax: true, cached: true});
+				$('.demo0').tabs({panes: '.panes0'});
+				$('.demo1').tabs({panes: '.panes1', ajax: true, cached: true});
 				$('.demo2').tabs({
+					panes: '.panes2',
 					event:'mouseover'
 				});
 				$('.demo3').tabs({
+					panes: '.panes3',
 					initialIndex: 2
 				});
 				$('.demo4').tabs({
+					panes: '.panes4',
 					skin: 'skin-1'
 				});
 

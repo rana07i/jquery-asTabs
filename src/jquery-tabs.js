@@ -6,11 +6,12 @@
  * Licensed under the MIT license.
  */
 
-;
-(function(window, document, $, undefined) {
+;(function(window, document, $, undefined) {
     "use strict";
 
-    var css3Transition = true;
+    //var css3Transition = true;
+    var $doc = $(document);
+
     // Constructor
     var Tabs = $.Tabs = function(element, options) {
         var self = this;
@@ -32,20 +33,25 @@
 
         // Class
         this.classes = {
-            activeTab: this.namespace + '-tabs_active',
-            activePanes: this.namespace + '-panes_active',
+            activeTab: this.namespace + '_active',
+            activePanes: this.namespace + '_active',
             effect: this.namespace + '-' + this.options.effect,
-            show: this.namespace + '-' + this.options.effect + '-show'
+            show: this.namespace + '-' + this.options.effect + '_show',
+            panes: this.namespace + '-panes',
+            skin: this.namespace + '_' + this.options.skin
         };
 
-        this.$tabs = this.$element.find(this.options.tabSelector);
-        this.$panes = this.$element.find(this.options.paneSelector);
-        this.$panesBox = this.$element.children('div');
+        this.$tabs = this.$element.children();
+        this.$panes = $(this.options.panes).addClass(this.classes.panes + ' ' + this.classes.effect);
+        this.$panesItem = this.$panes.children();
+
+        if (this.options.skin) {
+            this.$tabs.addClass(this.classes.skin);
+            this.$panes.addClass(this.classes.skin);
+        }
+        
         this.$loading = $('<span class="' + this.namespace + '-loading"></span>');
 
-        this.$element.addClass(this.options.skin).addClass(this.classes.effect);
-
-        
         if (this.options.ajax === true) {
             this.ajax = [];
             $.each(this.$tabs, function(i,v) {
@@ -55,24 +61,7 @@
             });
         }
 
-        $.extend(self, {
-            init: function() {
-                self.current = this.options.initialIndex;
-                self.active(self.current);
-
-                // Bind logic
-                self.$tabs.on(this.options.event, function(e, data) {
-                    var index = $(e.target).index();
-                    self.active(index);
-                    return false;
-                });
-            },
-            another: function() {
-
-            }
-        });
-
-        self.init();
+        this.init();
     };
 
 
@@ -80,8 +69,7 @@
     Tabs.defaults = {
         namespace: 'tabs',
 
-        tabSelector: '.tabs > li',
-        paneSelector: '.panes > div',
+        panes: '.panes',
 
         skin: null,
         initialIndex: 0,
@@ -91,29 +79,46 @@
         ajax: false,
         cached: false,
 
+        history: false,
+
         event: 'click'
     };
 
     Tabs.prototype = {
         constructor: Tabs,
+        init: function() {
+            var self = this;
+            this.current = this.options.initialIndex;
+            this.active(this.current);
+
+            // Bind logic
+            this.$tabs.on(this.options.event, function(e) {
+                var index = $(e.target).index();
+                self.active(index);
+                return false;
+            });
+
+            $doc.trigger('tabs::init', this);
+        },
         // This is a public function that users can call
         // Prototype methods are shared across all instances
         active: function(index) {
             var self = this;
 
+            this.current = index;
+            this.$tabs.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
+            this.$panesItem.eq(index).addClass(this.classes.activePanes).siblings().removeClass(this.classes.activePanes);
+
+            this.$panesItem.removeClass(this.classes.show);
+            $doc.trigger('tabs::active', this);
+
             if (this.options.ajax === true) {
                 this.ajaxLoad(index);
             }
 
-            // this.$panes.eq(index).css('display','block').siblings().css('display','none');
-            this.current = index;
-            this.$tabs.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
-            this.$panes.eq(index).addClass(this.classes.activePanes).siblings().removeClass(this.classes.activePanes);
-
-            this.$panes.removeClass(this.classes.show);
-
+            // give a chance for css transition
             setTimeout(function() {
-                self.$panes.eq(index).addClass(self.classes.show);
+                self.$panesItem.eq(index).addClass(self.classes.show);
             }, 0);
         },
 
@@ -127,17 +132,17 @@
                 dtd.done(function(data) {
                     self.ajax[index].cached = true;
                     self.hideLoading();
-                    self.$panes.eq(index).html(data);
+                    self.$panesItem.eq(index).html(data);
                 });
                 dtd.fail(function() {
                     self.hideLoading();
-                    self.$panes.eq(index).html('failed');
+                    self.$panesItem.eq(index).html('failed');
                 });
             }
         },
 
         showLoading: function() {
-            this.$loading.appendTo(this.$panesBox);
+            this.$loading.appendTo(this.$panes);
         },
         hideLoading: function() {
             this.$loading.remove();
@@ -148,11 +153,11 @@
         },
 
         getPanes: function() {
-            return this.$panes;
+            return this.$panesItem;
         },
 
         getCurrentPane: function() {
-            return this.$panes.eq(this.current);
+            return this.$panesItem.eq(this.current);
         },
 
         getCurrentTab: function() {
@@ -193,7 +198,7 @@
             // console.log(this.$element)
             this.$element.remove();
             // this.$tabs.off(this.options.event).removeClass(this.classes.activeTab);
-            // this.$panes.eq(this.current).removeClass(this.classes.activePanes); 
+            // this.$panesItem.eq(this.current).removeClass(this.classes.activePanes); 
             // return this;
         }
     };
@@ -226,3 +231,93 @@
         }
     };
 }(window, document, jQuery));
+
+//history
+(function(document, undefined) {
+    var $doc = $(document);
+    var namespace = 'tabs';
+    var hash = window.location.hash;
+
+    if ($.type(hash) === 'string' &&  hash.match(/(tabs)/i)) {
+        var result = parseHash(hash);
+
+        setTimeout(function() {
+            var $element = $('[popup-Id="' + result.id +'"]'),
+                instance = $element.data('popup');
+
+            if (instance.active === true) {
+                instance.goto(result.index);
+            } else {
+                $element.click();
+            }
+        }, 0);
+    }
+
+    $doc.on('tabs::init', function(event, instance) {
+
+        if (instance.options.history === false) {
+            return;
+        }
+
+        History.Adapter.bind(window,'statechange',function(){ 
+            var state = History.getState(); 
+            instance.active(state.data.index);
+        });
+    });
+    $doc.on('tabs::active', function(event, instance) {
+        var index = this.current; 
+
+        if (instance.options.history === false) {
+            return;
+        }
+
+        History.pushState({index: index}, "tabs" , "#"+ namespace +"=" + index);
+    });
+})(document);
+
+// keyboard
+(function(document,undefined) {
+    var $doc = $(document);
+    var keyboard = {
+        keys: {
+            'UP': 38,
+            'DOWN': 40,
+            'LEFT': 37,
+            'RIGHT': 39,
+            'RETURN': 13,
+            'ESCAPE': 27,
+            'BACKSPACE': 8,
+            'SPACE': 32
+        },
+        map: {},
+        bound: false,
+        press: function(e) {
+            var key = e.keyCode || e.which;
+            if (key in keyboard.map && typeof keyboard.map[key] === 'function') {
+                keyboard.map[key].call(self, e);
+            }
+        },
+        attach: function(map) {
+            var key, up;
+            for (key in map) {
+                if (map.hasOwnProperty(key)) {
+                    up = key.toUpperCase();
+                    if (up in keyboard.keys) {
+                        keyboard.map[keyboard.keys[up]] = map[key];
+                    } else {
+                        keyboard.map[up] = map[key];
+                    }
+                }
+            }
+            if (!keyboard.bound) {
+                keyboard.bound = true;
+                $doc.bind('keydown', keyboard.press);
+            }
+        },
+        detach: function() {
+            keyboard.bound = false;
+            keyboard.map = {};
+            $doc.unbind('keydown', keyboard.press);
+        }
+    };
+})(document);
