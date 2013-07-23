@@ -88,8 +88,7 @@
         constructor: Tabs,
         init: function() {
             var self = this;
-            this.current = this.options.initialIndex;
-            this.active(this.current);
+            this.active(this.options.initialIndex);
 
             // Bind logic
             this.$tabs.on(this.options.event, function(e) {
@@ -104,6 +103,10 @@
         // Prototype methods are shared across all instances
         active: function(index) {
             var self = this;
+
+            if (this.current === index) {
+                return;
+            }
 
             this.current = index;
             this.$tabs.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
@@ -232,26 +235,66 @@
     };
 }(window, document, jQuery));
 
-//history
+// history
 (function(document, undefined) {
     var $doc = $(document);
-    var namespace = 'tabs';
-    var hash = window.location.hash;
-
-    if ($.type(hash) === 'string' &&  hash.match(/(tabs)/i)) {
-        var result = parseHash(hash);
-
-        setTimeout(function() {
-            var $element = $('[popup-Id="' + result.id +'"]'),
-                instance = $element.data('popup');
-
-            if (instance.active === true) {
-                instance.goto(result.index);
-            } else {
-                $element.click();
+    var history = {
+        states: {},
+        reflash: false,
+        pushState: function(state) {
+            for (id in state) {
+                this.states[id] = state[id];
             }
-        }, 0);
-    }
+            this.reflash = false;
+            setTimeout($.proxy(this.changeStates,this), 0);
+        },
+        changeStates: function() {
+            var hash = '';
+            if (this.reflash === true) {
+                return;
+            }
+
+            $.each(this.states, function(id,index) {
+                hash += id + '=' + index + '&';
+            });
+
+            window.location.hash =  hash.substr(0, hash.length - 1);
+            this.reflash = true;
+        },
+        getState: function() {
+            var hash = window.location.hash.replace('#','').replace('!',''),
+                queryString, param = {};
+
+            if (hash ==='') {
+                return;
+            }
+
+            queryString = hash.split("&");
+
+            $.each(queryString, function(i,v) {
+                if (v == false) {
+                    return;
+                }
+                var args = v.match("#?(.*)=(.*)");
+                
+                if (args) {
+                    param[args[1]] = args[2];
+                }
+                
+            });
+
+            return param;
+        },
+        reset: function() {
+            if (this.reflash === true) {
+                return;
+            }
+            this.states = {};
+            window.location.hash = "#/";
+
+            this.reflash = true;
+        }
+    };
 
     $doc.on('tabs::init', function(event, instance) {
 
@@ -259,20 +302,36 @@
             return;
         }
 
-        History.Adapter.bind(window,'statechange',function(){ 
-            var state = History.getState(); 
-            instance.active(state.data.index);
-        });
+        $(window).on('hashchange.tabs', function(e) {
+            var states = history.getState(),
+                tabs,
+                id = instance.$element.attr('id'); 
+
+            if (states[id]) {
+                tabs = $('#'+id).data('tabs');
+                if (tabs) {
+                    tabs.active(states[id]);
+                }
+            }
+        });   
     });
+
     $doc.on('tabs::active', function(event, instance) {
-        var index = this.current; 
+        var index = instance.current, state = {},
+            id = instance.$element.attr('id'); 
 
         if (instance.options.history === false) {
             return;
         }
-
-        History.pushState({index: index}, "tabs" , "#"+ namespace +"=" + index);
+        state[id] = index;
+        history.pushState(state);
     });
+
+    setTimeout(function() {
+        $(window).trigger('hashchange.tabs');
+    },0);
+    
+
 })(document);
 
 // keyboard

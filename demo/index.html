@@ -85,6 +85,34 @@
 				</div>
 			</div>
 
+			<h2>History</h2>
+			<p>This is a demo description.</p>
+			<div class="">
+				<ul class="demo5 tabs" id="tab1">
+					<li>tab1</li>
+					<li>tab2</li>
+					<li>tab3</li>
+				</ul>
+				<div class="panes5">
+					<div>panes</div>
+					<div>panle2</div>
+					<div>panle3</div>
+				</div>
+			</div>
+
+			<div class="">
+				<ul class="demo6 tabs" id="tab2">
+					<li>tab1</li>
+					<li>tab2</li>
+					<li>tab3</li>
+				</ul>
+				<div class="panes6">
+					<div>panes</div>
+					<div>panle2</div>
+					<div>panle3</div>
+				</div>
+			</div>
+
 			<h2>test</h2>
 			<p>This is a demo description.</p>
 			<div "demo-test">
@@ -106,7 +134,11 @@
 		<script>
 			$(function(){
 				$('.demo0').tabs({panes: '.panes0'});
-				$('.demo1').tabs({panes: '.panes1', ajax: true, cached: true});
+				$('.demo1').tabs({
+					panes: '.panes1', 
+					ajax: true, 
+					cached: true
+				});
 				$('.demo2').tabs({
 					panes: '.panes2',
 					event:'mouseover'
@@ -118,6 +150,15 @@
 				$('.demo4').tabs({
 					panes: '.panes4',
 					skin: 'skin-1'
+				});
+
+				$('.demo5').tabs({
+					panes: '.panes5',
+					history: true
+				});
+				$('.demo6').tabs({
+					panes: '.panes6',
+					history: true
 				});
 
 
