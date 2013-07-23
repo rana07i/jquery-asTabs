@@ -15,7 +15,7 @@ In your web page:
 <script src="dist/jquery-tabs.min.js"></script>
 <script>
 jQuery(function($) {
-  $.awesome(); // "awesome"
+  $.tabs(); // "tabs"
 });
 </script>
 ```

@@ -6,377 +6,380 @@
  * Licensed under the MIT license.
  */
 
-;(function(window, document, $, undefined) {
-    "use strict";
+;
+(function(window, document, $, undefined) {
+	"use strict";
 
-    //var css3Transition = true;
-    var $doc = $(document);
+	//var css3Transition = true;
+	var $doc = $(document);
 
-    // Constructor
-    var Tabs = $.Tabs = function(element, options) {
-        var self = this;
+	// Constructor
+	var Tabs = $.Tabs = function(element, options) {
+		var self = this;
 
-        this.element = element;
-        this.$element = $(element);
+		this.element = element;
+		this.$element = $(element);
 
-        // options
-        var meta_data = [];
-        $.each(this.$element.data(), function(k, v) {
-            var re = new RegExp("^tabs", "i");
-            if (re.test(k)) {
-                meta_data[k.toLowerCase().replace(re, '')] = v;
-            }
-        });
+		// options
+		var meta_data = [];
+		$.each(this.$element.data(), function(k, v) {
+			var re = new RegExp("^tabs", "i");
+			if (re.test(k)) {
+				meta_data[k.toLowerCase().replace(re, '')] = v;
+			}
+		});
 
-        this.options = $.extend(true, {}, Tabs.defaults, options, meta_data);
-        this.namespace = this.options.namespace;
+		this.options = $.extend(true, {}, Tabs.defaults, options, meta_data);
+		this.namespace = this.options.namespace;
 
-        // Class
-        this.classes = {
-            activeTab: this.namespace + '_active',
-            activePanes: this.namespace + '_active',
-            effect: this.namespace + '-' + this.options.effect,
-            show: this.namespace + '-' + this.options.effect + '_show',
-            panes: this.namespace + '-panes',
-            skin: this.namespace + '_' + this.options.skin
-        };
+		// Class
+		this.classes = {
+			activeTab: this.namespace + '_active',
+			activePanes: this.namespace + '_active',
+			effect: this.namespace + '-' + this.options.effect,
+			show: this.namespace + '-' + this.options.effect + '_show',
+			panes: this.namespace + '-panes',
+			skin: this.namespace + '_' + this.options.skin
+		};
 
-        this.$tabs = this.$element.children();
-        this.$panes = $(this.options.panes).addClass(this.classes.panes + ' ' + this.classes.effect);
-        this.$panesItem = this.$panes.children();
+		this.$tabs = this.$element.children();
+		this.$panes = $(this.options.panes).addClass(this.classes.panes + ' ' + this.classes.effect);
+		this.$panesItem = this.$panes.children();
 
-        if (this.options.skin) {
-            this.$tabs.addClass(this.classes.skin);
-            this.$panes.addClass(this.classes.skin);
-        }
-        
-        this.$loading = $('<span class="' + this.namespace + '-loading"></span>');
+		if (this.options.skin) {
+			this.$tabs.addClass(this.classes.skin);
+			this.$panes.addClass(this.classes.skin);
+		}
 
-        if (this.options.ajax === true) {
-            this.ajax = [];
-            $.each(this.$tabs, function(i,v) {
-                var obj = {};
-                obj.href = $(v).data('href');
-                self.ajax.push(obj);
-            });
-        }
+		this.$loading = $('<span class="' + this.namespace + '-loading"></span>');
 
-        this.init();
-    };
+		if (this.options.ajax === true) {
+			this.ajax = [];
+			$.each(this.$tabs, function(i, v) {
+				var obj = {};
+				obj.href = $(v).data('href');
+				self.ajax.push(obj);
+			});
+		}
+
+		this.init();
+	};
 
 
-    // Default options for the plugin as a simple object
-    Tabs.defaults = {
-        namespace: 'tabs',
+	// Default options for the plugin as a simple object
+	Tabs.defaults = {
+		namespace: 'tabs',
 
-        panes: '.panes',
+		panes: '.panes',
 
-        skin: null,
-        initialIndex: 0,
-        
-        effect: 'fade',
+		skin: null,
+		initialIndex: 0,
 
-        ajax: false,
-        cached: false,
+		effect: 'fade',
 
-        history: false,
+		ajax: false,
+		cached: false,
 
-        event: 'click'
-    };
+		history: false,
 
-    Tabs.prototype = {
-        constructor: Tabs,
-        init: function() {
-            var self = this;
-            this.active(this.options.initialIndex);
+		event: 'click'
+	};
 
-            // Bind logic
-            this.$tabs.on(this.options.event, function(e) {
-                var index = $(e.target).index();
-                self.active(index);
-                return false;
-            });
+	Tabs.prototype = {
+		constructor: Tabs,
+		init: function() {
+			var self = this;
+			this.active(this.options.initialIndex);
 
-            $doc.trigger('tabs::init', this);
-        },
-        // This is a public function that users can call
-        // Prototype methods are shared across all instances
-        active: function(index) {
-            var self = this;
+			// Bind logic
+			this.$tabs.on(this.options.event, function(e) {
+				var index = $(e.target).index();
+				self.active(index);
+				return false;
+			});
 
-            if (this.current === index) {
-                return;
-            }
+			$doc.trigger('tabs::init', this);
+		},
+		// This is a public function that users can call
+		// Prototype methods are shared across all instances
+		active: function(index) {
+			var self = this;
 
-            this.current = index;
-            this.$tabs.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
-            this.$panesItem.eq(index).addClass(this.classes.activePanes).siblings().removeClass(this.classes.activePanes);
+			if (this.current === index) {
+				return;
+			}
 
-            this.$panesItem.removeClass(this.classes.show);
-            $doc.trigger('tabs::active', this);
+			this.current = index;
+			this.$tabs.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
+			this.$panesItem.eq(index).addClass(this.classes.activePanes).siblings().removeClass(this.classes.activePanes);
 
-            if (this.options.ajax === true) {
-                this.ajaxLoad(index);
-            }
+			this.$panesItem.removeClass(this.classes.show);
+			$doc.trigger('tabs::active', this);
 
-            // give a chance for css transition
-            setTimeout(function() {
-                self.$panesItem.eq(index).addClass(self.classes.show);
-            }, 0);
-        },
+			if (this.options.ajax === true) {
+				this.ajaxLoad(index);
+			}
 
-        ajaxLoad: function(index) {
-            var self = this, dtd;
-            if (this.options.cached === true && this.ajax[index].cached === true) {
-                return;
-            } else {
-                this.showLoading();
-                dtd = $.ajax({url: this.ajax[index].href});
-                dtd.done(function(data) {
-                    self.ajax[index].cached = true;
-                    self.hideLoading();
-                    self.$panesItem.eq(index).html(data);
-                });
-                dtd.fail(function() {
-                    self.hideLoading();
-                    self.$panesItem.eq(index).html('failed');
-                });
-            }
-        },
+			// give a chance for css transition
+			setTimeout(function() {
+				self.$panesItem.eq(index).addClass(self.classes.show);
+			}, 0);
+		},
 
-        showLoading: function() {
-            this.$loading.appendTo(this.$panes);
-        },
-        hideLoading: function() {
-            this.$loading.remove();
-        },
+		ajaxLoad: function(index) {
+			var self = this,
+				dtd;
+			if (this.options.cached === true && this.ajax[index].cached === true) {
+				return;
+			} else {
+				this.showLoading();
+				dtd = $.ajax({
+					url: this.ajax[index].href
+				});
+				dtd.done(function(data) {
+					self.ajax[index].cached = true;
+					self.hideLoading();
+					self.$panesItem.eq(index).html(data);
+				});
+				dtd.fail(function() {
+					self.hideLoading();
+					self.$panesItem.eq(index).html('failed');
+				});
+			}
+		},
 
-        getTabs: function() {
-            return this.$tabs;
-        },
+		showLoading: function() {
+			this.$loading.appendTo(this.$panes);
+		},
+		hideLoading: function() {
+			this.$loading.remove();
+		},
 
-        getPanes: function() {
-            return this.$panesItem;
-        },
+		getTabs: function() {
+			return this.$tabs;
+		},
 
-        getCurrentPane: function() {
-            return this.$panesItem.eq(this.current);
-        },
+		getPanes: function() {
+			return this.$panesItem;
+		},
 
-        getCurrentTab: function() {
-            return this.$tabs.eq(this.current);
-        },
+		getCurrentPane: function() {
+			return this.$panesItem.eq(this.current);
+		},
 
-        getIndex: function() {
-            return this.current;
-        },
+		getCurrentTab: function() {
+			return this.$tabs.eq(this.current);
+		},
 
-        next: function() {
-            var len = this.$tabs.length,
-                current = this.current;
-            if (current < len - 1) {
-                current++;
-            } else {
-                current = 0;
-            }
+		getIndex: function() {
+			return this.current;
+		},
 
-            // (current < len-1) ? current++ : current = 0;
+		next: function() {
+			var len = this.$tabs.length,
+				current = this.current;
+			if (current < len - 1) {
+				current++;
+			} else {
+				current = 0;
+			}
 
-            this.active(current);
-        },
+			// (current < len-1) ? current++ : current = 0;
 
-        prev: function() {
-            var len = this.$tabs.length,
-                current = this.current;
-            if (current === 0) {
-                current = Math.abs(1 - len);
-            } else {
-                current = current - 1;
-            }
+			this.active(current);
+		},
 
-            this.active(current);
-        },
+		prev: function() {
+			var len = this.$tabs.length,
+				current = this.current;
+			if (current === 0) {
+				current = Math.abs(1 - len);
+			} else {
+				current = current - 1;
+			}
 
-        destroy: function() {
-            // console.log(this.$element)
-            this.$element.remove();
-            // this.$tabs.off(this.options.event).removeClass(this.classes.activeTab);
-            // this.$panesItem.eq(this.current).removeClass(this.classes.activePanes); 
-            // return this;
-        }
-    };
+			this.active(current);
+		},
 
-    // Collection method.
-    $.fn.tabs = function(options) {
-        if (typeof options === 'string') {
-            var method = options;
-            var method_arguments = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : undefined;
+		destroy: function() {
+			// console.log(this.$element)
+			this.$element.remove();
+			// this.$tabs.off(this.options.event).removeClass(this.classes.activeTab);
+			// this.$panesItem.eq(this.current).removeClass(this.classes.activePanes); 
+			// return this;
+		}
+	};
 
-            if (/^(getTabs|getPanes|getCurrentPane|getCurrentTab|getIndex)$/.test(method)) {
-                var api = this.first().data('tabs');
-                if (api && typeof api[method] === 'function') {
-                    return api[method].apply(api, method_arguments);
-                }
-            } else {
-                return this.each(function() {
-                    var api = $.data(this, 'tabs');
-                    if (api && typeof api[method] === 'function') {
-                        api[method].apply(api, method_arguments);
-                    }
-                });
-            }
-        } else {
-            return this.each(function() {
-                if (!$.data(this, 'tabs')) {
-                    $.data(this, 'tabs', new Tabs(this, options));
-                }
-            });
-        }
-    };
+	// Collection method.
+	$.fn.tabs = function(options) {
+		if (typeof options === 'string') {
+			var method = options;
+			var method_arguments = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : undefined;
+
+			if (/^(getTabs|getPanes|getCurrentPane|getCurrentTab|getIndex)$/.test(method)) {
+				var api = this.first().data('tabs');
+				if (api && typeof api[method] === 'function') {
+					return api[method].apply(api, method_arguments);
+				}
+			} else {
+				return this.each(function() {
+					var api = $.data(this, 'tabs');
+					if (api && typeof api[method] === 'function') {
+						api[method].apply(api, method_arguments);
+					}
+				});
+			}
+		} else {
+			return this.each(function() {
+				if (!$.data(this, 'tabs')) {
+					$.data(this, 'tabs', new Tabs(this, options));
+				}
+			});
+		}
+	};
 }(window, document, jQuery));
 
 // history
 (function(document, undefined) {
-    var $doc = $(document);
-    var history = {
-        states: {},
-        reflash: false,
-        pushState: function(state) {
-            for (id in state) {
-                this.states[id] = state[id];
-            }
-            this.reflash = false;
-            setTimeout($.proxy(this.changeStates,this), 0);
-        },
-        changeStates: function() {
-            var hash = '';
-            if (this.reflash === true) {
-                return;
-            }
+	var $doc = $(document);
+	var history = {
+		states: {},
+		reflash: false,
+		pushState: function(state) {
+			for (id in state) {
+				this.states[id] = state[id];
+			}
+			this.reflash = false;
+			setTimeout($.proxy(this.changeStates, this), 0);
+		},
+		changeStates: function() {
+			var hash = '';
+			if (this.reflash === true) {
+				return;
+			}
 
-            $.each(this.states, function(id,index) {
-                hash += id + '=' + index + '&';
-            });
+			$.each(this.states, function(id, index) {
+				hash += id + '=' + index + '&';
+			});
 
-            window.location.hash =  hash.substr(0, hash.length - 1);
-            this.reflash = true;
-        },
-        getState: function() {
-            var hash = window.location.hash.replace('#','').replace('!',''),
-                queryString, param = {};
+			window.location.hash = hash.substr(0, hash.length - 1);
+			this.reflash = true;
+		},
+		getState: function() {
+			var hash = window.location.hash.replace('#', '').replace('!', ''),
+				queryString, param = {};
 
-            if (hash ==='') {
-                return;
-            }
+			if (hash === '') {
+				return;
+			}
 
-            queryString = hash.split("&");
+			queryString = hash.split("&");
 
-            $.each(queryString, function(i,v) {
-                if (v == false) {
-                    return;
-                }
-                var args = v.match("#?(.*)=(.*)");
-                
-                if (args) {
-                    param[args[1]] = args[2];
-                }
-                
-            });
+			$.each(queryString, function(i, v) {
+				if (v == false) {
+					return;
+				}
+				var args = v.match("#?(.*)=(.*)");
 
-            return param;
-        },
-        reset: function() {
-            if (this.reflash === true) {
-                return;
-            }
-            this.states = {};
-            window.location.hash = "#/";
+				if (args) {
+					param[args[1]] = args[2];
+				}
 
-            this.reflash = true;
-        }
-    };
+			});
 
-    $doc.on('tabs::init', function(event, instance) {
+			return param;
+		},
+		reset: function() {
+			if (this.reflash === true) {
+				return;
+			}
+			this.states = {};
+			window.location.hash = "#/";
 
-        if (instance.options.history === false) {
-            return;
-        }
+			this.reflash = true;
+		}
+	};
 
-        $(window).on('hashchange.tabs', function(e) {
-            var states = history.getState(),
-                tabs,
-                id = instance.$element.attr('id'); 
+	$doc.on('tabs::init', function(event, instance) {
 
-            if (states[id]) {
-                tabs = $('#'+id).data('tabs');
-                if (tabs) {
-                    tabs.active(states[id]);
-                }
-            }
-        });   
-    });
+		if (instance.options.history === false) {
+			return;
+		}
 
-    $doc.on('tabs::active', function(event, instance) {
-        var index = instance.current, state = {},
-            id = instance.$element.attr('id'); 
+		$(window).on('hashchange.tabs', function(e) {
+			var states = history.getState(),
+				tabs,
+				id = instance.$element.attr('id');
 
-        if (instance.options.history === false) {
-            return;
-        }
-        state[id] = index;
-        history.pushState(state);
-    });
+			if (states[id]) {
+				tabs = $('#' + id).data('tabs');
+				if (tabs) {
+					tabs.active(states[id]);
+				}
+			}
+		});
+	});
 
-    setTimeout(function() {
-        $(window).trigger('hashchange.tabs');
-    },0);
-    
+	$doc.on('tabs::active', function(event, instance) {
+		var index = instance.current,
+			state = {},
+			id = instance.$element.attr('id');
 
+		if (instance.options.history === false) {
+			return;
+		}
+		state[id] = index;
+		history.pushState(state);
+	});
+
+	setTimeout(function() {
+		$(window).trigger('hashchange.tabs');
+	}, 0);
 })(document);
 
 // keyboard
-(function(document,undefined) {
-    var $doc = $(document);
-    var keyboard = {
-        keys: {
-            'UP': 38,
-            'DOWN': 40,
-            'LEFT': 37,
-            'RIGHT': 39,
-            'RETURN': 13,
-            'ESCAPE': 27,
-            'BACKSPACE': 8,
-            'SPACE': 32
-        },
-        map: {},
-        bound: false,
-        press: function(e) {
-            var key = e.keyCode || e.which;
-            if (key in keyboard.map && typeof keyboard.map[key] === 'function') {
-                keyboard.map[key].call(self, e);
-            }
-        },
-        attach: function(map) {
-            var key, up;
-            for (key in map) {
-                if (map.hasOwnProperty(key)) {
-                    up = key.toUpperCase();
-                    if (up in keyboard.keys) {
-                        keyboard.map[keyboard.keys[up]] = map[key];
-                    } else {
-                        keyboard.map[up] = map[key];
-                    }
-                }
-            }
-            if (!keyboard.bound) {
-                keyboard.bound = true;
-                $doc.bind('keydown', keyboard.press);
-            }
-        },
-        detach: function() {
-            keyboard.bound = false;
-            keyboard.map = {};
-            $doc.unbind('keydown', keyboard.press);
-        }
-    };
+(function(document, undefined) {
+	var $doc = $(document);
+	var keyboard = {
+		keys: {
+			'UP': 38,
+			'DOWN': 40,
+			'LEFT': 37,
+			'RIGHT': 39,
+			'RETURN': 13,
+			'ESCAPE': 27,
+			'BACKSPACE': 8,
+			'SPACE': 32
+		},
+		map: {},
+		bound: false,
+		press: function(e) {
+			var key = e.keyCode || e.which;
+			if (key in keyboard.map && typeof keyboard.map[key] === 'function') {
+				keyboard.map[key].call(self, e);
+			}
+		},
+		attach: function(map) {
+			var key, up;
+			for (key in map) {
+				if (map.hasOwnProperty(key)) {
+					up = key.toUpperCase();
+					if (up in keyboard.keys) {
+						keyboard.map[keyboard.keys[up]] = map[key];
+					} else {
+						keyboard.map[up] = map[key];
+					}
+				}
+			}
+			if (!keyboard.bound) {
+				keyboard.bound = true;
+				$doc.bind('keydown', keyboard.press);
+			}
+		},
+		detach: function() {
+			keyboard.bound = false;
+			keyboard.map = {};
+			$doc.unbind('keydown', keyboard.press);
+		}
+	};
 })(document);
