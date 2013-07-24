@@ -62,7 +62,8 @@ div[class^="demo"] {
 .panes3,
 .panes4,
 .panes5,
-.panes6 {
+.panes6,
+.panes7 {
   padding: 15px;
   border-right: 1px solid #252525;
   border-bottom: 1px solid #252525;

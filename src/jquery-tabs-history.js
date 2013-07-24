@@ -1,5 +1,6 @@
 // history
-(function(document, undefined) {
+// history
+;(function(document, undefined) {
 	var $doc = $(document);
 	var history = {
 		states: {},
@@ -29,7 +30,7 @@
 				queryString, param = {};
 
 			if (hash === '') {
-				return;
+				return {};
 			}
 
 			queryString = hash.split("&");
@@ -79,7 +80,7 @@
 		});
 	});
 
-	$doc.on('tabs::active', function(event, instance) {
+	$doc.on('tabs::afterActive', function(event, instance) {
 		var index = instance.current,
 			state = {},
 			id = instance.$element.attr('id');
@@ -94,5 +95,4 @@
 	setTimeout(function() {
 		$(window).trigger('hashchange.tabs');
 	}, 0);
-
 })(document);

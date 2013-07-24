@@ -42,12 +42,12 @@
 			skin: this.namespace + '_' + this.options.skin
 		};
 
-		this.$tabs = this.$element.children();
+		this.$tabItems = this.$element.children();
 		this.$panes = $(this.options.panes).addClass(this.classes.panes + ' ' + this.classes.effect);
-		this.$panesItem = this.$panes.children();
+		this.$paneItems = this.$panes.children();
 
 		if (this.options.skin) {
-			this.$tabs.addClass(this.classes.skin);
+			this.$element.addClass(this.classes.skin);
 			this.$panes.addClass(this.classes.skin);
 		}
 
@@ -55,7 +55,7 @@
 
 		if (this.options.ajax === true) {
 			this.ajax = [];
-			$.each(this.$tabs, function(i, v) {
+			$.each(this.$tabItems, function(i, v) {
 				var obj = {};
 				obj.href = $(v).data('href');
 				self.ajax.push(obj);
@@ -81,6 +81,7 @@
 		cached: false,
 
 		history: false,
+        keyboard: false,
 
 		event: 'click'
 	};
@@ -92,9 +93,10 @@
 			this.active(this.options.initialIndex);
 
 			// Bind logic
-			this.$tabs.on(this.options.event, function(e) {
+			this.$tabItems.on(this.options.event, function(e) {
 				var index = $(e.target).index();
 				self.active(index);
+                self.afterActive();
 				return false;
 			});
 
@@ -110,10 +112,10 @@
 			}
 
 			this.current = index;
-			this.$tabs.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
-			this.$panesItem.eq(index).addClass(this.classes.activePanes).siblings().removeClass(this.classes.activePanes);
+			this.$tabItems.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
+			this.$paneItems.eq(index).addClass(this.classes.activePanes).siblings().removeClass(this.classes.activePanes);
 
-			this.$panesItem.removeClass(this.classes.show);
+			this.$paneItems.removeClass(this.classes.show);
 			$doc.trigger('tabs::active', this);
 
 			if (this.options.ajax === true) {
@@ -122,9 +124,13 @@
 
 			// give a chance for css transition
 			setTimeout(function() {
-				self.$panesItem.eq(index).addClass(self.classes.show);
+				self.$paneItems.eq(index).addClass(self.classes.show);
 			}, 0);
 		},
+
+        afterActive: function() {
+            $doc.trigger('tabs::afterActive', this);
+        },
 
 		ajaxLoad: function(index) {
 			var self = this,
@@ -139,11 +145,11 @@
 				dtd.done(function(data) {
 					self.ajax[index].cached = true;
 					self.hideLoading();
-					self.$panesItem.eq(index).html(data);
+					self.$paneItems.eq(index).html(data);
 				});
 				dtd.fail(function() {
 					self.hideLoading();
-					self.$panesItem.eq(index).html('failed');
+					self.$paneItems.eq(index).html('failed');
 				});
 			}
 		},
@@ -156,11 +162,11 @@
 		},
 
 		getTabs: function() {
-			return this.$tabs;
+			return this.$tabItems;
 		},
 
 		getPanes: function() {
-			return this.$panesItem;
+			return this.$paneItems;
 		},
 
 		getCurrentPane: function() {
@@ -168,7 +174,7 @@
 		},
 
 		getCurrentTab: function() {
-			return this.$tabs.eq(this.current);
+			return this.$tabItems.eq(this.current);
 		},
 
 		getIndex: function() {
@@ -176,7 +182,7 @@
 		},
 
 		next: function() {
-			var len = this.$tabs.length,
+			var len = this.$tabItems.length,
 				current = this.current;
 			if (current < len - 1) {
 				current++;
@@ -190,7 +196,7 @@
 		},
 
 		prev: function() {
-			var len = this.$tabs.length,
+			var len = this.$tabItems.length,
 				current = this.current;
 			if (current === 0) {
 				current = Math.abs(1 - len);
@@ -204,7 +210,7 @@
 		destroy: function() {
 			// console.log(this.$element)
 			this.$element.remove();
-			// this.$tabs.off(this.options.event).removeClass(this.classes.activeTab);
+			// this.$tabItems.off(this.options.event).removeClass(this.classes.activeTab);
 			// this.$panesItem.eq(this.current).removeClass(this.classes.activePanes); 
 			// return this;
 		}
@@ -270,7 +276,7 @@
 				queryString, param = {};
 
 			if (hash === '') {
-				return;
+				return {};
 			}
 
 			queryString = hash.split("&");
@@ -320,7 +326,7 @@
 		});
 	});
 
-	$doc.on('tabs::active', function(event, instance) {
+	$doc.on('tabs::afterActive', function(event, instance) {
 		var index = instance.current,
 			state = {},
 			id = instance.$element.attr('id');
@@ -382,4 +388,34 @@
 			$doc.unbind('keydown', keyboard.press);
 		}
 	};
+
+    $doc.on('tabs::init', function(event, instance) {
+        if (instance.options.keyboard === false) {
+            return;
+        }
+
+        // make ul div etc. get focus
+        instance.$element.attr('tabindex','0').on('focus',function(e) {
+            keyboard.attach({
+                left: $.proxy(instance.prev, instance),
+                right: $.proxy(instance.next, instance)
+            });
+            return false;
+        }).on('blur', function(e) {
+            keyboard.detach();
+            return false;
+        });
+
+        instance.$panes.attr('tabindex','0').on('focus',function(e) {
+            keyboard.attach({
+                left: $.proxy(instance.prev, instance),
+                right: $.proxy(instance.next, instance)
+            });
+            return false;
+        }).on('blur', function(e) {
+            keyboard.detach();
+            return false;
+        });;
+
+    });
 })(document);
