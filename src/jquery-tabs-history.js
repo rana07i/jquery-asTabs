@@ -1,5 +1,4 @@
-// history
-// history
+// jquery tabs history
 ;(function(document, undefined) {
 	var $doc = $(document);
 	var history = {

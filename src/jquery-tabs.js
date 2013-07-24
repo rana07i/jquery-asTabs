@@ -6,8 +6,7 @@
  * Licensed under the MIT license.
  */
 
-;
-(function(window, document, $, undefined) {
+;(function(window, document, $, undefined) {
 	"use strict";
 
 	//var css3Transition = true;

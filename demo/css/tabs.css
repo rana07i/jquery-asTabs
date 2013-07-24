@@ -92,13 +92,13 @@ div[class^="demo"] {
   background-color: #333;
 }
 
-.tabs-fade .tabs-panes > div {
+.tabs-fade > div {
   opacity: 0;
   -webkit-transition: all 0.3s;
      -moz-transition: all 0.3s;
           transition: all 0.3s;
 }
 
-.tabs-fade .tabs-panes .tabs-fade-show {
+.tabs-fade.tabs-panes .tabs-fade_show {
   opacity: 1;
 }
