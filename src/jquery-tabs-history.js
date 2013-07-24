@@ -1,5 +1,5 @@
 // jquery tabs history
-;(function(document, undefined) {
+;(function(window, document, $, undefined) {
     var $doc = $(document);
     var history = {
         states: {},
@@ -104,5 +104,4 @@
     setTimeout(function() {
         $(window).trigger('hashchange.tabs');
     },0);
-
-})(document);
+})(window, document, jQuery);

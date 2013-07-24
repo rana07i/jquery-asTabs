@@ -1,5 +1,5 @@
 // jquery tabs keyboard
-;(function(document, undefined) {
+;(function(window, document, $, undefined) {
 	var $doc = $(document);
 	var keyboard = {
 		keys: {
@@ -73,4 +73,4 @@
         });;
 
     });
-})(document);
+})(window, document, jQuery);

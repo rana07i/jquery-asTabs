@@ -41,7 +41,7 @@
         this.$paneItems = this.$panes.children();
 
         if (this.options.skin) {
-            this.$tabItems.addClass(this.classes.skin);
+            this.$element.addClass(this.classes.skin);
             this.$panes.addClass(this.classes.skin);
         }
         
