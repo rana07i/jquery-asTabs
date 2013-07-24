@@ -1,6 +1,6 @@
-/*! jQuery Tabs - v0.1.0 - 2013-07-23
+/*! jQuery tabs - v0.1.1 - 2013-07-24
 * https://github.com/amazingSurge/jquery-tabs
-* Copyright (c) 2013 Wowhoo; Licensed MIT */
+* Copyright (c) 2013 amazingSurge; Licensed GPL */
 ;(function(window, document, $, undefined) {
     "use strict";
 
@@ -75,6 +75,7 @@
         cached: false,
 
         history: false,
+        keyboard: false,
 
         event: 'click'
     };
@@ -89,6 +90,7 @@
             this.$tabs.on(this.options.event, function(e) {
                 var index = $(e.target).index();
                 self.active(index);
+                self.afterActive();
                 return false;
             });
 
@@ -118,6 +120,10 @@
             setTimeout(function() {
                 self.$panesItem.eq(index).addClass(self.classes.show);
             }, 0);
+        },
+
+        afterActive: function() {
+            $doc.trigger('tabs::afterActive', this);
         },
 
         ajaxLoad: function(index) {
@@ -230,8 +236,9 @@
     };
 }(window, document, jQuery));
 
-// history
-(function(document, undefined) {
+
+// jquery tabs history
+;(function(document, undefined) {
     var $doc = $(document);
     var history = {
         states: {},
@@ -261,7 +268,7 @@
                 queryString, param = {};
 
             if (hash ==='') {
-                return;
+                return {};
             }
 
             queryString = hash.split("&");
@@ -271,7 +278,7 @@
                     return;
                 }
                 var args = v.match("#?(.*)=(.*)");
-                
+
                 if (args) {
                     param[args[1]] = args[2];
                 }
@@ -292,11 +299,9 @@
     };
 
     $doc.on('tabs::init', function(event, instance) {
-
         if (instance.options.history === false) {
             return;
         }
-
         $(window).on('hashchange.tabs', function(e) {
             var states = history.getState(),
                 tabs,
@@ -311,65 +316,103 @@
         });   
     });
 
-    $doc.on('tabs::active', function(event, instance) {
+    $doc.on('tabs::afterActive', function(event, instance) {
         var index = instance.current, state = {},
-            id = instance.$element.attr('id'); 
+            id = instance.$element.attr('id'),
+            content = instance.$tabs.eq(index).attr('id'); 
 
         if (instance.options.history === false) {
             return;
         }
-        state[id] = index;
+
+        if (content) {
+            state[id] = content;
+        } else {
+            state[id] = index;
+        }
+        
         history.pushState(state);
     });
 
     setTimeout(function() {
         $(window).trigger('hashchange.tabs');
     },0);
+    
 })(document);
 
-// keyboard
-(function(document,undefined) {
-    var $doc = $(document);
-    var keyboard = {
-        keys: {
-            'UP': 38,
-            'DOWN': 40,
-            'LEFT': 37,
-            'RIGHT': 39,
-            'RETURN': 13,
-            'ESCAPE': 27,
-            'BACKSPACE': 8,
-            'SPACE': 32
-        },
-        map: {},
-        bound: false,
-        press: function(e) {
-            var key = e.keyCode || e.which;
-            if (key in keyboard.map && typeof keyboard.map[key] === 'function') {
-                keyboard.map[key].call(self, e);
-            }
-        },
-        attach: function(map) {
-            var key, up;
-            for (key in map) {
-                if (map.hasOwnProperty(key)) {
-                    up = key.toUpperCase();
-                    if (up in keyboard.keys) {
-                        keyboard.map[keyboard.keys[up]] = map[key];
-                    } else {
-                        keyboard.map[up] = map[key];
-                    }
-                }
-            }
-            if (!keyboard.bound) {
-                keyboard.bound = true;
-                $doc.bind('keydown', keyboard.press);
-            }
-        },
-        detach: function() {
-            keyboard.bound = false;
-            keyboard.map = {};
-            $doc.unbind('keydown', keyboard.press);
+// jquery tabs keyboard
+;(function(document, undefined) {
+	var $doc = $(document);
+	var keyboard = {
+		keys: {
+			'UP': 38,
+			'DOWN': 40,
+			'LEFT': 37,
+			'RIGHT': 39,
+			'RETURN': 13,
+			'ESCAPE': 27,
+			'BACKSPACE': 8,
+			'SPACE': 32
+		},
+		map: {},
+		bound: false,
+		press: function(e) {
+			var key = e.keyCode || e.which;
+			if (key in keyboard.map && typeof keyboard.map[key] === 'function') {
+				keyboard.map[key].call(self, e);
+			}
+		},
+		attach: function(map) {
+			var key, up;
+			for (key in map) {
+				if (map.hasOwnProperty(key)) {
+					up = key.toUpperCase();
+					if (up in keyboard.keys) {
+						keyboard.map[keyboard.keys[up]] = map[key];
+					} else {
+						keyboard.map[up] = map[key];
+					}
+				}
+			}
+			if (!keyboard.bound) {
+				keyboard.bound = true;
+				$doc.bind('keydown', keyboard.press);
+			}
+		},
+		detach: function() {
+			keyboard.bound = false;
+			keyboard.map = {};
+			$doc.unbind('keydown', keyboard.press);
+		}
+	};
+
+    $doc.on('tabs::init', function(event, instance) {
+        if (instance.options.keyboard === false) {
+            return;
         }
-    };
+
+        // make ul div etc. get focus
+        instance.$element.attr('tabindex','0').on('focus',function(e) {
+            keyboard.attach({
+                left: $.proxy(instance.prev, instance),
+                right: $.proxy(instance.next, instance)
+            });
+            return false;
+        }).on('blur', function(e) {
+            keyboard.detach();
+            return false;
+        });
+
+        instance.$panes.attr('tabindex','0').on('focus',function(e) {
+            keyboard.attach({
+                left: $.proxy(instance.prev, instance),
+                right: $.proxy(instance.next, instance)
+            });
+            return false;
+        }).on('blur', function(e) {
+            keyboard.detach();
+            return false;
+        });;
+
+    });
 })(document);

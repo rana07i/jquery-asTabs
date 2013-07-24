@@ -17,9 +17,13 @@ module.exports = function(grunt) {
 				stripBanners: true
 			},
 			dist: {
-				src: ['src/<%= pkg.name %>.js'],
+				src: ['src/<%= pkg.name %>.js','src/jquery-tabs-history.js','src/jquery-tabs-keyboard.js'],
 				dest: 'dist/<%= pkg.name %>.js'
 			},
+			// all: {
+			// 	src: ['src/<%= pkg.name %>.js','src/jquery-tabs-history.js','src/jquery-tabs-keyboard.js'],
+			// 	dest: 'dist/<%= pkg.name %>.js'
+			// }
 		},
 		uglify: {
 			options: {
@@ -28,7 +32,7 @@ module.exports = function(grunt) {
 			dist: {
 				src: '<%= concat.dist.dest %>',
 				dest: 'dist/<%= pkg.name %>.min.js'
-			},
+			}
 		},
 		qunit: {
 			files: ['test/**/*.html']
