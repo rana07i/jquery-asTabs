@@ -71,7 +71,13 @@
             if (states[id]) {
                 tabs = $('#'+id).data('tabs');
                 if (tabs) {
-                    tabs.active(states[id]);
+                    var $tab = instance.$element.find('#' + states[id]);
+                    if ($tab.length >= 1) {
+                        $tab.click();
+                    } else {
+                        tabs.active(states[id]);
+                    }
+                    
                 }
             }
         });   
@@ -80,7 +86,7 @@
     $doc.on('tabs::afterActive', function(event, instance) {
         var index = instance.current, state = {},
             id = instance.$element.attr('id'),
-            content = instance.$tabs.eq(index).attr('id'); 
+            content = instance.$tabItems.eq(index).attr('id'); 
 
         if (instance.options.history === false) {
             return;
@@ -98,5 +104,5 @@
     setTimeout(function() {
         $(window).trigger('hashchange.tabs');
     },0);
-    
+
 })(document);
