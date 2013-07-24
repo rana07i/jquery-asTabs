@@ -3,7 +3,7 @@
  * https://github.com/amazingSurge/jquery-tabs
  *
  * Copyright (c) 2013 Wowhoo
- * Licensed under the MIT license.
+ * Licensed under the GPL license.
  */
 
 ;(function(window, document, $, undefined) {
