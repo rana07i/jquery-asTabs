@@ -98,6 +98,13 @@ module.exports = function(grunt) {
 					compile: true
 				}
 			},
+			css: {
+				src: ["less/**/*.less"],
+				dest: 'css/<%= pkg.name %>.css',
+				options: {
+					compile: true
+				}
+			}
 		},
 		replace: {
 			bower: {
