@@ -78,7 +78,7 @@ the most important thing is you should set panes value to let plugin find his pa
         <tr>
             <td>panes</td>
             <td>'.panes'</td>
-            <td>compulsory property, </td>
+            <td>compulsory property, specify the content to tabs</td>
         </tr>
         <tr>
             <td>namespace</td>
