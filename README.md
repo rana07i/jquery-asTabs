@@ -150,12 +150,12 @@ $(".demo").tabs("destroy");
 <code>tabs::afterActive</code>:  trigger after acitve
 
 how to use event:
-
-<code>$(document).on('tabs::init', function(event,instance) {
+```javascript
+$(document).on('tabs::init', function(event,instance) {
 	// instance means the $.tabs instance 
     // some stuff
-})</code>
-
+});
+```
 
 ## Update history
 * July 31, 2013 - update readme.md
