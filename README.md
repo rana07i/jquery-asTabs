@@ -145,9 +145,9 @@ $(".demo").tabs("destroy");
 
 ## event
 
-<code>tabs::init</code>: trigger when tabs initilize
-<code>tabs::active</code>: trigger when tabs is selected
-<code>tabs::afterActive</code>:  trigger after acitve
+* <code>tabs::init</code>: trigger when tabs initilize
+* <code>tabs::active</code>: trigger when tabs is selected
+* <code>tabs::afterActive</code>:  trigger after acitve
 
 how to use event:
 ```javascript
