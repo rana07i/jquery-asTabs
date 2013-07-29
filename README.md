@@ -164,28 +164,11 @@ Mobile browsers (like Opera mini, Chrome mobile, Safari mobile, Android browser 
 
 ## Changes
 
-<table>
-    <thead>
-        <tr>
-            <th>Version</th>
-            <th>Notes</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>0.2.x</td>
-            <td>([compare][compare-1.2]) Added keyboard function </td>
-        </tr>
-        <tr>
-            <td>0.1.x</td>
-            <td>([compare][compare-1.1]) Added history function</td>
-        </tr>
-        <tr>
-            <td>...</td>
-            <td>...</td>
-        </tr>
-    </tbody>
-</table>
+| Version | Notes                                                            |
+|---------|------------------------------------------------------------------|
+|   0.2.x | ([compare][compare-2.0]) add history function                    |
+|   0.1.x | ([compare][compare-1.0]) add keyboard function   |
+|     ... | ...                                                              |
 
 [compare-1.2]: https://github.com/amazingSurge/jquery-tabs/compare/v1.2.0...v1.3.0
 [compare-1.1]: https://github.com/amazingSurge/jquery-tabs/compare/v1.1.0...v1.2.0
