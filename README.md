@@ -125,8 +125,7 @@ the most important thing is you should set panes value to let plugin find his pa
             <td>event</td>
             <td>'click'</td>
             <td>Optional property, the way to active tabs index, optioal 'mouseover'</td>
-        </tr>
-        
+        </tr>    
     </tbody>
 </table>
 
@@ -163,8 +162,38 @@ jquery-tabs is verified to work in Internet Explorer 7+, Firefox 2+, Opera 9+, G
 
 Mobile browsers (like Opera mini, Chrome mobile, Safari mobile, Android browser and others) is coming soon.
 
+## Changes
+
+<table>
+    <thead>
+        <tr>
+            <th>Version</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>0.2.x</td>
+            <td>([compare][compare-1.2]) Added keyboard function </td>
+        </tr>
+        <tr>
+            <td>0.1.x</td>
+            <td>([compare][compare-1.1]) Added history function</td>
+        </tr>
+        <tr>
+            <td>...</td>
+            <td>...</td>
+        </tr>
+    </tbody>
+</table>
+
+[compare-1.2]: https://github.com/amazingSurge/jquery-tabs/compare/v1.2.0...v1.3.0
+[compare-1.1]: https://github.com/amazingSurge/jquery-tabs/compare/v1.1.0...v1.2.0
+
+## Author
+[amazingSurge](http://amazingSurge.com)
+
 ## License
 jQuery-tabs plugin is released under the <a href="https://github.com/amazingSurge/jquery-tabs/blob/master/LICENCE.GPL" target="_blank">GPL licence</a>.
 
-## Update history
-* July 31, 2013 - update readme.md
+
