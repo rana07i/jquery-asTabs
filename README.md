@@ -7,17 +7,10 @@ Download: <a href="https://github.com/amazingSurge/jquery-tabs/archive/master.zi
 
 ## Features
 
-
 * **History support** — tabs can handle browser's back and forward buttons
 * **AJAXed tabs support** — ajax load content support
 * **Keyboard navigation support** — use `Arrow left/right` to navigate
 * **Lightweight size** — 1 kb gzipped
-
-
-jQuery-tabs — Nice, comfortable and easily customizable tabs with skins support. Also support events and public methods, has flexible settings, can be completely altered with CSS.<br />
-Crossbrowser: Google Chrome, Mozilla Firefox, Opera, Safari, IE(8.0+).<br />
-jQuery-tabs supports touch-devices (iPhone, iPad, etc.).<br />
-jQuery-tabs distributed under <a href="https://github.com/amazingSurge/jquery-tabs/blob/master/LICENCE.GPL" target="_blank">GPL licence</a>.
 
 ## Dependencies
 * <a href="http://jquery.com/" target="_blank">jQuery 1.83+</a>
