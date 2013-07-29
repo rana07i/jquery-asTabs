@@ -1,12 +1,19 @@
 # jQuery tabs
 
-The powerful jQuery plugin that creates a tab. <a href="http://amazingsurge.github.io/jquery-tabs/">Project page and demos</a>
-
+The powerful jQuery plugin that creates a tab. <a href="http://amazingsurge.github.io/jquery-tabs/">Project page and demos</a><br />
 Download: <a href="https://github.com/amazingSurge/jquery-tabs/archive/master.zip">jquery-tabs-master.zip</a>
 
 ***
 
-## Description
+## Features
+
+
+* **History support** — tabs can handle browser's back and forward buttons
+* **AJAXed tabs support** — ajax load content support
+* **Keyboard navigation support** — use `Arrow left/right` to navigate
+* **Lightweight size** — 1 kb gzipped
+
+
 jQuery-tabs — Nice, comfortable and easily customizable tabs with skins support. Also support events and public methods, has flexible settings, can be completely altered with CSS.<br />
 Crossbrowser: Google Chrome, Mozilla Firefox, Opera, Safari, IE(8.0+).<br />
 jQuery-tabs supports touch-devices (iPhone, iPad, etc.).<br />
@@ -15,7 +22,7 @@ jQuery-tabs distributed under <a href="https://github.com/amazingSurge/jquery-ta
 ## Dependencies
 * <a href="http://jquery.com/" target="_blank">jQuery 1.83+</a>
 
-## Using script
+## Usage
 
 Import this libraries:
 * jQuery
@@ -25,29 +32,29 @@ And CSS:
 * jquery-tabs.css - desirable if you have not yet connected one
 
 
-Create base input element:
+Create base html element:
 ```html
 <ul class="demo tabs">
-	<li>tab1</li>
-	<li>tab2</li>
-	<li>tab3</li>
+    <li>tab1</li>
+    <li>tab2</li>
+    <li>tab3</li>
 </ul>
 <div class="panes">
-	<div>panes</div>
-	<div>panle2</div>
-	<div>panle3</div>
+    <div>panes</div>
+    <div>panle2</div>
+    <div>panle3</div>
 </div>
 ```
 
-Initialize slider:
+Initialize tabs:
 ```javascript
 $(".demo").tabs({panes: '.panes'});
 ```
 
-Or initialize slider with custom settings:
+Or initialize tabs with custom settings:
 ```javascript
 $(".demo").tabs({
-        namespace: 'tabs',  // 
+        namespace: 'tabs',  // namespace for css class
         panes: '.panes',
         skin: null,         // set custom skin
         initialIndex: 0,    // set initial index when first open
@@ -144,7 +151,7 @@ $(".demo").tabs("prev");
 $(".demo").tabs("destroy");
 ```
 
-## event
+## Event / Callback
 
 * <code>tabs::init</code>: trigger when tabs initilize
 * <code>tabs::active</code>: trigger when tabs is selected
@@ -153,10 +160,18 @@ $(".demo").tabs("destroy");
 how to use event:
 ```javascript
 $(document).on('tabs::init', function(event,instance) {
-	// instance means the $.tabs instance 
+    // instance means current tabs instance 
     // some stuff
 });
 ```
+
+## Browser support
+jquery-tabs is verified to work in Internet Explorer 7+, Firefox 2+, Opera 9+, Google Chrome and Safari browsers. Should also work in many others.
+
+Mobile browsers (like Opera mini, Chrome mobile, Safari mobile, Android browser and others) is coming soon.
+
+## License
+jQuery-tabs plugin is released under the <a href="https://github.com/amazingSurge/jquery-tabs/blob/master/LICENCE.GPL" target="_blank">GPL licence</a>.
 
 ## Update history
 * July 31, 2013 - update readme.md
