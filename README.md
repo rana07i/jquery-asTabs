@@ -1,6 +1,6 @@
 # jQuery tabs
 
-The powerful jQuery plugin that creates a tab. <a href="http://amazingsurge.github.io/jquery-tabs">Project page and demos</a>
+The powerful jQuery plugin that creates a tab. <a href="http://amazingsurge.github.io/jquery-tabs/">Project page and demos</a>
 
 Download: <a href="https://github.com/amazingSurge/jquery-tabs/archive/master.zip">jquery-tabs-master.zip</a>
 
@@ -8,6 +8,7 @@ Download: <a href="https://github.com/amazingSurge/jquery-tabs/archive/master.zi
 
 ## Description
 jQuery-tabs — Nice, comfortable and easily customizable tabs with skins support. Also support events and public methods, has flexible settings, can be completely altered with CSS.<br />
+Crossbrowser: Google Chrome, Mozilla Firefox, Opera, Safari, IE(8.0+).<br />
 jQuery-tabs supports touch-devices (iPhone, iPad, etc.).<br />
 jQuery-tabs distributed under <a href="https://github.com/amazingSurge/jquery-tabs/blob/master/LICENCE.GPL" target="_blank">GPL licence</a>.
 
