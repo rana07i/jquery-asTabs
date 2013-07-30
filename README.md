@@ -133,13 +133,29 @@ the most important thing is you should set panes value to let plugin find his pa
 
 jquery tabs has different methods , we can use it as below :
 ```javascript
+
+// get all tabs element
 $(".demo").tabs("getTabs");
+
+// get all panes element
 $(".demo").tabs("getPanes");
+
+// get current index, start from 0
 $(".demo").tabs("getIndex");
+
+// get current pane element
 $(".demo").tabs("getCurrentPane");
+
+// get current tab elemnt
 $(".demo").tabs("getCurrentTab");
+
+// goto the next tab, the last will goto the first
 $(".demo").tabs("next");
+
+// goto the prevous tab, the first will goto the last
 $(".demo").tabs("prev");
+
+// remove tabs Dom element and unbound all events
 $(".demo").tabs("destroy");
 ```
 
