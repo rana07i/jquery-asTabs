@@ -9,9 +9,6 @@
 ;(function(window, document, $, undefined) {
     "use strict";
 
-    //var css3Transition = true;
-    var $doc = $(document);
-
     // Constructor
     var Tabs = $.Tabs = function(element, options) {
         var self = this;
@@ -99,7 +96,10 @@
                 return false;
             });
 
-            $doc.trigger('tabs::init', this);
+            this.$element.trigger('tabs::init', this);
+            if ($.type(this.options.onInit) === 'function') {
+                this.options.onInit(this);
+            }
         },
         // This is a public function that users can call
         // Prototype methods are shared across all instances
@@ -115,7 +115,11 @@
             this.$paneItems.eq(index).addClass(this.classes.activePanes).siblings().removeClass(this.classes.activePanes);
 
             this.$paneItems.removeClass(this.classes.show);
-            $doc.trigger('tabs::active', this);
+            this.$element.trigger('tabs::active', this);
+
+            if ($.type(this.options.onActive) === 'function') {
+                this.options.onActive(this);
+            }
 
             if (this.options.ajax === true) {
                 this.ajaxLoad(index);
@@ -128,7 +132,10 @@
         },
 
         afterActive: function() {
-            $doc.trigger('tabs::afterActive', this);
+            this.$element.trigger('tabs::afterActive', this);
+            if ($.type(this.options.onAfterActive) === 'function') {
+                this.options.onAfterActive(this);
+            }
         },
 
         ajaxLoad: function(index) {

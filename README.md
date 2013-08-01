@@ -125,7 +125,22 @@ the most important thing is you should set panes value to let plugin find his pa
             <td>event</td>
             <td>'click'</td>
             <td>Optional property, the way to active tabs index, optioal 'mouseover'</td>
-        </tr>    
+        </tr>  
+        <tr>
+            <td>onInit</td>
+            <td>null</td>
+            <td>Optional property, callback, call when tabs is initilized</td>
+        </tr> 
+        <tr>
+            <td>onActive</td>
+            <td>null</td>
+            <td>Optional property, callback, call when tab is actived</td>
+        </tr> 
+        <tr>
+            <td>onAfterAcitve</td>
+            <td>null</td>
+            <td>Optional property, callback, call after tab is actived</td>
+        </tr>   
     </tbody>
 </table>
 
@@ -133,7 +148,6 @@ the most important thing is you should set panes value to let plugin find his pa
 
 jquery tabs has different methods , we can use it as below :
 ```javascript
-
 // get all tabs element
 $(".demo").tabs("getTabs");
 
