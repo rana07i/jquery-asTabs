@@ -1,5 +1,6 @@
 // jquery tabs keyboard
-;(function(window, document, $, undefined) {
+;
+(function(window, document, $, undefined) {
 	var $doc = $(document);
 	var keyboard = {
 		keys: {
@@ -44,33 +45,33 @@
 		}
 	};
 
-    $doc.on('tabs::init', function(event, instance) {
-        if (instance.options.keyboard === false) {
-            return;
-        }
+	$doc.on('tabs::init', function(event, instance) {
+		if (instance.options.keyboard === false) {
+			return;
+		}
 
-        // make ul div etc. get focus
-        instance.$element.attr('tabindex','0').on('focus',function(e) {
-            keyboard.attach({
-                left: $.proxy(instance.prev, instance),
-                right: $.proxy(instance.next, instance)
-            });
-            return false;
-        }).on('blur', function(e) {
-            keyboard.detach();
-            return false;
-        });
+		// make ul div etc. get focus
+		instance.$element.attr('tabindex', '0').on('focus', function(e) {
+			keyboard.attach({
+				left: $.proxy(instance.prev, instance),
+				right: $.proxy(instance.next, instance)
+			});
+			return false;
+		}).on('blur', function(e) {
+			keyboard.detach();
+			return false;
+		});
 
-        instance.$panes.attr('tabindex','0').on('focus',function(e) {
-            keyboard.attach({
-                left: $.proxy(instance.prev, instance),
-                right: $.proxy(instance.next, instance)
-            });
-            return false;
-        }).on('blur', function(e) {
-            keyboard.detach();
-            return false;
-        });;
+		instance.$panes.attr('tabindex', '0').on('focus', function(e) {
+			keyboard.attach({
+				left: $.proxy(instance.prev, instance),
+				right: $.proxy(instance.next, instance)
+			});
+			return false;
+		}).on('blur', function(e) {
+			keyboard.detach();
+			return false;
+		});;
 
-    });
+	});
 })(window, document, jQuery);

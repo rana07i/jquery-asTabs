@@ -62,11 +62,12 @@ div[class^="demo"] {
 }
 
 .tabs-panes > div {
-	display: none;
+	display: block;
+	visibility: hidden;
 	word-wrap: break-word;
 }
 .tabs-panes .tabs_active {
-	display: block;
+	visibility: visible;
 }
 
 .tabs-loading {
@@ -86,16 +87,3 @@ div[class^="demo"] {
 }
 
 
-// effect
-.tabs-fade > div {
-
-	opacity: 0;
-
-	-webkit-transition: all 0.3s;
-	-moz-transition: all 0.3s;
-	transition: all 0.3s;
-}
-
-.tabs-fade.tabs-panes .tabs-fade_show {
-	opacity: 1;
-}

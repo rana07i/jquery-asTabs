@@ -1,374 +1,385 @@
-/*! jQuery tabs - v0.1.1 - 2013-07-28
+/*! jQuery tabs - v0.1.1 - 2013-08-06
 * https://github.com/amazingSurge/jquery-tabs
 * Copyright (c) 2013 amazingSurge; Licensed GPL */
 ;(function(window, document, $, undefined) {
-    "use strict";
+	"use strict";
 
-    //var css3Transition = true;
-    var $doc = $(document);
+	// Constructor
+	var Tabs = $.Tabs = function(element, options) {
+		var self = this;
 
-    // Constructor
-    var Tabs = $.Tabs = function(element, options) {
-        var self = this;
+		this.element = element;
+		this.$element = $(element);
 
-        this.element = element;
-        this.$element = $(element);
+		// options
+		var meta_data = [];
+		$.each(this.$element.data(), function(k, v) {
+			var re = new RegExp("^tabs", "i");
+			if (re.test(k)) {
+				meta_data[k.toLowerCase().replace(re, '')] = v;
+			}
+		});
 
-        // options
-        var meta_data = [];
-        $.each(this.$element.data(), function(k, v) {
-            var re = new RegExp("^tabs", "i");
-            if (re.test(k)) {
-                meta_data[k.toLowerCase().replace(re, '')] = v;
-            }
-        });
+		this.options = $.extend(true, {}, Tabs.defaults, options, meta_data);
+		this.namespace = this.options.namespace;
 
-        this.options = $.extend(true, {}, Tabs.defaults, options, meta_data);
-        this.namespace = this.options.namespace;
+		// Class
+		this.classes = {
+			activeTab: this.namespace + '_active',
+			activePanes: this.namespace + '_active',
+			panes: this.namespace + '-panes',
+			skin: this.namespace + '_' + this.options.skin
+		};
 
-        // Class
-        this.classes = {
-            activeTab: this.namespace + '_active',
-            activePanes: this.namespace + '_active',
-            effect: this.namespace + '-' + this.options.effect,
-            show: this.namespace + '-' + this.options.effect + '_show',
-            panes: this.namespace + '-panes',
-            skin: this.namespace + '_' + this.options.skin
-        };
+		this.$tabItems = this.$element.children();
+		this.$panes = $(this.options.panes).addClass(this.classes.panes);
+		this.$paneItems = this.$panes.children();
 
-        this.$tabItems = this.$element.children();
-        this.$panes = $(this.options.panes).addClass(this.classes.panes + ' ' + this.classes.effect);
-        this.$paneItems = this.$panes.children();
+		if (this.options.skin) {
+			this.$element.addClass(this.classes.skin);
+			this.$panes.addClass(this.classes.skin);
+		}
 
-        if (this.options.skin) {
-            this.$element.addClass(this.classes.skin);
-            this.$panes.addClass(this.classes.skin);
-        }
-        
-        this.$loading = $('<span class="' + this.namespace + '-loading"></span>');
+		this.$loading = $('<span class="' + this.namespace + '-loading"></span>');
 
-        if (this.options.ajax === true) {
-            this.ajax = [];
-            $.each(this.$tabItems, function(i,v) {
-                var obj = {};
-                obj.href = $(v).data('href');
-                self.ajax.push(obj);
-            });
-        }
+		if (this.options.ajax === true) {
+			this.ajax = [];
+			$.each(this.$tabItems, function(i, v) {
+				var obj = {};
+				obj.href = $(v).data('href');
+				self.ajax.push(obj);
+			});
+		}
 
-        this.init();
-    };
+		this.init();
+	};
 
 
-    // Default options for the plugin as a simple object
-    Tabs.defaults = {
-        namespace: 'tabs',
+	// Default options for the plugin as a simple object
+	Tabs.defaults = {
+		namespace: 'tabs',
 
-        panes: '.panes',
+		panes: '.panes',
 
-        skin: null,
-        initialIndex: 0,
-        
-        effect: 'fade',
+		skin: null,
+		initialIndex: 0,
 
-        ajax: false,
-        cached: false,
+		ajax: false,
+		cached: false,
 
-        history: false,
-        keyboard: false,
+		history: false,
+		keyboard: false,
 
-        event: 'click'
-    };
+		ifAnimate: false,
+		animate: {
+			inClass: '',
+			outClass: '',
+		},
 
-    Tabs.prototype = {
-        constructor: Tabs,
-        init: function() {
-            var self = this;
-            this.active(this.options.initialIndex);
+		event: 'click'
+	};
 
-            // Bind logic
-            this.$tabItems.on(this.options.event, function(e) {
-                var index = $(e.target).index();
-                self.active(index);
-                self.afterActive();
-                return false;
-            });
+	Tabs.prototype = {
+		constructor: Tabs,
+		init: function() {
+			var self = this;
 
-            $doc.trigger('tabs::init', this);
-        },
-        // This is a public function that users can call
-        // Prototype methods are shared across all instances
-        active: function(index) {
-            var self = this;
+			// Bind logic
+			this.$tabItems.on(this.options.event, function(e) {
+				var index = $(e.target).index();
+				self.active(index);
+				self.afterActive();
+				return false;
+			});
 
-            if (this.current === index) {
-                return;
-            }
+			this.$element.trigger('tabs::init', this);
+			if ($.type(this.options.onInit) === 'function') {
+				this.options.onInit(this);
+			}
 
-            this.current = index;
-            this.$tabItems.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
-            this.$paneItems.eq(index).addClass(this.classes.activePanes).siblings().removeClass(this.classes.activePanes);
+			this.active(this.options.initialIndex);
+		},
+		// This is a public function that users can call
+		// Prototype methods are shared across all instances
+		active: function(index) {
+			var self = this;
 
-            this.$paneItems.removeClass(this.classes.show);
-            $doc.trigger('tabs::active', this);
+			if (this.current === index) {
+				return;
+			}
 
-            if (this.options.ajax === true) {
-                this.ajaxLoad(index);
-            }
+			this.last = this.current;
+			this.current = index;
+			this.$tabItems.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
+			this.$paneItems.eq(index).addClass(this.classes.activePanes).siblings().removeClass(this.classes.activePanes);
 
-            // give a chance for css transition
-            setTimeout(function() {
-                self.$paneItems.eq(index).addClass(self.classes.show);
-            }, 0);
-        },
+			this.$element.trigger('tabs::active', this);
 
-        afterActive: function() {
-            $doc.trigger('tabs::afterActive', this);
-        },
+			if ($.type(this.options.onActive) === 'function') {
+				this.options.onActive(this);
+			}
 
-        ajaxLoad: function(index) {
-            var self = this, dtd;
-            if (this.options.cached === true && this.ajax[index].cached === true) {
-                return;
-            } else {
-                this.showLoading();
-                dtd = $.ajax({url: this.ajax[index].href});
-                dtd.done(function(data) {
-                    self.ajax[index].cached = true;
-                    self.hideLoading();
-                    self.$paneItems.eq(index).html(data);
-                });
-                dtd.fail(function() {
-                    self.hideLoading();
-                    self.$paneItems.eq(index).html('failed');
-                });
-            }
-        },
+			if (this.options.ajax === true) {
+				this.ajaxLoad(index);
+			}
 
-        showLoading: function() {
-            this.$loading.appendTo(this.$panes);
-        },
-        hideLoading: function() {
-            this.$loading.remove();
-        },
+		},
 
-        getTabs: function() {
-            return this.$tabItems;
-        },
+		afterActive: function() {
+			this.$element.trigger('tabs::afterActive', this);
+			if ($.type(this.options.onAfterActive) === 'function') {
+				this.options.onAfterActive(this);
+			}
+		},
 
-        getPanes: function() {
-            return this.$paneItems;
-        },
+		ajaxLoad: function(index) {
+			var self = this,
+				dtd;
+			if (this.options.cached === true && this.ajax[index].cached === true) {
+				return;
+			} else {
+				this.showLoading();
+				dtd = $.ajax({
+					url: this.ajax[index].href
+				});
+				dtd.done(function(data) {
+					self.ajax[index].cached = true;
+					self.hideLoading();
+					self.$paneItems.eq(index).html(data);
+				});
+				dtd.fail(function() {
+					self.hideLoading();
+					self.$paneItems.eq(index).html('failed');
+				});
+			}
+		},
 
-        getCurrentPane: function() {
-            return this.$paneItems.eq(this.current);
-        },
+		showLoading: function() {
+			this.$loading.appendTo(this.$panes);
+		},
+		hideLoading: function() {
+			this.$loading.remove();
+		},
 
-        getCurrentTab: function() {
-            return this.$tabItems.eq(this.current);
-        },
+		getTabs: function() {
+			return this.$tabItems;
+		},
 
-        getIndex: function() {
-            return this.current;
-        },
+		getPanes: function() {
+			return this.$paneItems;
+		},
 
-        next: function() {
-            var len = this.$tabItems.length,
-                current = this.current;
-            if (current < len - 1) {
-                current++;
-            } else {
-                current = 0;
-            }
+		getCurrentPane: function() {
+			return this.$paneItems.eq(this.current);
+		},
 
-            // (current < len-1) ? current++ : current = 0;
+		getCurrentTab: function() {
+			return this.$tabItems.eq(this.current);
+		},
 
-            this.active(current);
-        },
+		getIndex: function() {
+			return this.current;
+		},
 
-        prev: function() {
-            var len = this.$tabItems.length,
-                current = this.current;
-            if (current === 0) {
-                current = Math.abs(1 - len);
-            } else {
-                current = current - 1;
-            }
+		next: function() {
+			var len = this.$tabItems.length,
+				current = this.current;
+			if (current < len - 1) {
+				current++;
+			} else {
+				current = 0;
+			}
 
-            this.active(current);
-        },
+			// (current < len-1) ? current++ : current = 0;
 
-        destroy: function() {
-            // console.log(this.$element)
-            this.$element.remove();
-            // this.$tabItems.off(this.options.event).removeClass(this.classes.activeTab);
-            // this.$paneItems.eq(this.current).removeClass(this.classes.activePanes); 
-            // return this;
-        }
-    };
+			this.active(current);
+		},
 
-    // Collection method.
-    $.fn.tabs = function(options) {
-        if (typeof options === 'string') {
-            var method = options;
-            var method_arguments = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : undefined;
+		prev: function() {
+			var len = this.$tabItems.length,
+				current = this.current;
+			if (current === 0) {
+				current = Math.abs(1 - len);
+			} else {
+				current = current - 1;
+			}
 
-            if (/^(getTabs|getPanes|getCurrentPane|getCurrentTab|getIndex)$/.test(method)) {
-                var api = this.first().data('tabs');
-                if (api && typeof api[method] === 'function') {
-                    return api[method].apply(api, method_arguments);
-                }
-            } else {
-                return this.each(function() {
-                    var api = $.data(this, 'tabs');
-                    if (api && typeof api[method] === 'function') {
-                        api[method].apply(api, method_arguments);
-                    }
-                });
-            }
-        } else {
-            return this.each(function() {
-                if (!$.data(this, 'tabs')) {
-                    $.data(this, 'tabs', new Tabs(this, options));
-                }
-            });
-        }
-    };
+			this.active(current);
+		},
+
+		destroy: function() {
+			// console.log(this.$element)
+			this.$element.remove();
+			// this.$tabItems.off(this.options.event).removeClass(this.classes.activeTab);
+			// this.$paneItems.eq(this.current).removeClass(this.classes.activePanes); 
+			// return this;
+		}
+	};
+
+	// Collection method.
+	$.fn.tabs = function(options) {
+		if (typeof options === 'string') {
+			var method = options;
+			var method_arguments = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : undefined;
+
+			if (/^(getTabs|getPanes|getCurrentPane|getCurrentTab|getIndex)$/.test(method)) {
+				var api = this.first().data('tabs');
+				if (api && typeof api[method] === 'function') {
+					return api[method].apply(api, method_arguments);
+				}
+			} else {
+				return this.each(function() {
+					var api = $.data(this, 'tabs');
+					if (api && typeof api[method] === 'function') {
+						api[method].apply(api, method_arguments);
+					}
+				});
+			}
+		} else {
+			return this.each(function() {
+				if (!$.data(this, 'tabs')) {
+					$.data(this, 'tabs', new Tabs(this, options));
+				}
+			});
+		}
+	};
 }(window, document, jQuery));
 
-
 // jquery tabs history
-;(function(window, document, $, undefined) {
-    var $doc = $(document);
-    var history = {
-        states: {},
-        refresh: false,             // avoid repeating update
-        stopHashchangeEvent: false, // stop trigger hashChange when push state
-        on: function(eventType, callback) {
-            var self = this;
-            $(window).on(eventType, function(e) {
-                if (self.stopHashchangeEvent) {
-                    return false;
-                } else {
-                    callback(e);
-                    return false;
-                }
-                
-            });
-        },
-        off: function(eventType) {
-            $(window).off(eventType);
-        },
-        pushState: function(state) {
-            for (id in state) {
-                this.states[id] = state[id];
-            }
-            this.refresh = false;
-            this.stopHashchangeEvent = true;
-            setTimeout($.proxy(this.changeStates,this), 0);
-        },
-        changeStates: function() {
-            var self = this,
-                hash = '';
-            if (this.refresh === true) {
-                return;
-            }
+;
+(function(window, document, $, undefined) {
+	var $doc = $(document);
+	var history = {
+		states: {},
+		refresh: false, // avoid repeating update
+		stopHashchangeEvent: false, // stop trigger hashChange when push state
+		on: function(eventType, callback) {
+			var self = this;
+			$(window).on(eventType, function(e) {
+				if (self.stopHashchangeEvent) {
+					return false;
+				} else {
+					callback(e);
+					return false;
+				}
 
-            $.each(this.states, function(id,index) {
-                hash += id + '=' + index + '&';
-            });
+			});
+		},
+		off: function(eventType) {
+			$(window).off(eventType);
+		},
+		pushState: function(state) {
+			for (id in state) {
+				this.states[id] = state[id];
+			}
+			this.refresh = false;
+			this.stopHashchangeEvent = true;
+			setTimeout($.proxy(this.changeStates, this), 0);
+		},
+		changeStates: function() {
+			var self = this,
+				hash = '';
+			if (this.refresh === true) {
+				return;
+			}
 
-            window.location.hash =  hash.substr(0, hash.length - 1);
-            this.refresh = true;
-            setTimeout(function(){
-                self.stopHashchangeEvent = false;
-            },0);
-        },
-        getState: function() {
-            var hash = window.location.hash.replace('#','').replace('!',''),
-                queryString, param = {};
+			$.each(this.states, function(id, index) {
+				hash += id + '=' + index + '&';
+			});
 
-            if (hash ==='') {
-                return {};
-            }
+			window.location.hash = hash.substr(0, hash.length - 1);
+			this.refresh = true;
+			setTimeout(function() {
+				self.stopHashchangeEvent = false;
+			}, 0);
+		},
+		getState: function() {
+			var hash = window.location.hash.replace('#', '').replace('!', ''),
+				queryString, param = {};
 
-            queryString = hash.split("&");
+			if (hash === '') {
+				return {};
+			}
 
-            $.each(queryString, function(i,v) {
-                if (v == false) {
-                    return;
-                }
-                var args = v.match("#?(.*)=(.*)");
+			queryString = hash.split("&");
 
-                if (args) {
-                    param[args[1]] = args[2];
-                }
-                
-            });
+			$.each(queryString, function(i, v) {
+				if (v == false) {
+					return;
+				}
+				var args = v.match("#?(.*)=(.*)");
 
-            return param;
-        },
-        reset: function() {
-            if (this.refresh === true) {
-                return;
-            }
-            this.states = {};
-            window.location.hash = "#/";
+				if (args) {
+					param[args[1]] = args[2];
+				}
 
-            this.refresh = true;
-        }
-    };
+			});
 
-    $doc.on('tabs::init', function(event, instance) {
-        if (instance.options.history === false) {
-            return;
-        }
-        var hashchange = function(e) {
-            var states = history.getState(),
-                tabs,
-                id = instance.$element.attr('id'); 
-  
-            if (states[id]) {
-                tabs = $('#'+id).data('tabs');
-                if (tabs) {
-                    var $tab = instance.$element.find('#' + states[id]);
-                    if ($tab.length >= 1) {
-                        tabs.active(instance.$tabItems.index($tab));
-                    } else {
-                        tabs.active(states[id]);
-                    }
-                    
-                }
-            }
-        };
-  
-        history.on('hashchange.tabs', hashchange); 
-    });
+			return param;
+		},
+		reset: function() {
+			if (this.refresh === true) {
+				return;
+			}
+			this.states = {};
+			window.location.hash = "#/";
 
-    $doc.on('tabs::afterActive', function(event, instance) {
-        var index = instance.current, state = {},
-            id = instance.$element.attr('id'),
-            content = instance.$tabItems.eq(index).attr('id'); 
+			this.refresh = true;
+		}
+	};
 
-        if (instance.options.history === false) {
-            return;
-        }
+	$doc.on('tabs::init', function(event, instance) {
+		if (instance.options.history === false) {
+			return;
+		}
+		var hashchange = function(e) {
+			var states = history.getState(),
+				tabs,
+				id = instance.$element.attr('id');
 
-        if (content) {
-            state[id] = content;
-        } else {
-            state[id] = index;
-        }
-        history.pushState(state);
-    });
+			if (states[id]) {
+				tabs = $('#' + id).data('tabs');
+				if (tabs) {
+					var $tab = instance.$element.find('#' + states[id]);
+					if ($tab.length >= 1) {
+						tabs.active(instance.$tabItems.index($tab));
+					} else {
+						tabs.active(states[id]);
+					}
 
-    setTimeout(function() {
-        $(window).trigger('hashchange.tabs');
-    },0);
+				}
+			}
+		};
+
+		history.on('hashchange.tabs', hashchange);
+	});
+
+	$doc.on('tabs::afterActive', function(event, instance) {
+		var index = instance.current,
+			state = {},
+			id = instance.$element.attr('id'),
+			content = instance.$tabItems.eq(index).attr('id');
+
+		if (instance.options.history === false) {
+			return;
+		}
+
+		if (content) {
+			state[id] = content;
+		} else {
+			state[id] = index;
+		}
+		history.pushState(state);
+	});
+
+	setTimeout(function() {
+		$(window).trigger('hashchange.tabs');
+	}, 0);
 })(window, document, jQuery);
 
 // jquery tabs keyboard
-;(function(window, document, $, undefined) {
+;
+(function(window, document, $, undefined) {
 	var $doc = $(document);
 	var keyboard = {
 		keys: {
@@ -413,33 +424,204 @@
 		}
 	};
 
-    $doc.on('tabs::init', function(event, instance) {
-        if (instance.options.keyboard === false) {
-            return;
-        }
+	$doc.on('tabs::init', function(event, instance) {
+		if (instance.options.keyboard === false) {
+			return;
+		}
 
-        // make ul div etc. get focus
-        instance.$element.attr('tabindex','0').on('focus',function(e) {
-            keyboard.attach({
-                left: $.proxy(instance.prev, instance),
-                right: $.proxy(instance.next, instance)
-            });
-            return false;
-        }).on('blur', function(e) {
-            keyboard.detach();
-            return false;
-        });
+		// make ul div etc. get focus
+		instance.$element.attr('tabindex', '0').on('focus', function(e) {
+			keyboard.attach({
+				left: $.proxy(instance.prev, instance),
+				right: $.proxy(instance.next, instance)
+			});
+			return false;
+		}).on('blur', function(e) {
+			keyboard.detach();
+			return false;
+		});
 
-        instance.$panes.attr('tabindex','0').on('focus',function(e) {
-            keyboard.attach({
-                left: $.proxy(instance.prev, instance),
-                right: $.proxy(instance.next, instance)
-            });
-            return false;
-        }).on('blur', function(e) {
-            keyboard.detach();
-            return false;
-        });;
+		instance.$panes.attr('tabindex', '0').on('focus', function(e) {
+			keyboard.attach({
+				left: $.proxy(instance.prev, instance),
+				right: $.proxy(instance.next, instance)
+			});
+			return false;
+		}).on('blur', function(e) {
+			keyboard.detach();
+			return false;
+		});;
 
-    });
+	});
+})(window, document, jQuery);
+
+// elementTransitions
+;(function(window, document, $, undefined) {
+	var $doc = $(document);
+	var effects = {
+		options: {
+			inClass: '',
+			outClass: '',
+			$block: null,
+			$pages: null
+		},
+
+		animEndEventName: '',
+		isAnimating: false,
+		current: 0,
+		total: 0,
+		inClass: '',
+		outClass: '',
+
+		$block: '',
+		$pages: '',
+
+		animEndEventNames: {
+			'WebkitAnimation': 'webkitAnimationEnd',
+			'OAnimation': 'oAnimationEnd',
+			'msAnimation': 'MSAnimationEnd',
+			'animation': 'animationend'
+		},
+
+		init: function(options) {
+			this.options = $.extend({}, this.options, options);
+
+			this.$pages = this.options.$pages;
+			this.$block = this.options.$block;
+			
+			this.inClass = this.formatClass(this.options.inClass);
+			this.outClass = this.formatClass(this.options.outClass);
+			this.total = this.options.$pages.length;
+			this.animEndEventName = this.animEndEventNames[this.getTransitionPrefix()];
+
+			this.$pages.each(function(i,v) {
+				$(v).addClass('et-page');
+			});
+			this.$block.addClass('et-wrapper');
+			
+			this.$pages.eq(this.current).addClass('et-page-current');
+		},
+		nextPage: function() {
+			var last = this.current;
+
+			if (this.isAnimating) {
+				return false;
+			}
+
+			this.isAnimating = true;
+
+			if (this.current < this.total - 1) {
+				this.current++;
+			} else {
+				this.current = 0;
+			}
+
+			this.animate(last, this.current);
+		},
+		prevPage: function() {
+			var last = this.current;
+
+			if (this.isAnimating) {
+				return false;
+			}
+
+			this.isAnimating = true;
+
+			if (this.current > 0) {
+				this.current--;
+			} else {
+				this.current = this.total - 1;
+			}
+
+			this.animate(last, this.current);
+		},
+		animate: function(currentIndex, nextIndex, callback) {
+			var self = this,
+				endCurrPage = false,
+				endNextPage = false,
+				$currPage = this.$pages.eq(currentIndex),
+				$nextPage = this.$pages.eq(nextIndex);
+
+			this.$pages.removeClass('et-page-current');
+			$nextPage.addClass('et-page-current');
+
+			$currPage.addClass(this.outClass).on(this.animEndEventName, function() {
+				$currPage.off(self.animEndEventName);
+				endCurrPage = true;
+				if (endNextPage) {
+					if (jQuery.isFunction(callback)) {
+						callback(self.$block, $nextPage, $currPage);
+					}
+					self.onEndAnimation($currPage, $nextPage);
+				}
+			});
+
+			$nextPage.addClass(this.inClass).on(this.animEndEventName, function() {
+				$nextPage.off(self.animEndEventName);
+				endNextPage = true;
+				if (endCurrPage) {
+					self.onEndAnimation($currPage, $nextPage);
+				}
+			});
+		},
+		onEndAnimation: function($outpage, $inpage) {
+			this.resetPage($outpage, $inpage);
+    		this.isAnimating = false;
+		},
+		resetPage: function($outpage, $inpage) {
+		    $outpage.removeClass(this.outClass);
+		    $inpage.removeClass(this.inClass);
+		},
+		formatClass: function(str) {
+		    var classes = str.split(" "),
+		    	len = classes.length,
+		        output = "";
+
+		    for(var n=0; n<len; n++){
+		      output += " pt-page-" + classes[n];
+		    }
+		    return output;
+		},
+		getTransitionPrefix: function() {
+		    var b = document.body || document.documentElement,
+		    	v = ['Moz', 'Webkit', 'Khtml', 'O', 'ms'],
+		        s = b.style,
+		    	p = 'animation';
+
+		    if(typeof s[p] == 'string') {
+		      return 'animation';
+		    }
+		    
+		    p = p.charAt(0).toUpperCase() + p.substr(1);
+
+		    for( var i=0; i<v.length; i++ ) {
+		      if(typeof s[v[i] + p] == 'string') {
+		      	return v[i] + p;
+		      }
+		        
+		    }
+		    return false;
+		}
+	};
+
+	$doc.on('tabs::init', function(event, instance) {
+		if (instance.options.ifAnimate === false) {
+			return false;
+		}
+		instance.effects = $.extend(true, {}, effects);
+		instance.effects.init({
+			inClass: instance.options.animate.inClass,
+			outClass: instance.options.animate.outClass,
+			$block: instance.$panes,
+			$pages: instance.$paneItems
+		});
+	});
+
+	$doc.on('tabs::active', function(event, instance) {
+		if (instance.options.ifAnimate === false) {
+			return false;
+		}
+		instance.effects.animate(instance.last, instance.current);
+	});
+
 })(window, document, jQuery);

@@ -1,129 +1,131 @@
 // jquery tabs history
-;(function(window, document, $, undefined) {
-    var $doc = $(document);
-    var history = {
-        states: {},
-        refresh: false,             // avoid repeating update
-        stopHashchangeEvent: false, // stop trigger hashChange when push state
-        on: function(eventType, callback) {
-            var self = this;
-            $(window).on(eventType, function(e) {
-                if (self.stopHashchangeEvent) {
-                    return false;
-                } else {
-                    callback(e);
-                    return false;
-                }
-                
-            });
-        },
-        off: function(eventType) {
-            $(window).off(eventType);
-        },
-        pushState: function(state) {
-            for (id in state) {
-                this.states[id] = state[id];
-            }
-            this.refresh = false;
-            this.stopHashchangeEvent = true;
-            setTimeout($.proxy(this.changeStates,this), 0);
-        },
-        changeStates: function() {
-            var self = this,
-                hash = '';
-            if (this.refresh === true) {
-                return;
-            }
+;
+(function(window, document, $, undefined) {
+	var $doc = $(document);
+	var history = {
+		states: {},
+		refresh: false, // avoid repeating update
+		stopHashchangeEvent: false, // stop trigger hashChange when push state
+		on: function(eventType, callback) {
+			var self = this;
+			$(window).on(eventType, function(e) {
+				if (self.stopHashchangeEvent) {
+					return false;
+				} else {
+					callback(e);
+					return false;
+				}
 
-            $.each(this.states, function(id,index) {
-                hash += id + '=' + index + '&';
-            });
+			});
+		},
+		off: function(eventType) {
+			$(window).off(eventType);
+		},
+		pushState: function(state) {
+			for (id in state) {
+				this.states[id] = state[id];
+			}
+			this.refresh = false;
+			this.stopHashchangeEvent = true;
+			setTimeout($.proxy(this.changeStates, this), 0);
+		},
+		changeStates: function() {
+			var self = this,
+				hash = '';
+			if (this.refresh === true) {
+				return;
+			}
 
-            window.location.hash =  hash.substr(0, hash.length - 1);
-            this.refresh = true;
-            setTimeout(function(){
-                self.stopHashchangeEvent = false;
-            },0);
-        },
-        getState: function() {
-            var hash = window.location.hash.replace('#','').replace('!',''),
-                queryString, param = {};
+			$.each(this.states, function(id, index) {
+				hash += id + '=' + index + '&';
+			});
 
-            if (hash ==='') {
-                return {};
-            }
+			window.location.hash = hash.substr(0, hash.length - 1);
+			this.refresh = true;
+			setTimeout(function() {
+				self.stopHashchangeEvent = false;
+			}, 0);
+		},
+		getState: function() {
+			var hash = window.location.hash.replace('#', '').replace('!', ''),
+				queryString, param = {};
 
-            queryString = hash.split("&");
+			if (hash === '') {
+				return {};
+			}
 
-            $.each(queryString, function(i,v) {
-                if (v == false) {
-                    return;
-                }
-                var args = v.match("#?(.*)=(.*)");
+			queryString = hash.split("&");
 
-                if (args) {
-                    param[args[1]] = args[2];
-                }
-                
-            });
+			$.each(queryString, function(i, v) {
+				if (v == false) {
+					return;
+				}
+				var args = v.match("#?(.*)=(.*)");
 
-            return param;
-        },
-        reset: function() {
-            if (this.refresh === true) {
-                return;
-            }
-            this.states = {};
-            window.location.hash = "#/";
+				if (args) {
+					param[args[1]] = args[2];
+				}
 
-            this.refresh = true;
-        }
-    };
+			});
 
-    $doc.on('tabs::init', function(event, instance) {
-        if (instance.options.history === false) {
-            return;
-        }
-        var hashchange = function(e) {
-            var states = history.getState(),
-                tabs,
-                id = instance.$element.attr('id'); 
-  
-            if (states[id]) {
-                tabs = $('#'+id).data('tabs');
-                if (tabs) {
-                    var $tab = instance.$element.find('#' + states[id]);
-                    if ($tab.length >= 1) {
-                        tabs.active(instance.$tabItems.index($tab));
-                    } else {
-                        tabs.active(states[id]);
-                    }
-                    
-                }
-            }
-        };
-  
-        history.on('hashchange.tabs', hashchange); 
-    });
+			return param;
+		},
+		reset: function() {
+			if (this.refresh === true) {
+				return;
+			}
+			this.states = {};
+			window.location.hash = "#/";
 
-    $doc.on('tabs::afterActive', function(event, instance) {
-        var index = instance.current, state = {},
-            id = instance.$element.attr('id'),
-            content = instance.$tabItems.eq(index).attr('id'); 
+			this.refresh = true;
+		}
+	};
 
-        if (instance.options.history === false) {
-            return;
-        }
+	$doc.on('tabs::init', function(event, instance) {
+		if (instance.options.history === false) {
+			return;
+		}
+		var hashchange = function(e) {
+			var states = history.getState(),
+				tabs,
+				id = instance.$element.attr('id');
 
-        if (content) {
-            state[id] = content;
-        } else {
-            state[id] = index;
-        }
-        history.pushState(state);
-    });
+			if (states[id]) {
+				tabs = $('#' + id).data('tabs');
+				if (tabs) {
+					var $tab = instance.$element.find('#' + states[id]);
+					if ($tab.length >= 1) {
+						tabs.active(instance.$tabItems.index($tab));
+					} else {
+						tabs.active(states[id]);
+					}
 
-    setTimeout(function() {
-        $(window).trigger('hashchange.tabs');
-    },0);
+				}
+			}
+		};
+
+		history.on('hashchange.tabs', hashchange);
+	});
+
+	$doc.on('tabs::afterActive', function(event, instance) {
+		var index = instance.current,
+			state = {},
+			id = instance.$element.attr('id'),
+			content = instance.$tabItems.eq(index).attr('id');
+
+		if (instance.options.history === false) {
+			return;
+		}
+
+		if (content) {
+			state[id] = content;
+		} else {
+			state[id] = index;
+		}
+		history.pushState(state);
+	});
+
+	setTimeout(function() {
+		$(window).trigger('hashchange.tabs');
+	}, 0);
 })(window, document, jQuery);
