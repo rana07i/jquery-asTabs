@@ -1,7 +1,8 @@
 /*! jQuery tabs - v0.1.1 - 2013-08-06
 * https://github.com/amazingSurge/jquery-tabs
 * Copyright (c) 2013 amazingSurge; Licensed GPL */
-;(function(window, document, $, undefined) {
+;
+(function(window, document, $, undefined) {
 	"use strict";
 
 	// Constructor
@@ -22,6 +23,7 @@
 
 		this.options = $.extend(true, {}, Tabs.defaults, options, meta_data);
 		this.namespace = this.options.namespace;
+		this.initialized = false;
 
 		// Class
 		this.classes = {
@@ -73,7 +75,7 @@
 		ifAnimate: false,
 		animate: {
 			inClass: '',
-			outClass: '',
+			outClass: ''
 		},
 
 		event: 'click'
@@ -98,6 +100,7 @@
 			}
 
 			this.active(this.options.initialIndex);
+			this.initialized = true;
 		},
 		// This is a public function that users can call
 		// Prototype methods are shared across all instances
@@ -122,7 +125,6 @@
 			if (this.options.ajax === true) {
 				this.ajaxLoad(index);
 			}
-
 		},
 
 		afterActive: function() {
@@ -189,8 +191,6 @@
 			} else {
 				current = 0;
 			}
-
-			// (current < len-1) ? current++ : current = 0;
 
 			this.active(current);
 		},
@@ -463,7 +463,8 @@
 			inClass: '',
 			outClass: '',
 			$block: null,
-			$pages: null
+			$pages: null,
+			onInit: null
 		},
 
 		animEndEventName: '',
@@ -488,18 +489,22 @@
 
 			this.$pages = this.options.$pages;
 			this.$block = this.options.$block;
-			
+
 			this.inClass = this.formatClass(this.options.inClass);
 			this.outClass = this.formatClass(this.options.outClass);
 			this.total = this.options.$pages.length;
 			this.animEndEventName = this.animEndEventNames[this.getTransitionPrefix()];
 
-			this.$pages.each(function(i,v) {
+			this.$pages.each(function(i, v) {
 				$(v).addClass('et-page');
 			});
+
 			this.$block.addClass('et-wrapper');
-			
 			this.$pages.eq(this.current).addClass('et-page-current');
+
+			if ($.type(this.options.onInit) === 'function') {
+				this.options.onInit(this.$block, this.$pages);
+			}
 		},
 		nextPage: function() {
 			var last = this.current;
@@ -542,7 +547,6 @@
 				$currPage = this.$pages.eq(currentIndex),
 				$nextPage = this.$pages.eq(nextIndex);
 
-			this.$pages.removeClass('et-page-current');
 			$nextPage.addClass('et-page-current');
 
 			$currPage.addClass(this.outClass).on(this.animEndEventName, function() {
@@ -566,41 +570,41 @@
 		},
 		onEndAnimation: function($outpage, $inpage) {
 			this.resetPage($outpage, $inpage);
-    		this.isAnimating = false;
+			this.isAnimating = false;
 		},
 		resetPage: function($outpage, $inpage) {
-		    $outpage.removeClass(this.outClass);
-		    $inpage.removeClass(this.inClass);
+			this.$pages.removeClass('et-page-current');
+			$outpage.removeClass(this.outClass);
+			$inpage.removeClass(this.inClass).addClass('et-page-current');
 		},
 		formatClass: function(str) {
-		    var classes = str.split(" "),
-		    	len = classes.length,
-		        output = "";
+			var classes = str.split(" "),
+				len = classes.length,
+				output = "";
 
-		    for(var n=0; n<len; n++){
-		      output += " pt-page-" + classes[n];
-		    }
-		    return output;
+			for (var n = 0; n < len; n++) {
+				output += " pt-page-" + classes[n];
+			}
+			return $.trim(output);
 		},
 		getTransitionPrefix: function() {
-		    var b = document.body || document.documentElement,
-		    	v = ['Moz', 'Webkit', 'Khtml', 'O', 'ms'],
-		        s = b.style,
-		    	p = 'animation';
+			var b = document.body || document.documentElement,
+				v = ['Moz', 'Webkit', 'Khtml', 'O', 'ms'],
+				s = b.style,
+				p = 'animation';
 
-		    if(typeof s[p] == 'string') {
-		      return 'animation';
-		    }
-		    
-		    p = p.charAt(0).toUpperCase() + p.substr(1);
+			if (typeof s[p] === 'string') {
+				return 'animation';
+			}
 
-		    for( var i=0; i<v.length; i++ ) {
-		      if(typeof s[v[i] + p] == 'string') {
-		      	return v[i] + p;
-		      }
-		        
-		    }
-		    return false;
+			p = p.charAt(0).toUpperCase() + p.substr(1);
+
+			for (var i = 0; i < v.length; i++) {
+				if (typeof s[v[i] + p] === 'string') {
+					return v[i] + p;
+				}
+			}
+			return false;
 		}
 	};
 
@@ -613,12 +617,15 @@
 			inClass: instance.options.animate.inClass,
 			outClass: instance.options.animate.outClass,
 			$block: instance.$panes,
-			$pages: instance.$paneItems
+			$pages: instance.$paneItems,
+			onInit: function($panes, $panesItems) {
+				$panesItems.css({display: 'block'});
+			}
 		});
 	});
 
 	$doc.on('tabs::active', function(event, instance) {
-		if (instance.options.ifAnimate === false) {
+		if (instance.options.ifAnimate === false || instance.initialized === false) {
 			return false;
 		}
 		instance.effects.animate(instance.last, instance.current);

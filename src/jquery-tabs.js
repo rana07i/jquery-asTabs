@@ -6,7 +6,8 @@
  * Licensed under the GPL license.
  */
 
-;(function(window, document, $, undefined) {
+;
+(function(window, document, $, undefined) {
 	"use strict";
 
 	// Constructor
@@ -27,6 +28,7 @@
 
 		this.options = $.extend(true, {}, Tabs.defaults, options, meta_data);
 		this.namespace = this.options.namespace;
+		this.initialized = false;
 
 		// Class
 		this.classes = {
@@ -78,7 +80,7 @@
 		ifAnimate: false,
 		animate: {
 			inClass: '',
-			outClass: '',
+			outClass: ''
 		},
 
 		event: 'click'
@@ -103,6 +105,7 @@
 			}
 
 			this.active(this.options.initialIndex);
+			this.initialized = true;
 		},
 		// This is a public function that users can call
 		// Prototype methods are shared across all instances
@@ -127,7 +130,6 @@
 			if (this.options.ajax === true) {
 				this.ajaxLoad(index);
 			}
-
 		},
 
 		afterActive: function() {
@@ -194,8 +196,6 @@
 			} else {
 				current = 0;
 			}
-
-			// (current < len-1) ? current++ : current = 0;
 
 			this.active(current);
 		},
