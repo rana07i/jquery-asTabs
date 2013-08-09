@@ -148,6 +148,9 @@ the most important thing is you should set panes value to let plugin find his pa
 
 jquery tabs has different methods , we can use it as below :
 ```javascript
+// active index
+$(".demo").tabs("active", index);
+
 // get all tabs element
 $(".demo").tabs("getTabs");
 

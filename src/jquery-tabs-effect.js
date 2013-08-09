@@ -146,6 +146,7 @@
 				if (typeof s[v[i] + p] === 'string') {
 					return v[i] + p;
 				}
+
 			}
 			return false;
 		}
@@ -162,7 +163,9 @@
 			$block: instance.$panes,
 			$pages: instance.$paneItems,
 			onInit: function($panes, $panesItems) {
-				$panesItems.css({display: 'block'});
+				$panesItems.css({
+					display: 'block'
+				});
 			}
 		});
 	});

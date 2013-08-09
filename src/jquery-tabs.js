@@ -29,6 +29,7 @@
 		this.options = $.extend(true, {}, Tabs.defaults, options, meta_data);
 		this.namespace = this.options.namespace;
 		this.initialized = false;
+		this.enabled = true;
 
 		// Class
 		this.classes = {
@@ -112,7 +113,7 @@
 		active: function(index) {
 			var self = this;
 
-			if (this.current === index) {
+			if (this.current === index || this.enabled === false) {
 				return;
 			}
 
@@ -210,6 +211,14 @@
 			}
 
 			this.active(current);
+		},
+
+		enable: function() {
+			this.enabled = true;
+		},
+
+		disable: function() {
+			this.enabled = false;
 		},
 
 		destroy: function() {

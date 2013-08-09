@@ -1,4 +1,4 @@
-/*! jQuery tabs - v0.1.1 - 2013-08-06
+/*! jQuery tabs - v0.1.1 - 2013-08-08
 * https://github.com/amazingSurge/jquery-tabs
 * Copyright (c) 2013 amazingSurge; Licensed GPL */
 ;
@@ -456,7 +456,8 @@
 })(window, document, jQuery);
 
 // elementTransitions
-;(function(window, document, $, undefined) {
+;
+(function(window, document, $, undefined) {
 	var $doc = $(document);
 	var effects = {
 		options: {
@@ -603,6 +604,7 @@
 				if (typeof s[v[i] + p] === 'string') {
 					return v[i] + p;
 				}
+
 			}
 			return false;
 		}
@@ -619,7 +621,9 @@
 			$block: instance.$panes,
 			$pages: instance.$paneItems,
 			onInit: function($panes, $panesItems) {
-				$panesItems.css({display: 'block'});
+				$panesItems.css({
+					display: 'block'
+				});
 			}
 		});
 	});
