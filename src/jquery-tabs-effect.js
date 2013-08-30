@@ -1,5 +1,6 @@
 // elementTransitions
-;(function(window, document, $, undefined) {
+;
+(function(window, document, $, undefined) {
 	var $doc = $(document);
 	var effects = {
 		options: {

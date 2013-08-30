@@ -1,11 +1,6 @@
-/*
- * jquery-tabs
- * https://github.com/amazingSurge/jquery-tabs
- *
- * Copyright (c) 2013 Wowhoo
- * Licensed under the GPL license.
- */
-
+/*! jQuery tabs - v0.1.1 - 2013-08-08
+* https://github.com/amazingSurge/jquery-tabs
+* Copyright (c) 2013 amazingSurge; Licensed GPL */
 ;
 (function(window, document, $, undefined) {
 	"use strict";
@@ -29,7 +24,6 @@
 		this.options = $.extend(true, {}, Tabs.defaults, options, meta_data);
 		this.namespace = this.options.namespace;
 		this.initialized = false;
-		this.enabled = true;
 
 		// Class
 		this.classes = {
@@ -42,6 +36,7 @@
 		this.$tabItems = this.$element.children();
 		this.$panes = $(this.options.panes).addClass(this.classes.panes);
 		this.$paneItems = this.$panes.children();
+		this.size = this.$tabItems.length;
 
 		if (this.options.skin) {
 			this.$element.addClass(this.classes.skin);
@@ -107,13 +102,15 @@
 
 			this.active(this.options.initialIndex);
 			this.initialized = true;
+
+			this.$element.trigger('tabs::ready', this);
 		},
 		// This is a public function that users can call
 		// Prototype methods are shared across all instances
 		active: function(index) {
 			var self = this;
 
-			if (this.current === index || this.enabled === false) {
+			if (this.current === index) {
 				return;
 			}
 
@@ -189,6 +186,30 @@
 			return this.current;
 		},
 
+		getSize: function() {
+			return this.size;
+		},
+
+		append: function(title, content) {
+
+		},
+
+		insertBefore: function(title, content, index) {
+
+		},
+
+		insertAfter: function(title, content, index) {
+
+		},
+
+		enable: function(index){
+
+		},
+
+		disable: function(index){
+
+		},
+
 		next: function() {
 			var len = this.$tabItems.length,
 				current = this.current;
@@ -211,14 +232,6 @@
 			}
 
 			this.active(current);
-		},
-
-		enable: function() {
-			this.enabled = true;
-		},
-
-		disable: function() {
-			this.enabled = false;
 		},
 
 		destroy: function() {

@@ -390,14 +390,17 @@
 			'RETURN': 13,
 			'ESCAPE': 27,
 			'BACKSPACE': 8,
-			'SPACE': 32
+			'SPACE': 32,
+			'HOME':36,
+			'END':35
 		},
 		map: {},
 		bound: false,
 		press: function(e) {
 			var key = e.keyCode || e.which;
 			if (key in keyboard.map && typeof keyboard.map[key] === 'function') {
-				keyboard.map[key].call(self, e);
+				e.preventDefault();
+				return keyboard.map[key].call(self, e);
 			}
 		},
 		attach: function(map) {
@@ -430,27 +433,18 @@
 		}
 
 		// make ul div etc. get focus
-		instance.$element.attr('tabindex', '0').on('focus', function(e) {
+		instance.$element.add(instance.$panes).attr('tabindex', '0').on('focus', function(e) {
 			keyboard.attach({
 				left: $.proxy(instance.prev, instance),
-				right: $.proxy(instance.next, instance)
+				right: $.proxy(instance.next, instance),
+				home: $.proxy(instance.active, instance, 0),
+				end: $.proxy(instance.active, instance, 0),
 			});
 			return false;
 		}).on('blur', function(e) {
 			keyboard.detach();
 			return false;
 		});
-
-		instance.$panes.attr('tabindex', '0').on('focus', function(e) {
-			keyboard.attach({
-				left: $.proxy(instance.prev, instance),
-				right: $.proxy(instance.next, instance)
-			});
-			return false;
-		}).on('blur', function(e) {
-			keyboard.detach();
-			return false;
-		});;
 
 	});
 })(window, document, jQuery);
