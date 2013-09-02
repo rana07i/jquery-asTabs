@@ -152,6 +152,7 @@
 				<button id="testGetIndex">Test Get Index</button>
 				<button id="testNext">Test Next</button>
 				<button id="testPrev">Test Prev</button>
+				<button id="testAppend">Test Append</button>
 				<button id="testDestroy">Test Destroy</button>
 			</div>
 		</div>
@@ -238,6 +239,10 @@
 
 				$('#testDestroy').click(function(){
 					console.info($('.demo4').tabs('destroy'));
+				});
+
+				$('#testAppend').click(function(){
+					$('.demo7').tabs('append','hello','<p>world</p>');
 				});
 			});	
 		</script>

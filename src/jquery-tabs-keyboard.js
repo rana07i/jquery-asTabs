@@ -11,9 +11,7 @@
 			'RETURN': 13,
 			'ESCAPE': 27,
 			'BACKSPACE': 8,
-			'SPACE': 32,
-			'HOME':36,
-			'END':35
+			'SPACE': 32
 		},
 		map: {},
 		bound: false,
@@ -57,9 +55,7 @@
 		instance.$element.add(instance.$panes).attr('tabindex', '0').on('focus', function(e) {
 			keyboard.attach({
 				left: $.proxy(instance.prev, instance),
-				right: $.proxy(instance.next, instance),
-				home: $.proxy(instance.active, instance, 0),
-				end: $.proxy(instance.active, instance, instance.size-1),
+				right: $.proxy(instance.next, instance)
 			});
 			return false;
 		}).on('blur', function(e) {

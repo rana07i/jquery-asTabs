@@ -28,7 +28,7 @@
 		// Class
 		this.classes = {
 			activeTab: this.namespace + '_active',
-			activePanes: this.namespace + '_active',
+			activePane: this.namespace + '_active',
 			panes: this.namespace + '-panes',
 			skin: this.namespace + '_' + this.options.skin
 		};
@@ -61,24 +61,18 @@
 	// Default options for the plugin as a simple object
 	Tabs.defaults = {
 		namespace: 'tabs',
-
 		panes: '.panes',
-
 		skin: null,
 		initialIndex: 0,
-
 		ajax: false,
 		cached: false,
-
 		history: false,
 		keyboard: false,
-
 		ifAnimate: false,
 		animate: {
 			inClass: '',
 			outClass: ''
 		},
-
 		event: 'click'
 	};
 
@@ -88,7 +82,7 @@
 			var self = this;
 
 			// Bind logic
-			this.$tabItems.on(this.options.event, function(e) {
+			this.$element.on(this.options.event, '> *', function(e) {
 				var index = $(e.target).index();
 				self.active(index);
 				self.afterActive();
@@ -117,7 +111,7 @@
 			this.last = this.current;
 			this.current = index;
 			this.$tabItems.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
-			this.$paneItems.eq(index).addClass(this.classes.activePanes).siblings().removeClass(this.classes.activePanes);
+			this.$paneItems.eq(index).addClass(this.classes.activePane).siblings().removeClass(this.classes.activePane);
 
 			this.$element.trigger('tabs::active', this);
 
@@ -191,15 +185,16 @@
 		},
 
 		append: function(title, content) {
-
+			this.add(title, content, this.size);
 		},
 
-		insertBefore: function(title, content, index) {
+		add: function(title, content, index) {
+			this.$tabItems.eq(index-1).after(this.$tabItems.eq(0).clone().removeClass(this.classes.activeTab).html(title));
+			this.$paneItems.eq(index-1).after(this.$paneItems.eq(0).clone().removeClass(this.classes.activePane).html(content));
 
-		},
-
-		insertAfter: function(title, content, index) {
-
+			this.$tabItems = this.$element.children();
+			this.$paneItems = this.$panes.children();
+			this.size++;
 		},
 
 		enable: function(index){
@@ -235,11 +230,7 @@
 		},
 
 		destroy: function() {
-			// console.log(this.$element)
-			this.$element.remove();
-			// this.$tabItems.off(this.options.event).removeClass(this.classes.activeTab);
-			// this.$paneItems.eq(this.current).removeClass(this.classes.activePanes); 
-			// return this;
+			
 		}
 	};
 
