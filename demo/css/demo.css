@@ -43,25 +43,25 @@ div[class^="demo"] {
   height: 200px;
 }
 
-.et-page {
+[class*="page"] {
   padding: 8px;
 }
-.et-page:nth-child(1) {
+[class*="page"]:nth-child(1) {
   background: #0ac2d2;
 }
 
-.et-page:nth-child(2) {
+[class*="page"]:nth-child(2) {
   background: #f68dbb;
 }
 
-.et-page:nth-child(3) {
+[class*="page"]:nth-child(3) {
   background: #60d7a9;
 }
 
-.et-page:nth-child(4) {
+[class*="page"]:nth-child(4) {
   background: #fdc162;
 }
 
-.et-page:nth-child(5) {
+[class*="page"]:nth-child(5) {
   background: #fd6a62;
 }

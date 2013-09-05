@@ -21,8 +21,8 @@ module.exports = function(grunt) {
 				dest: 'dist/<%= pkg.name %>.js'
 			},
 			// all: {
-			// 	src: ['src/<%= pkg.name %>.js','src/jquery-tabs-history.js','src/jquery-tabs-keyboard.js'],
-			// 	dest: 'dist/<%= pkg.name %>.js'
+			//	src: ['src/<%= pkg.name %>.js','src/jquery-tabs-history.js','src/jquery-tabs-keyboard.js'],
+			//	dest: 'dist/<%= pkg.name %>.js'
 			// }
 		},
 		uglify: {

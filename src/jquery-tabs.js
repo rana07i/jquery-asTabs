@@ -70,6 +70,7 @@
 		keyboard: false,
 		ifAnimate: false,
 		animate: {
+			effect: '',
 			inClass: '',
 			outClass: ''
 		},
@@ -90,9 +91,6 @@
 			});
 
 			this.$element.trigger('tabs::init', this);
-			if ($.type(this.options.onInit) === 'function') {
-				this.options.onInit(this);
-			}
 
 			this.active(this.options.initialIndex);
 			this.initialized = true;

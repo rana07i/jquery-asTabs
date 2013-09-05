@@ -7,8 +7,7 @@
 			inClass: '',
 			outClass: '',
 			$block: null,
-			$pages: null,
-			onInit: null
+			$pages: null
 		},
 
 		animEndEventName: '',
@@ -39,16 +38,8 @@
 			this.total = this.options.$pages.length;
 			this.animEndEventName = this.animEndEventNames[this.getTransitionPrefix()];
 
-			this.$pages.each(function(i, v) {
-				$(v).addClass('et-page');
-			});
+			this.$block.addClass('effect_' + this.options.effect);
 
-			this.$block.addClass('et-wrapper');
-			this.$pages.eq(this.current).addClass('et-page-current');
-
-			if ($.type(this.options.onInit) === 'function') {
-				this.options.onInit(this.$block, this.$pages);
-			}
 		},
 		nextPage: function() {
 			var last = this.current;
@@ -91,9 +82,7 @@
 				$currPage = this.$pages.eq(currentIndex),
 				$nextPage = this.$pages.eq(nextIndex);
 
-			$nextPage.addClass('et-page-current');
-
-			$currPage.addClass(this.outClass).on(this.animEndEventName, function() {
+			$currPage.addClass(this.outClass + ' effect_last').on(this.animEndEventName, function() {
 				$currPage.off(self.animEndEventName);
 				endCurrPage = true;
 				if (endNextPage) {
@@ -117,9 +106,9 @@
 			this.isAnimating = false;
 		},
 		resetPage: function($outpage, $inpage) {
-			this.$pages.removeClass('et-page-current');
+			this.$pages.removeClass('effect_last');
 			$outpage.removeClass(this.outClass);
-			$inpage.removeClass(this.inClass).addClass('et-page-current');
+			$inpage.removeClass(this.inClass);
 		},
 		formatClass: function(str) {
 			var classes = str.split(" "),
@@ -127,7 +116,7 @@
 				output = "";
 
 			for (var n = 0; n < len; n++) {
-				output += " pt-page-" + classes[n];
+				output += " effect_" + this.options.effect + classes[n];
 			}
 			return $.trim(output);
 		},
@@ -159,15 +148,11 @@
 		}
 		instance.effects = $.extend(true, {}, effects);
 		instance.effects.init({
+			effect: instance.options.animate.effect,
 			inClass: instance.options.animate.inClass,
 			outClass: instance.options.animate.outClass,
 			$block: instance.$panes,
-			$pages: instance.$paneItems,
-			onInit: function($panes, $panesItems) {
-				$panesItems.css({
-					display: 'block'
-				});
-			}
+			$pages: instance.$paneItems
 		});
 	});
 
