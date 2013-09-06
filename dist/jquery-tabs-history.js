@@ -1,3 +1,6 @@
+/*! jQuery tabs - v0.3.0 - 2013-09-06
+* https://github.com/amazingSurge/jquery-tabs
+* Copyright (c) 2013 amazingSurge; Licensed GPL */
 // jquery tabs history
 
 (function(window, document, $, undefined) {

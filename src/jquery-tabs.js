@@ -1,7 +1,7 @@
-/*! jQuery tabs - v0.1.1 - 2013-08-08
-* https://github.com/amazingSurge/jquery-tabs
-* Copyright (c) 2013 amazingSurge; Licensed GPL */
-;
+/*! jQuery tabs - v0.3.0 - 2013-09-06
+ * https://github.com/amazingSurge/jquery-tabs
+ * Copyright (c) 2013 amazingSurge; Licensed GPL */
+
 (function(window, document, $, undefined) {
 	"use strict";
 
@@ -68,12 +68,7 @@
 		cached: false,
 		history: false,
 		keyboard: false,
-		ifAnimate: false,
-		animate: {
-			effect: '',
-			inClass: '',
-			outClass: ''
-		},
+		effect: false, // slideIn, scaleUp, scaleUpDown, scaleUpCenter, flipInLeft, flipInRight, flipInRight, flipInBottom, flipInTop
 		event: 'click'
 	};
 
@@ -100,7 +95,6 @@
 		// This is a public function that users can call
 		// Prototype methods are shared across all instances
 		active: function(index) {
-			var self = this;
 
 			if (this.current === index) {
 				return;
@@ -187,19 +181,19 @@
 		},
 
 		add: function(title, content, index) {
-			this.$tabItems.eq(index-1).after(this.$tabItems.eq(0).clone().removeClass(this.classes.activeTab).html(title));
-			this.$paneItems.eq(index-1).after(this.$paneItems.eq(0).clone().removeClass(this.classes.activePane).html(content));
+			this.$tabItems.eq(index - 1).after(this.$tabItems.eq(0).clone().removeClass(this.classes.activeTab).html(title));
+			this.$paneItems.eq(index - 1).after(this.$paneItems.eq(0).clone().removeClass(this.classes.activePane).html(content));
 
 			this.$tabItems = this.$element.children();
 			this.$paneItems = this.$panes.children();
 			this.size++;
 		},
 
-		enable: function(index){
+		enable: function() {
 
 		},
 
-		disable: function(index){
+		disable: function() {
 
 		},
 
@@ -228,7 +222,7 @@
 		},
 
 		destroy: function() {
-			
+
 		}
 	};
 

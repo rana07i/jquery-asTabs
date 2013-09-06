@@ -17,21 +17,25 @@ module.exports = function(grunt) {
 				stripBanners: true
 			},
 			dist: {
-				src: ['src/<%= pkg.name %>.js', 'src/jquery-tabs-history.js', 'src/jquery-tabs-keyboard.js', 'src/jquery-tabs-effect.js'],
-				dest: 'dist/<%= pkg.name %>.js'
-			},
-			// all: {
-			//	src: ['src/<%= pkg.name %>.js','src/jquery-tabs-history.js','src/jquery-tabs-keyboard.js'],
-			//	dest: 'dist/<%= pkg.name %>.js'
-			// }
+				files: {
+					'dist/jquery-tabs-effect.js': ['src/jquery-tabs-effect.js'],
+					'dist/jquery-tabs-history.js': ['src/jquery-tabs-history.js'],
+					'dist/jquery-tabs-keyboard.js': ['src/jquery-tabs-keyboard.js'],
+					'dist/jquery-tabs-all.js': ['src/*.js'],
+				}
+			}
 		},
 		uglify: {
 			options: {
 				banner: '<%= banner %>'
 			},
 			dist: {
-				src: '<%= concat.dist.dest %>',
-				dest: 'dist/<%= pkg.name %>.min.js'
+				files: {
+					'dist/jquery-tabs-effect.min.js': ['dist/jquery-tabs-effect.js'],
+					'dist/jquery-tabs-history.min.js': ['dist/jquery-tabs-history.js'],
+					'dist/jquery-tabs-keyboard.min.js': ['dist/jquery-tabs-keyboard.js'],
+					'dist/jquery-tabs-all.min.js': ['dist/jquery-tabs-all.js'],
+				}
 			}
 		},
 		qunit: {
@@ -132,7 +136,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-text-replace');
 
 	// Default task.
-	grunt.registerTask('default', ['jshint', 'qunit', 'clean', 'concat', 'uglify']);
+	grunt.registerTask('default', ['jshint',  'clean', 'concat', 'uglify']);
 
 	grunt.registerTask('dist', ['concat', 'uglify']);
 

@@ -38,14 +38,6 @@
 	overflow: auto;
 }
 
-.et-page-ontop {
-	z-index: 999;
-}
-
-/* Triggers (menu and button) */
-.et-rotate {
-  cursor: pointer;
-}
 
 /* animation sets */
 
