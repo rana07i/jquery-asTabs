@@ -4,21 +4,16 @@
 	var $doc = $(document);
 	var effects = {
 		options: {
-			inClass: '',
-			outClass: '',
-			$block: null,
-			$pages: null
+			$parent: null,
+			$panes: null
 		},
 
 		animEndEventName: '',
 		isAnimating: false,
 		current: 0,
 		total: 0,
-		inClass: '',
-		outClass: '',
-
-		$block: '',
-		$pages: '',
+		$parent: '',
+		$panes: '',
 
 		animEndEventNames: {
 			'WebkitAnimation': 'webkitAnimationEnd',
@@ -26,22 +21,21 @@
 			'msAnimation': 'MSAnimationEnd',
 			'animation': 'animationend'
 		},
-
 		init: function(options) {
 			this.options = $.extend({}, this.options, options);
 
-			this.$pages = this.options.$pages;
-			this.$block = this.options.$block;
+			this.$panes = this.options.$panes;
+			this.$parent = this.options.$parent;
 
 			this.inClass = 'effect_' + this.options.effect;
-			this.outClass = this.formatClass(this.options.effect);
-			this.total = this.options.$pages.length;
+			this.outClass = this.revertClass(this.options.effect);
+			this.total = this.options.$panes.length;
 			this.animEndEventName = this.animEndEventNames[this.getTransitionPrefix()];
 
-			this.$block.addClass('effect_' + this.options.effect);
+			this.$parent.addClass('effect_' + this.options.effect);
 
 		},
-		nextPage: function() {
+		next: function() {
 			var last = this.current;
 
 			if (this.isAnimating) {
@@ -58,7 +52,7 @@
 
 			this.animate(last, this.current);
 		},
-		prevPage: function() {
+		prev: function() {
 			var last = this.current;
 
 			if (this.isAnimating) {
@@ -79,15 +73,15 @@
 			var self = this,
 				endCurrPage = false,
 				endNextPage = false,
-				$currPage = this.$pages.eq(currentIndex),
-				$nextPage = this.$pages.eq(nextIndex);
+				$currPage = this.$panes.eq(currentIndex),
+				$nextPage = this.$panes.eq(nextIndex);
 
 			$currPage.addClass(this.outClass + ' effect_last').on(this.animEndEventName, function() {
 				$currPage.off(self.animEndEventName);
 				endCurrPage = true;
 				if (endNextPage) {
 					if (jQuery.isFunction(callback)) {
-						callback(self.$block, $nextPage, $currPage);
+						callback(self.$parent, $nextPage, $currPage);
 					}
 					self.onEndAnimation($currPage, $nextPage);
 				}
@@ -102,15 +96,15 @@
 			});
 		},
 		onEndAnimation: function($outpage, $inpage) {
-			this.resetPage($outpage, $inpage);
+			this.reset($outpage, $inpage);
 			this.isAnimating = false;
 		},
-		resetPage: function($outpage, $inpage) {
-			this.$pages.removeClass('effect_last');
+		reset: function($outpage, $inpage) {
+			this.$panes.removeClass('effect_last');
 			$outpage.removeClass(this.outClass);
 			$inpage.removeClass(this.inClass);
 		},
-		formatClass: function(str) {
+		revertClass: function(str) {
 			var classes = str.split(" "),
 				len = classes.length,
 				inre = ['Up', 'Down', 'In', 'Out', 'Left', 'Right', 'Top', 'Bottom'],
@@ -168,11 +162,11 @@
 		instance.effects = $.extend(true, {}, effects);
 		instance.effects.init({
 			effect: instance.options.effect,
-			$block: instance.$panes,
-			$pages: instance.$paneItems
+			$parent: instance.$panes_wrap,
+			$panes: instance.$panes
 		});
 	});
-
+	
 	$doc.on('tabs::active', function(event, instance) {
 		if (instance.options.effect === false || instance.initialized === false) {
 			return false;

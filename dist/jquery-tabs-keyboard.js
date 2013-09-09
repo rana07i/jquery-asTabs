@@ -1,4 +1,4 @@
-/*! jQuery tabs - v0.3.0 - 2013-09-06
+/*! jQuery tabs - v0.3.0 - 2013-09-09
 * https://github.com/amazingSurge/jquery-tabs
 * Copyright (c) 2013 amazingSurge; Licensed GPL */
 // jquery tabs keyboard
@@ -55,7 +55,7 @@
 		}
 
 		// make ul div etc. get focus
-		instance.$element.add(instance.$panes).attr('tabindex', '0').on('focus', function() {
+		instance.$element.add(instance.$panes_wrap).attr('tabindex', '0').on('focus', function() {
 			keyboard.attach({
 				left: $.proxy(instance.prev, instance),
 				right: $.proxy(instance.next, instance)

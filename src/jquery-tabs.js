@@ -1,4 +1,4 @@
-/*! jQuery tabs - v0.3.0 - 2013-09-06
+/*! jQuery tabs - v0.3.0 - 2013-09-09
  * https://github.com/amazingSurge/jquery-tabs
  * Copyright (c) 2013 amazingSurge; Licensed GPL */
 
@@ -29,25 +29,25 @@
 		this.classes = {
 			activeTab: this.namespace + '_active',
 			activePane: this.namespace + '_active',
-			panes: this.namespace + '-panes',
+			panes_wrap: this.namespace + '-panes',
 			skin: this.namespace + '_' + this.options.skin
 		};
 
-		this.$tabItems = this.$element.children();
-		this.$panes = $(this.options.panes).addClass(this.classes.panes);
-		this.$paneItems = this.$panes.children();
-		this.size = this.$tabItems.length;
+		this.$tabs = this.$element.children();
+		this.$panes_wrap = $(this.options.panes_wrap).addClass(this.classes.panes_wrap);
+		this.$panes = this.$panes_wrap.children();
+		this.size = this.$tabs.length;
 
 		if (this.options.skin) {
 			this.$element.addClass(this.classes.skin);
-			this.$panes.addClass(this.classes.skin);
+			this.$panes_wrap.addClass(this.classes.skin);
 		}
 
 		this.$loading = $('<span class="' + this.namespace + '-loading"></span>');
 
 		if (this.options.ajax === true) {
 			this.ajax = [];
-			$.each(this.$tabItems, function(i, v) {
+			$.each(this.$tabs, function(i, v) {
 				var obj = {};
 				obj.href = $(v).data('href');
 				self.ajax.push(obj);
@@ -61,7 +61,7 @@
 	// Default options for the plugin as a simple object
 	Tabs.defaults = {
 		namespace: 'tabs',
-		panes: '.panes',
+		panes_wrap: '.panes_wrap',
 		skin: null,
 		initialIndex: 0,
 		ajax: false,
@@ -102,8 +102,8 @@
 
 			this.last = this.current;
 			this.current = index;
-			this.$tabItems.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
-			this.$paneItems.eq(index).addClass(this.classes.activePane).siblings().removeClass(this.classes.activePane);
+			this.$tabs.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
+			this.$panes.eq(index).addClass(this.classes.activePane).siblings().removeClass(this.classes.activePane);
 
 			this.$element.trigger('tabs::active', this);
 
@@ -115,14 +115,12 @@
 				this.ajaxLoad(index);
 			}
 		},
-
 		afterActive: function() {
 			this.$element.trigger('tabs::afterActive', this);
 			if ($.type(this.options.onAfterActive) === 'function') {
 				this.options.onAfterActive(this);
 			}
 		},
-
 		ajaxLoad: function(index) {
 			var self = this,
 				dtd;
@@ -136,69 +134,57 @@
 				dtd.done(function(data) {
 					self.ajax[index].cached = true;
 					self.hideLoading();
-					self.$paneItems.eq(index).html(data);
+					self.$panes.eq(index).html(data);
 				});
 				dtd.fail(function() {
 					self.hideLoading();
-					self.$paneItems.eq(index).html('failed');
+					self.$panes.eq(index).html('failed');
 				});
 			}
 		},
-
 		showLoading: function() {
-			this.$loading.appendTo(this.$panes);
+			this.$loading.appendTo(this.$panes_wrap);
 		},
 		hideLoading: function() {
 			this.$loading.remove();
 		},
-
 		getTabs: function() {
-			return this.$tabItems;
+			return this.$tabs;
 		},
-
-		getPanes: function() {
-			return this.$paneItems;
+		getPanes_wrap: function() {
+			return this.$panes;
 		},
-
 		getCurrentPane: function() {
-			return this.$paneItems.eq(this.current);
+			return this.$panes.eq(this.current);
 		},
-
 		getCurrentTab: function() {
-			return this.$tabItems.eq(this.current);
+			return this.$tabs.eq(this.current);
 		},
-
 		getIndex: function() {
 			return this.current;
 		},
-
 		getSize: function() {
 			return this.size;
 		},
-
 		append: function(title, content) {
 			this.add(title, content, this.size);
 		},
-
 		add: function(title, content, index) {
-			this.$tabItems.eq(index - 1).after(this.$tabItems.eq(0).clone().removeClass(this.classes.activeTab).html(title));
-			this.$paneItems.eq(index - 1).after(this.$paneItems.eq(0).clone().removeClass(this.classes.activePane).html(content));
+			this.$tabs.eq(index - 1).after(this.$tabs.eq(0).clone().removeClass(this.classes.activeTab).html(title));
+			this.$panes.eq(index - 1).after(this.$panes.eq(0).clone().removeClass(this.classes.activePane).html(content));
 
-			this.$tabItems = this.$element.children();
-			this.$paneItems = this.$panes.children();
+			this.$tabs = this.$element.children();
+			this.$panes = this.$panes_wrap.children();
 			this.size++;
 		},
-
 		enable: function() {
 
 		},
-
 		disable: function() {
 
 		},
-
 		next: function() {
-			var len = this.$tabItems.length,
+			var len = this.$tabs.length,
 				current = this.current;
 			if (current < len - 1) {
 				current++;
@@ -208,9 +194,8 @@
 
 			this.active(current);
 		},
-
 		prev: function() {
-			var len = this.$tabItems.length,
+			var len = this.$tabs.length,
 				current = this.current;
 			if (current === 0) {
 				current = Math.abs(1 - len);
@@ -220,7 +205,6 @@
 
 			this.active(current);
 		},
-
 		destroy: function() {
 
 		}
@@ -232,7 +216,7 @@
 			var method = options;
 			var method_arguments = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : undefined;
 
-			if (/^(getTabs|getPanes|getCurrentPane|getCurrentTab|getIndex)$/.test(method)) {
+			if (/^(getTabs|getPanes_wrap|getCurrentPane|getCurrentTab|getIndex)$/.test(method)) {
 				var api = this.first().data('tabs');
 				if (api && typeof api[method] === 'function') {
 					return api[method].apply(api, method_arguments);

@@ -52,7 +52,7 @@
 		}
 
 		// make ul div etc. get focus
-		instance.$element.add(instance.$panes).attr('tabindex', '0').on('focus', function() {
+		instance.$element.add(instance.$panes_wrap).attr('tabindex', '0').on('focus', function() {
 			keyboard.attach({
 				left: $.proxy(instance.prev, instance),
 				right: $.proxy(instance.next, instance)

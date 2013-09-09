@@ -96,7 +96,7 @@
 				if (tabs) {
 					var $tab = instance.$element.find('#' + states[id]);
 					if ($tab.length >= 1) {
-						tabs.active(instance.$tabItems.index($tab));
+						tabs.active(instance.$tabs.index($tab));
 					} else {
 						tabs.active(states[id]);
 					}
@@ -112,7 +112,7 @@
 		var index = instance.current,
 			state = {},
 			id = instance.$element.attr('id'),
-			content = instance.$tabItems.eq(index).attr('id');
+			content = instance.$tabs.eq(index).attr('id');
 
 		if (instance.options.history === false) {
 			return;

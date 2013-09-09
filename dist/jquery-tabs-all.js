@@ -1,4 +1,4 @@
-/*! jQuery tabs - v0.3.0 - 2013-09-06
+/*! jQuery tabs - v0.3.0 - 2013-09-09
 * https://github.com/amazingSurge/jquery-tabs
 * Copyright (c) 2013 amazingSurge; Licensed GPL */
 // elementTransitions
@@ -7,21 +7,16 @@
 	var $doc = $(document);
 	var effects = {
 		options: {
-			inClass: '',
-			outClass: '',
-			$block: null,
-			$pages: null
+			$parent: null,
+			$panes: null
 		},
 
 		animEndEventName: '',
 		isAnimating: false,
 		current: 0,
 		total: 0,
-		inClass: '',
-		outClass: '',
-
-		$block: '',
-		$pages: '',
+		$parent: '',
+		$panes: '',
 
 		animEndEventNames: {
 			'WebkitAnimation': 'webkitAnimationEnd',
@@ -29,22 +24,21 @@
 			'msAnimation': 'MSAnimationEnd',
 			'animation': 'animationend'
 		},
-
 		init: function(options) {
 			this.options = $.extend({}, this.options, options);
 
-			this.$pages = this.options.$pages;
-			this.$block = this.options.$block;
+			this.$panes = this.options.$panes;
+			this.$parent = this.options.$parent;
 
 			this.inClass = 'effect_' + this.options.effect;
-			this.outClass = this.formatClass(this.options.effect);
-			this.total = this.options.$pages.length;
+			this.outClass = this.revertClass(this.options.effect);
+			this.total = this.options.$panes.length;
 			this.animEndEventName = this.animEndEventNames[this.getTransitionPrefix()];
 
-			this.$block.addClass('effect_' + this.options.effect);
+			this.$parent.addClass('effect_' + this.options.effect);
 
 		},
-		nextPage: function() {
+		next: function() {
 			var last = this.current;
 
 			if (this.isAnimating) {
@@ -61,7 +55,7 @@
 
 			this.animate(last, this.current);
 		},
-		prevPage: function() {
+		prev: function() {
 			var last = this.current;
 
 			if (this.isAnimating) {
@@ -82,15 +76,15 @@
 			var self = this,
 				endCurrPage = false,
 				endNextPage = false,
-				$currPage = this.$pages.eq(currentIndex),
-				$nextPage = this.$pages.eq(nextIndex);
+				$currPage = this.$panes.eq(currentIndex),
+				$nextPage = this.$panes.eq(nextIndex);
 
 			$currPage.addClass(this.outClass + ' effect_last').on(this.animEndEventName, function() {
 				$currPage.off(self.animEndEventName);
 				endCurrPage = true;
 				if (endNextPage) {
 					if (jQuery.isFunction(callback)) {
-						callback(self.$block, $nextPage, $currPage);
+						callback(self.$parent, $nextPage, $currPage);
 					}
 					self.onEndAnimation($currPage, $nextPage);
 				}
@@ -105,15 +99,15 @@
 			});
 		},
 		onEndAnimation: function($outpage, $inpage) {
-			this.resetPage($outpage, $inpage);
+			this.reset($outpage, $inpage);
 			this.isAnimating = false;
 		},
-		resetPage: function($outpage, $inpage) {
-			this.$pages.removeClass('effect_last');
+		reset: function($outpage, $inpage) {
+			this.$panes.removeClass('effect_last');
 			$outpage.removeClass(this.outClass);
 			$inpage.removeClass(this.inClass);
 		},
-		formatClass: function(str) {
+		revertClass: function(str) {
 			var classes = str.split(" "),
 				len = classes.length,
 				inre = ['Up', 'Down', 'In', 'Out', 'Left', 'Right', 'Top', 'Bottom'],
@@ -171,11 +165,11 @@
 		instance.effects = $.extend(true, {}, effects);
 		instance.effects.init({
 			effect: instance.options.effect,
-			$block: instance.$panes,
-			$pages: instance.$paneItems
+			$parent: instance.$panes_wrap,
+			$panes: instance.$panes
 		});
 	});
-
+	
 	$doc.on('tabs::active', function(event, instance) {
 		if (instance.options.effect === false || instance.initialized === false) {
 			return false;
@@ -283,7 +277,7 @@
 				if (tabs) {
 					var $tab = instance.$element.find('#' + states[id]);
 					if ($tab.length >= 1) {
-						tabs.active(instance.$tabItems.index($tab));
+						tabs.active(instance.$tabs.index($tab));
 					} else {
 						tabs.active(states[id]);
 					}
@@ -299,7 +293,7 @@
 		var index = instance.current,
 			state = {},
 			id = instance.$element.attr('id'),
-			content = instance.$tabItems.eq(index).attr('id');
+			content = instance.$tabs.eq(index).attr('id');
 
 		if (instance.options.history === false) {
 			return;
@@ -372,7 +366,7 @@
 		}
 
 		// make ul div etc. get focus
-		instance.$element.add(instance.$panes).attr('tabindex', '0').on('focus', function() {
+		instance.$element.add(instance.$panes_wrap).attr('tabindex', '0').on('focus', function() {
 			keyboard.attach({
 				left: $.proxy(instance.prev, instance),
 				right: $.proxy(instance.next, instance)
@@ -386,7 +380,7 @@
 	});
 })(window, document, jQuery);
 
-/*! jQuery tabs - v0.3.0 - 2013-09-06
+/*! jQuery tabs - v0.3.0 - 2013-09-09
  * https://github.com/amazingSurge/jquery-tabs
  * Copyright (c) 2013 amazingSurge; Licensed GPL */
 
@@ -417,25 +411,25 @@
 		this.classes = {
 			activeTab: this.namespace + '_active',
 			activePane: this.namespace + '_active',
-			panes: this.namespace + '-panes',
+			panes_wrap: this.namespace + '-panes',
 			skin: this.namespace + '_' + this.options.skin
 		};
 
-		this.$tabItems = this.$element.children();
-		this.$panes = $(this.options.panes).addClass(this.classes.panes);
-		this.$paneItems = this.$panes.children();
-		this.size = this.$tabItems.length;
+		this.$tabs = this.$element.children();
+		this.$panes_wrap = $(this.options.panes_wrap).addClass(this.classes.panes_wrap);
+		this.$panes = this.$panes_wrap.children();
+		this.size = this.$tabs.length;
 
 		if (this.options.skin) {
 			this.$element.addClass(this.classes.skin);
-			this.$panes.addClass(this.classes.skin);
+			this.$panes_wrap.addClass(this.classes.skin);
 		}
 
 		this.$loading = $('<span class="' + this.namespace + '-loading"></span>');
 
 		if (this.options.ajax === true) {
 			this.ajax = [];
-			$.each(this.$tabItems, function(i, v) {
+			$.each(this.$tabs, function(i, v) {
 				var obj = {};
 				obj.href = $(v).data('href');
 				self.ajax.push(obj);
@@ -449,7 +443,7 @@
 	// Default options for the plugin as a simple object
 	Tabs.defaults = {
 		namespace: 'tabs',
-		panes: '.panes',
+		panes_wrap: '.panes_wrap',
 		skin: null,
 		initialIndex: 0,
 		ajax: false,
@@ -490,8 +484,8 @@
 
 			this.last = this.current;
 			this.current = index;
-			this.$tabItems.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
-			this.$paneItems.eq(index).addClass(this.classes.activePane).siblings().removeClass(this.classes.activePane);
+			this.$tabs.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
+			this.$panes.eq(index).addClass(this.classes.activePane).siblings().removeClass(this.classes.activePane);
 
 			this.$element.trigger('tabs::active', this);
 
@@ -503,14 +497,12 @@
 				this.ajaxLoad(index);
 			}
 		},
-
 		afterActive: function() {
 			this.$element.trigger('tabs::afterActive', this);
 			if ($.type(this.options.onAfterActive) === 'function') {
 				this.options.onAfterActive(this);
 			}
 		},
-
 		ajaxLoad: function(index) {
 			var self = this,
 				dtd;
@@ -524,69 +516,57 @@
 				dtd.done(function(data) {
 					self.ajax[index].cached = true;
 					self.hideLoading();
-					self.$paneItems.eq(index).html(data);
+					self.$panes.eq(index).html(data);
 				});
 				dtd.fail(function() {
 					self.hideLoading();
-					self.$paneItems.eq(index).html('failed');
+					self.$panes.eq(index).html('failed');
 				});
 			}
 		},
-
 		showLoading: function() {
-			this.$loading.appendTo(this.$panes);
+			this.$loading.appendTo(this.$panes_wrap);
 		},
 		hideLoading: function() {
 			this.$loading.remove();
 		},
-
 		getTabs: function() {
-			return this.$tabItems;
+			return this.$tabs;
 		},
-
-		getPanes: function() {
-			return this.$paneItems;
+		getPanes_wrap: function() {
+			return this.$panes;
 		},
-
 		getCurrentPane: function() {
-			return this.$paneItems.eq(this.current);
+			return this.$panes.eq(this.current);
 		},
-
 		getCurrentTab: function() {
-			return this.$tabItems.eq(this.current);
+			return this.$tabs.eq(this.current);
 		},
-
 		getIndex: function() {
 			return this.current;
 		},
-
 		getSize: function() {
 			return this.size;
 		},
-
 		append: function(title, content) {
 			this.add(title, content, this.size);
 		},
-
 		add: function(title, content, index) {
-			this.$tabItems.eq(index - 1).after(this.$tabItems.eq(0).clone().removeClass(this.classes.activeTab).html(title));
-			this.$paneItems.eq(index - 1).after(this.$paneItems.eq(0).clone().removeClass(this.classes.activePane).html(content));
+			this.$tabs.eq(index - 1).after(this.$tabs.eq(0).clone().removeClass(this.classes.activeTab).html(title));
+			this.$panes.eq(index - 1).after(this.$panes.eq(0).clone().removeClass(this.classes.activePane).html(content));
 
-			this.$tabItems = this.$element.children();
-			this.$paneItems = this.$panes.children();
+			this.$tabs = this.$element.children();
+			this.$panes = this.$panes_wrap.children();
 			this.size++;
 		},
-
 		enable: function() {
 
 		},
-
 		disable: function() {
 
 		},
-
 		next: function() {
-			var len = this.$tabItems.length,
+			var len = this.$tabs.length,
 				current = this.current;
 			if (current < len - 1) {
 				current++;
@@ -596,9 +576,8 @@
 
 			this.active(current);
 		},
-
 		prev: function() {
-			var len = this.$tabItems.length,
+			var len = this.$tabs.length,
 				current = this.current;
 			if (current === 0) {
 				current = Math.abs(1 - len);
@@ -608,7 +587,6 @@
 
 			this.active(current);
 		},
-
 		destroy: function() {
 
 		}
@@ -620,7 +598,7 @@
 			var method = options;
 			var method_arguments = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : undefined;
 
-			if (/^(getTabs|getPanes|getCurrentPane|getCurrentTab|getIndex)$/.test(method)) {
+			if (/^(getTabs|getPanes_wrap|getCurrentPane|getCurrentTab|getIndex)$/.test(method)) {
 				var api = this.first().data('tabs');
 				if (api && typeof api[method] === 'function') {
 					return api[method].apply(api, method_arguments);

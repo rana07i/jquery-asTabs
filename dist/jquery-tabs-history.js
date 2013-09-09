@@ -1,4 +1,4 @@
-/*! jQuery tabs - v0.3.0 - 2013-09-06
+/*! jQuery tabs - v0.3.0 - 2013-09-09
 * https://github.com/amazingSurge/jquery-tabs
 * Copyright (c) 2013 amazingSurge; Licensed GPL */
 // jquery tabs history
@@ -99,7 +99,7 @@
 				if (tabs) {
 					var $tab = instance.$element.find('#' + states[id]);
 					if ($tab.length >= 1) {
-						tabs.active(instance.$tabItems.index($tab));
+						tabs.active(instance.$tabs.index($tab));
 					} else {
 						tabs.active(states[id]);
 					}
@@ -115,7 +115,7 @@
 		var index = instance.current,
 			state = {},
 			id = instance.$element.attr('id'),
-			content = instance.$tabItems.eq(index).attr('id');
+			content = instance.$tabs.eq(index).attr('id');
 
 		if (instance.options.history === false) {
 			return;
