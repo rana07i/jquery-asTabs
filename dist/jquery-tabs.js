@@ -1,8 +1,7 @@
-/*! jQuery tabs - v0.1.1 - 2013-08-08
+/*! jQuery tabs - v0.1.1 - 2013-11-26
 * https://github.com/amazingSurge/jquery-tabs
 * Copyright (c) 2013 amazingSurge; Licensed GPL */
-;
-(function(window, document, $, undefined) {
+;(function(window, document, $, undefined) {
 	"use strict";
 
 	// Constructor
@@ -24,6 +23,7 @@
 		this.options = $.extend(true, {}, Tabs.defaults, options, meta_data);
 		this.namespace = this.options.namespace;
 		this.initialized = false;
+		this.enabled = true;
 
 		// Class
 		this.classes = {
@@ -107,7 +107,7 @@
 		active: function(index) {
 			var self = this;
 
-			if (this.current === index) {
+			if (this.current === index || this.enabled === false) {
 				return;
 			}
 
@@ -205,6 +205,14 @@
 			}
 
 			this.active(current);
+		},
+
+		enable: function() {
+			this.enabled = true;
+		},
+
+		disable: function() {
+			this.enabled = false;
 		},
 
 		destroy: function() {
@@ -378,8 +386,7 @@
 })(window, document, jQuery);
 
 // jquery tabs keyboard
-;
-(function(window, document, $, undefined) {
+;(function(window, document, $, undefined) {
 	var $doc = $(document);
 	var keyboard = {
 		keys: {
@@ -450,14 +457,13 @@
 		}).on('blur', function(e) {
 			keyboard.detach();
 			return false;
-		});;
+		});
 
 	});
 })(window, document, jQuery);
 
 // elementTransitions
-;
-(function(window, document, $, undefined) {
+;(function(window, document, $, undefined) {
 	var $doc = $(document);
 	var effects = {
 		options: {
@@ -550,7 +556,7 @@
 
 			$nextPage.addClass('et-page-current');
 
-			$currPage.addClass(this.outClass).on(this.animEndEventName, function() {
+			$currPage.removeClass(this.inClass).addClass(this.outClass).on(this.animEndEventName, function() {
 				$currPage.off(self.animEndEventName);
 				endCurrPage = true;
 				if (endNextPage) {
@@ -577,6 +583,8 @@
 			this.$pages.removeClass('et-page-current');
 			$outpage.removeClass(this.outClass);
 			$inpage.removeClass(this.inClass).addClass('et-page-current');
+			
+			console.log('event end');
 		},
 		formatClass: function(str) {
 			var classes = str.split(" "),
@@ -609,7 +617,6 @@
 			return false;
 		}
 	};
-
 	$doc.on('tabs::init', function(event, instance) {
 		if (instance.options.ifAnimate === false) {
 			return false;
@@ -627,12 +634,10 @@
 			}
 		});
 	});
-
 	$doc.on('tabs::active', function(event, instance) {
 		if (instance.options.ifAnimate === false || instance.initialized === false) {
 			return false;
 		}
 		instance.effects.animate(instance.last, instance.current);
 	});
-
 })(window, document, jQuery);

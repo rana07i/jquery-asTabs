@@ -5,6 +5,10 @@
 		<link rel="stylesheet" type="text/css" href="../css/jquery-tabs.css" />
 		<link rel="stylesheet" type="text/css" href="css/demo.css">
 		<link rel="stylesheet" type="text/css" href="../css/elementTransitions.css">
+
+		<script type="text/javascript" src="js/vendor/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="js/vendor/jquery.history.js"></script>
+		<script type="text/javascript" src="../dist/jquery-tabs.js"></script>
 	</head>
 	<body>
 
@@ -142,6 +146,32 @@
 				</div>
 			</div>
 
+			<div class="">
+				<ul class="demo9 tabs">
+					<li>tab1</li>
+					<li>tab2</li>
+					<li>tab3</li>
+				</ul>
+				<div class="panes9">
+					<div class="page0">panes</div>
+					<div class="page1">panle2</div>
+					<div class="page2">panle3</div>
+				</div>
+			</div>
+
+			<div class="">
+				<ul class="demo10 tabs">
+					<li>tab1</li>
+					<li>tab2</li>
+					<li>tab3</li>
+				</ul>
+				<div class="panes10">
+					<div class="page0">panes</div>
+					<div class="page1">panle2</div>
+					<div class="page2">panle3</div>
+				</div>
+			</div>
+
 			<h2>test</h2>
 			<p>This is a demo description.</p>
 			<div "demo-test">
@@ -157,9 +187,7 @@
 		</div>
 
 		
-		<script type="text/javascript" src="js/vendor/jquery-1.8.3.min.js"></script>
-		<script type="text/javascript" src="js/vendor/jquery.history.js"></script>
-		<script type="text/javascript" src="../dist/jquery-tabs.js"></script>
+		
 		<script>
 			$(function(){
 				$('.demo0').tabs({panes: '.panes0'});
@@ -201,6 +229,24 @@
 					animate: {
 						inClass: 'rotateSlideIn',
 						outClass: 'rotateSlideOut'
+					}
+				});
+
+				$('.demo9').tabs({
+					panes: '.panes9',
+					ifAnimate: true,
+					animate: {
+						inClass: 'rotateSidesIn delay200',
+						outClass: 'rotateSidesOut'
+					}
+				});
+
+				$('.demo10').tabs({
+					panes: '.panes10',
+					ifAnimate: true,
+					animate: {
+						inClass: 'rotateUnfoldRight',
+						outClass: 'moveToLeftFade'
 					}
 				});
 

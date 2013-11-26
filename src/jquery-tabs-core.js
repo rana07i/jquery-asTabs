@@ -2,12 +2,11 @@
  * jquery-tabs
  * https://github.com/amazingSurge/jquery-tabs
  *
- * Copyright (c) 2013 Wowhoo
+ * Copyright (c) 2013 amazingSurge
  * Licensed under the GPL license.
  */
 
-;
-(function(window, document, $, undefined) {
+;(function(window, document, $, undefined) {
 	"use strict";
 
 	// Constructor

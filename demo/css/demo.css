@@ -38,8 +38,8 @@ div[class^="demo"] {
 	border-radius: 0 0 6px 6px;
 }
 
-.panes8 {
-  width: 200px;
+.panes8, .panes9, .panes10, .panes11 {
+  width: 600px;
   height: 200px;
 }
 

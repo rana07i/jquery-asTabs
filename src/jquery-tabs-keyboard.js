@@ -1,6 +1,5 @@
 // jquery tabs keyboard
-;
-(function(window, document, $, undefined) {
+;(function(window, document, $, undefined) {
 	var $doc = $(document);
 	var keyboard = {
 		keys: {
@@ -71,7 +70,7 @@
 		}).on('blur', function(e) {
 			keyboard.detach();
 			return false;
-		});;
+		});
 
 	});
 })(window, document, jQuery);

@@ -17,7 +17,7 @@ module.exports = function(grunt) {
 				stripBanners: true
 			},
 			dist: {
-				src: ['src/<%= pkg.name %>.js', 'src/jquery-tabs-history.js', 'src/jquery-tabs-keyboard.js', 'src/jquery-tabs-effect.js'],
+				src: ['src/<%= pkg.name %>-core.js', 'src/jquery-tabs-history.js', 'src/jquery-tabs-keyboard.js', 'src/jquery-tabs-effect.js'],
 				dest: 'dist/<%= pkg.name %>.js'
 			},
 			// all: {
@@ -32,6 +32,10 @@ module.exports = function(grunt) {
 			dist: {
 				src: '<%= concat.dist.dest %>',
 				dest: 'dist/<%= pkg.name %>.min.js'
+			},
+			core: {
+				src: 'src/<%= pkg.name %>-core.js',
+				dest: 'dist/<%= pkg.name %>-core.min.js'
 			}
 		},
 		qunit: {

@@ -92,7 +92,7 @@
 
 			$nextPage.addClass('et-page-current');
 
-			$currPage.addClass(this.outClass).on(this.animEndEventName, function() {
+			$currPage.removeClass(this.inClass).addClass(this.outClass).on(this.animEndEventName, function() {
 				$currPage.off(self.animEndEventName);
 				endCurrPage = true;
 				if (endNextPage) {
@@ -119,6 +119,8 @@
 			this.$pages.removeClass('et-page-current');
 			$outpage.removeClass(this.outClass);
 			$inpage.removeClass(this.inClass).addClass('et-page-current');
+			
+			console.log('event end');
 		},
 		formatClass: function(str) {
 			var classes = str.split(" "),
@@ -151,7 +153,6 @@
 			return false;
 		}
 	};
-
 	$doc.on('tabs::init', function(event, instance) {
 		if (instance.options.ifAnimate === false) {
 			return false;
@@ -169,12 +170,10 @@
 			}
 		});
 	});
-
 	$doc.on('tabs::active', function(event, instance) {
 		if (instance.options.ifAnimate === false || instance.initialized === false) {
 			return false;
 		}
 		instance.effects.animate(instance.last, instance.current);
 	});
-
 })(window, document, jQuery);
