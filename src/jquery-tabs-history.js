@@ -1,5 +1,5 @@
 // jquery tabs history
-;
+
 (function(window, document, $, undefined) {
 	var $doc = $(document);
 	var history = {
@@ -22,6 +22,7 @@
 			$(window).off(eventType);
 		},
 		pushState: function(state) {
+			var id;
 			for (id in state) {
 				this.states[id] = state[id];
 			}
@@ -57,7 +58,7 @@
 			queryString = hash.split("&");
 
 			$.each(queryString, function(i, v) {
-				if (v == false) {
+				if (v === false) {
 					return;
 				}
 				var args = v.match("#?(.*)=(.*)");
@@ -85,7 +86,7 @@
 		if (instance.options.history === false) {
 			return;
 		}
-		var hashchange = function(e) {
+		var hashchange = function() {
 			var states = history.getState(),
 				tabs,
 				id = instance.$element.attr('id');
@@ -95,7 +96,7 @@
 				if (tabs) {
 					var $tab = instance.$element.find('#' + states[id]);
 					if ($tab.length >= 1) {
-						tabs.active(instance.$tabItems.index($tab));
+						tabs.active(instance.$tabs.index($tab));
 					} else {
 						tabs.active(states[id]);
 					}
@@ -111,7 +112,7 @@
 		var index = instance.current,
 			state = {},
 			id = instance.$element.attr('id'),
-			content = instance.$tabItems.eq(index).attr('id');
+			content = instance.$tabs.eq(index).attr('id');
 
 		if (instance.options.history === false) {
 			return;

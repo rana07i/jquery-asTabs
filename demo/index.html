@@ -4,11 +4,7 @@
 		<title>tabs</title>
 		<link rel="stylesheet" type="text/css" href="../css/jquery-tabs.css" />
 		<link rel="stylesheet" type="text/css" href="css/demo.css">
-		<link rel="stylesheet" type="text/css" href="../css/elementTransitions.css">
-
-		<script type="text/javascript" src="js/vendor/jquery-1.8.3.min.js"></script>
-		<script type="text/javascript" src="js/vendor/jquery.history.js"></script>
-		<script type="text/javascript" src="../dist/jquery-tabs.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/effects.css">
 	</head>
 	<body>
 
@@ -182,54 +178,57 @@
 				<button id="testGetIndex">Test Get Index</button>
 				<button id="testNext">Test Next</button>
 				<button id="testPrev">Test Prev</button>
+				<button id="testAppend">Test Append</button>
 				<button id="testDestroy">Test Destroy</button>
 			</div>
 		</div>
 
 		
-		
+		<script type="text/javascript" src="js/vendor/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="js/vendor/jquery.history.js"></script>
+		<script type="text/javascript" src="../src/jquery-tabs-core.js"></script>
+		<script type="text/javascript" src="../src/jquery-tabs-history.js"></script>
+		<script type="text/javascript" src="../src/jquery-tabs-effect.js"></script>
+		<script type="text/javascript" src="../src/jquery-tabs-keyboard.js"></script>
+
 		<script>
 			$(function(){
-				$('.demo0').tabs({panes: '.panes0'});
+				$('.demo0').tabs({panes_wrap: '.panes0'});
 				$('.demo1').tabs({
-					panes: '.panes1', 
+					panes_wrap: '.panes1', 
 					ajax: true, 
 					cached: true
 				});
 				$('.demo2').tabs({
-					panes: '.panes2',
+					panes_wrap: '.panes2',
 					event:'mouseover'
 				});
 				$('.demo3').tabs({
-					panes: '.panes3',
+					panes_wrap: '.panes3',
 					initialIndex: 2
 				});
 				$('.demo4').tabs({
-					panes: '.panes4',
+					panes_wrap: '.panes4',
 					skin: 'skin-1'
 				});
 
 				$('.demo5').tabs({
-					panes: '.panes5',
+					panes_wrap: '.panes5',
 					history: true
 				});
 				$('.demo6').tabs({
-					panes: '.panes6',
+					panes_wrap: '.panes6',
 					history: true
 				});
 
 				$('.demo7').tabs({
-					panes: '.panes7',
+					panes_wrap: '.panes7',
 					keyboard: true
 				});
 
 				$('.demo8').tabs({
-					panes: '.panes8',
-					ifAnimate: true,
-					animate: {
-						inClass: 'rotateSlideIn',
-						outClass: 'rotateSlideOut'
-					}
+					panes_wrap: '.panes8',
+					effect: 'slideIn'
 				});
 
 				$('.demo9').tabs({
@@ -281,6 +280,10 @@
 
 				$('#testDestroy').click(function(){
 					console.info($('.demo4').tabs('destroy'));
+				});
+
+				$('#testAppend').click(function(){
+					$('.demo7').tabs('append','hello','<p>world</p>');
 				});
 			});	
 		</script>

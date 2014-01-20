@@ -19,11 +19,7 @@ module.exports = function(grunt) {
 			dist: {
 				src: ['src/<%= pkg.name %>-core.js', 'src/jquery-tabs-history.js', 'src/jquery-tabs-keyboard.js', 'src/jquery-tabs-effect.js'],
 				dest: 'dist/<%= pkg.name %>.js'
-			},
-			// all: {
-			// 	src: ['src/<%= pkg.name %>.js','src/jquery-tabs-history.js','src/jquery-tabs-keyboard.js'],
-			// 	dest: 'dist/<%= pkg.name %>.js'
-			// }
+			}
 		},
 		uglify: {
 			options: {
@@ -36,6 +32,13 @@ module.exports = function(grunt) {
 			core: {
 				src: 'src/<%= pkg.name %>-core.js',
 				dest: 'dist/<%= pkg.name %>-core.min.js'
+			},
+			all: {
+				files: {
+					'dist/jquery-tabs-effect.min.js': ['src/jquery-tabs-effect.js'],
+					'dist/jquery-tabs-history.min.js': ['src/jquery-tabs-history.js'],
+					'dist/jquery-tabs-keyboard.min.js': ['src/jquery-tabs-keyboard.js']
+				}
 			}
 		},
 		qunit: {
@@ -136,7 +139,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-text-replace');
 
 	// Default task.
-	grunt.registerTask('default', ['jshint', 'qunit', 'clean', 'concat', 'uglify']);
+	grunt.registerTask('default', ['jshint',  'clean', 'concat', 'uglify']);
 
 	grunt.registerTask('dist', ['concat', 'uglify']);
 

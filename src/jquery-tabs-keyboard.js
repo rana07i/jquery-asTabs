@@ -17,7 +17,8 @@
 		press: function(e) {
 			var key = e.keyCode || e.which;
 			if (key in keyboard.map && typeof keyboard.map[key] === 'function') {
-				keyboard.map[key].call(self, e);
+				e.preventDefault();
+				return keyboard.map[key].call(this, e);
 			}
 		},
 		attach: function(map) {
@@ -50,13 +51,13 @@
 		}
 
 		// make ul div etc. get focus
-		instance.$element.attr('tabindex', '0').on('focus', function(e) {
+		instance.$element.add(instance.$panes_wrap).attr('tabindex', '0').on('focus', function() {
 			keyboard.attach({
 				left: $.proxy(instance.prev, instance),
 				right: $.proxy(instance.next, instance)
 			});
 			return false;
-		}).on('blur', function(e) {
+		}).on('blur', function() {
 			keyboard.detach();
 			return false;
 		});
@@ -71,6 +72,5 @@
 			keyboard.detach();
 			return false;
 		});
-
 	});
 })(window, document, jQuery);

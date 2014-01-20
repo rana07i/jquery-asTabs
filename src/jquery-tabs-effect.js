@@ -1,24 +1,19 @@
 // elementTransitions
-;(function(window, document, $, undefined) {
+
+(function(window, document, $, undefined) {
 	var $doc = $(document);
 	var effects = {
 		options: {
-			inClass: '',
-			outClass: '',
-			$block: null,
-			$pages: null,
-			onInit: null
+			$parent: null,
+			$panes: null
 		},
 
 		animEndEventName: '',
 		isAnimating: false,
 		current: 0,
 		total: 0,
-		inClass: '',
-		outClass: '',
-
-		$block: '',
-		$pages: '',
+		$parent: '',
+		$panes: '',
 
 		animEndEventNames: {
 			'WebkitAnimation': 'webkitAnimationEnd',
@@ -26,30 +21,21 @@
 			'msAnimation': 'MSAnimationEnd',
 			'animation': 'animationend'
 		},
-
 		init: function(options) {
 			this.options = $.extend({}, this.options, options);
 
-			this.$pages = this.options.$pages;
-			this.$block = this.options.$block;
+			this.$panes = this.options.$panes;
+			this.$parent = this.options.$parent;
 
-			this.inClass = this.formatClass(this.options.inClass);
-			this.outClass = this.formatClass(this.options.outClass);
-			this.total = this.options.$pages.length;
+			this.inClass = 'effect_' + this.options.effect;
+			this.outClass = this.revertClass(this.options.effect);
+			this.total = this.options.$panes.length;
 			this.animEndEventName = this.animEndEventNames[this.getTransitionPrefix()];
 
-			this.$pages.each(function(i, v) {
-				$(v).addClass('et-page');
-			});
+			this.$parent.addClass('effect_' + this.options.effect);
 
-			this.$block.addClass('et-wrapper');
-			this.$pages.eq(this.current).addClass('et-page-current');
-
-			if ($.type(this.options.onInit) === 'function') {
-				this.options.onInit(this.$block, this.$pages);
-			}
 		},
-		nextPage: function() {
+		next: function() {
 			var last = this.current;
 
 			if (this.isAnimating) {
@@ -66,7 +52,7 @@
 
 			this.animate(last, this.current);
 		},
-		prevPage: function() {
+		prev: function() {
 			var last = this.current;
 
 			if (this.isAnimating) {
@@ -87,17 +73,15 @@
 			var self = this,
 				endCurrPage = false,
 				endNextPage = false,
-				$currPage = this.$pages.eq(currentIndex),
-				$nextPage = this.$pages.eq(nextIndex);
-
-			$nextPage.addClass('et-page-current');
+				$currPage = this.$panes.eq(currentIndex),
+				$nextPage = this.$panes.eq(nextIndex);
 
 			$currPage.removeClass(this.inClass).addClass(this.outClass).on(this.animEndEventName, function() {
 				$currPage.off(self.animEndEventName);
 				endCurrPage = true;
 				if (endNextPage) {
 					if (jQuery.isFunction(callback)) {
-						callback(self.$block, $nextPage, $currPage);
+						callback(self.$parent, $nextPage, $currPage);
 					}
 					self.onEndAnimation($currPage, $nextPage);
 				}
@@ -112,23 +96,40 @@
 			});
 		},
 		onEndAnimation: function($outpage, $inpage) {
-			this.resetPage($outpage, $inpage);
+			this.reset($outpage, $inpage);
 			this.isAnimating = false;
 		},
-		resetPage: function($outpage, $inpage) {
-			this.$pages.removeClass('et-page-current');
+		reset: function($outpage, $inpage) {
+			this.$panes.removeClass('effect_last');
 			$outpage.removeClass(this.outClass);
 			$inpage.removeClass(this.inClass).addClass('et-page-current');
-			
-			console.log('event end');
 		},
-		formatClass: function(str) {
+		revertClass: function(str) {
 			var classes = str.split(" "),
 				len = classes.length,
-				output = "";
+				inre = ['Up', 'Down', 'In', 'Out', 'Left', 'Right', 'Top', 'Bottom'],
+				outre = ['Down', 'Up', 'Out', 'In', 'Right', 'Left', 'Bottom', 'Top'],
+				output = "",
+				re = "",
+				re_array = [],
+				re_num = "";
 
 			for (var n = 0; n < len; n++) {
-				output += " pt-page-" + classes[n];
+				for (var m = 0; m < inre.length; m++) {
+					re = new RegExp(inre[m]);
+					if (re.test(classes[n])) {
+						re_array.push(m);
+					}
+				}
+				for (var l = 0; l < re_array.length; l++) {
+					re_num = re_array[l];
+					classes[n] = classes[n].replace(inre[re_num], re_num);
+				}
+				for (var k = 0; k < re_array.length; k++) {
+					re_num = re_array[k];
+					classes[n] = classes[n].replace(re_num, outre[re_num]);
+				}
+				output += " effect_" + classes[n];
 			}
 			return $.trim(output);
 		},
@@ -154,24 +155,19 @@
 		}
 	};
 	$doc.on('tabs::init', function(event, instance) {
-		if (instance.options.ifAnimate === false) {
+		if (instance.options.effect === false) {
 			return false;
 		}
 		instance.effects = $.extend(true, {}, effects);
 		instance.effects.init({
-			inClass: instance.options.animate.inClass,
-			outClass: instance.options.animate.outClass,
-			$block: instance.$panes,
-			$pages: instance.$paneItems,
-			onInit: function($panes, $panesItems) {
-				$panesItems.css({
-					display: 'block'
-				});
-			}
+			effect: instance.options.effect,
+			$parent: instance.$panes_wrap,
+			$panes: instance.$panes
 		});
 	});
+	
 	$doc.on('tabs::active', function(event, instance) {
-		if (instance.options.ifAnimate === false || instance.initialized === false) {
+		if (instance.options.effect === false || instance.initialized === false) {
 			return false;
 		}
 		instance.effects.animate(instance.last, instance.current);
