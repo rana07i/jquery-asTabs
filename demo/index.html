@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>tabs</title>
-		<link rel="stylesheet" type="text/css" href="../css/jquery-tabs.css" />
+		<title>asTabs</title>
+		<link rel="stylesheet" type="text/css" href="../css/jquery-asTabs.css" />
 		<link rel="stylesheet" type="text/css" href="css/demo.css">
 		<link rel="stylesheet" type="text/css" href="../css/effects.css">
 	</head>
@@ -12,7 +12,7 @@
 			<h2>default(click)</h2>
 			<p>This is a demo description.</p>
 			<div class="">
-				<ul class="demo0 tabs">
+				<ul class="demo0 asTabs">
 					<li>tab1</li>
 					<li>tab2</li>
 					<li>tab3</li>
@@ -27,7 +27,7 @@
 			<h2>ajax content</h2>
 			<p>This is a demo description.</p>
 			<div class="">
-				<ul class="demo1 tabs">
+				<ul class="demo1 asTabs">
 					<li data-href="ajax1.txt">tab1</li>
 					<li data-href="ajax2.txt">tab2</li>
 					<li data-href="ajax3.txt">tab3</li>
@@ -42,7 +42,7 @@
 			<h2>mouseover</h2>
 			<p>This is a demo description.</p>
 			<div class="">
-				<ul class="demo2 tabs">
+				<ul class="demo2 asTabs">
 					<li>tab1</li>
 					<li>tab2</li>
 					<li>tab3</li>
@@ -57,7 +57,7 @@
 			<h2>initialIndex</h2>
 			<p>This is a demo description.</p>
 			<div class="">
-				<ul class="demo3 tabs">
+				<ul class="demo3 asTabs">
 					<li>tab1</li>
 					<li>tab2</li>
 					<li>tab3</li>
@@ -72,7 +72,7 @@
 			<h2>skin</h2>
 			<p>This is a demo description.</p>
 			<div class="">
-				<ul class="demo4 tabs">
+				<ul class="demo4 asTabs">
 					<li>tab1</li>
 					<li>tab2</li>
 					<li>tab3</li>
@@ -87,7 +87,7 @@
 			<h2>History</h2>
 			<p>This is a demo description.</p>
 			<div class="">
-				<ul class="demo5 tabs" id="tab1">
+				<ul class="demo5 asTabs" id="tab1">
 					<li id="hello">tab1</li>
 					<li id="world">tab2</li>
 					<li id="too">tab3</li>
@@ -100,7 +100,7 @@
 			</div>
 
 			<div class="">
-				<ul class="demo6 tabs" id="tab2">
+				<ul class="demo6 asTabs" id="tab2">
 					<li>tab1</li>
 					<li>tab2</li>
 					<li>tab3</li>
@@ -115,7 +115,7 @@
 			<h2>Keyboard</h2>
 			<p>This is a demo description.</p>
 			<div class="">
-				<ul class="demo7 tabs">
+				<ul class="demo7 asTabs">
 					<li>tab1</li>
 					<li>tab2</li>
 					<li>tab3</li>
@@ -130,7 +130,7 @@
 			<h2>effects</h2>
 			<p>This is a demo description.</p>
 			<div class="">
-				<ul class="demo8 tabs">
+				<ul class="demo8 asTabs">
 					<li>tab1</li>
 					<li>tab2</li>
 					<li>tab3</li>
@@ -143,7 +143,7 @@
 			</div>
 
 			<div class="">
-				<ul class="demo9 tabs">
+				<ul class="demo9 asTabs">
 					<li>tab1</li>
 					<li>tab2</li>
 					<li>tab3</li>
@@ -156,7 +156,7 @@
 			</div>
 
 			<div class="">
-				<ul class="demo10 tabs">
+				<ul class="demo10 asTabs">
 					<li>tab1</li>
 					<li>tab2</li>
 					<li>tab3</li>
@@ -186,52 +186,49 @@
 		
 		<script type="text/javascript" src="js/vendor/jquery-1.8.3.min.js"></script>
 		<script type="text/javascript" src="js/vendor/jquery.history.js"></script>
-		<script type="text/javascript" src="../src/jquery-tabs-core.js"></script>
-		<script type="text/javascript" src="../src/jquery-tabs-history.js"></script>
-		<script type="text/javascript" src="../src/jquery-tabs-effect.js"></script>
-		<script type="text/javascript" src="../src/jquery-tabs-keyboard.js"></script>
+		<script type="text/javascript" src="../dist/jquery-asTabs.js"></script>
 
 		<script>
 			$(function(){
-				$('.demo0').tabs({panes_wrap: '.panes0'});
-				$('.demo1').tabs({
+				$('.demo0').asTabs({panes_wrap: '.panes0'});
+				$('.demo1').asTabs({
 					panes_wrap: '.panes1', 
 					ajax: true, 
 					cached: true
 				});
-				$('.demo2').tabs({
+				$('.demo2').asTabs({
 					panes_wrap: '.panes2',
 					event:'mouseover'
 				});
-				$('.demo3').tabs({
+				$('.demo3').asTabs({
 					panes_wrap: '.panes3',
 					initialIndex: 2
 				});
-				$('.demo4').tabs({
+				$('.demo4').asTabs({
 					panes_wrap: '.panes4',
 					skin: 'skin-1'
 				});
 
-				$('.demo5').tabs({
+				$('.demo5').asTabs({
 					panes_wrap: '.panes5',
 					history: true
 				});
-				$('.demo6').tabs({
+				$('.demo6').asTabs({
 					panes_wrap: '.panes6',
 					history: true
 				});
 
-				$('.demo7').tabs({
+				$('.demo7').asTabs({
 					panes_wrap: '.panes7',
 					keyboard: true
 				});
 
-				$('.demo8').tabs({
+				$('.demo8').asTabs({
 					panes_wrap: '.panes8',
 					effect: 'slideIn'
 				});
 
-				$('.demo9').tabs({
+				$('.demo9').asTabs({
 					panes: '.panes9',
 					ifAnimate: true,
 					animate: {
@@ -240,7 +237,7 @@
 					}
 				});
 
-				$('.demo10').tabs({
+				$('.demo10').asTabs({
 					panes: '.panes10',
 					ifAnimate: true,
 					animate: {
@@ -251,39 +248,39 @@
 
 
 				$('#testGetTabs').click(function(){
-					console.info($('.demo4').tabs('getTabs'));
+					console.info($('.demo4').asTabs('getTabs'));
 				});
 
 				$('#testGetPanes').click(function(){
-					console.info($('.demo4').tabs('getPanes'));
+					console.info($('.demo4').asTabs('getPanes'));
 				});
 
 				$('#testGetIndex').click(function(){
-					console.info($('.demo4').tabs('getIndex'));
+					console.info($('.demo4').asTabs('getIndex'));
 				});
 
 				$('#testGetCurrentPane').click(function(){
-					console.info($('.demo4').tabs('getCurrentPane'));
+					console.info($('.demo4').asTabs('getCurrentPane'));
 				});
 
 				$('#testGetCurrentTab').click(function(){
-					console.info($('.demo4').tabs('getCurrentTab'));
+					console.info($('.demo4').asTabs('getCurrentTab'));
 				});
 
 				$('#testNext').click(function(){
-					console.info($('.demo4').tabs('next'));
+					console.info($('.demo4').asTabs('next'));
 				});
 
 				$('#testPrev').click(function(){
-					console.info($('.demo4').tabs('prev'));
+					console.info($('.demo4').asTabs('prev'));
 				});
 
 				$('#testDestroy').click(function(){
-					console.info($('.demo4').tabs('destroy'));
+					console.info($('.demo4').asTabs('destroy'));
 				});
 
 				$('#testAppend').click(function(){
-					$('.demo7').tabs('append','hello','<p>world</p>');
+					$('.demo7').asTabs('append','hello','<p>world</p>');
 				});
 			});	
 		</script>

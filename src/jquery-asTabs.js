@@ -1,12 +1,12 @@
-/*! jQuery tabs - v0.3.0 - 2013-09-09
- * https://github.com/amazingSurge/jquery-tabs
+/*! jQuery asTabs - v0.3.0 - 2013-09-09
+ * https://github.com/amazingSurge/jquery-asTabs
  * Copyright (c) 2013 amazingSurge; Licensed GPL */
 
 (function(window, document, $, undefined) {
     "use strict";
 
     // Constructor
-    var Tabs = $.Tabs = function(element, options) {
+    var AsTabs = $.asTabs = function(element, options) {
         var self = this;
 
         this.element = element;
@@ -15,13 +15,13 @@
         // options
         var meta_data = [];
         $.each(this.$element.data(), function(k, v) {
-            var re = new RegExp("^tabs", "i");
+            var re = new RegExp("^asTabs", "i");
             if (re.test(k)) {
                 meta_data[k.toLowerCase().replace(re, '')] = v;
             }
         });
 
-        this.options = $.extend(true, {}, Tabs.defaults, options, meta_data);
+        this.options = $.extend(true, {}, AsTabs.defaults, options, meta_data);
         this.namespace = this.options.namespace;
         this.initialized = false;
 
@@ -60,8 +60,8 @@
 
 
     // Default options for the plugin as a simple object
-    Tabs.defaults = {
-        namespace: 'tabs',
+    AsTabs.defaults = {
+        namespace: 'asTabs',
         panes_wrap: '.panes_wrap',
         skin: null,
         initialIndex: 0,
@@ -73,8 +73,8 @@
         event: 'click'
     };
 
-    Tabs.prototype = {
-        constructor: Tabs,
+    AsTabs.prototype = {
+        constructor: AsTabs,
         init: function() {
             var self = this;
 
@@ -86,12 +86,12 @@
                 return false;
             });
 
-            this.$element.trigger('tabs::init', this);
+            this.$element.trigger('asTabs::init', this);
 
             this.active(this.options.initialIndex);
             this.initialized = true;
 
-            this.$element.trigger('tabs::ready', this);
+            this.$element.trigger('asTabs::ready', this);
         },
         // This is a public function that users can call
         // Prototype methods are shared across all instances
@@ -105,7 +105,7 @@
             this.$tabs.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
             this.$panes.eq(index).addClass(this.classes.activePane).siblings().removeClass(this.classes.activePane);
 
-            this.$element.trigger('tabs::active', this);
+            this.$element.trigger('asTabs::active', this);
 
             if ($.type(this.options.onActive) === 'function') {
                 this.options.onActive(this);
@@ -116,7 +116,7 @@
             }
         },
         afterActive: function() {
-            this.$element.trigger('tabs::afterActive', this);
+            this.$element.trigger('asTabs::afterActive', this);
             if ($.type(this.options.onAfterActive) === 'function') {
                 this.options.onAfterActive(this);
             }
@@ -205,19 +205,19 @@
     };
 
     // Collection method.
-    $.fn.tabs = function(options) {
+    $.fn.asTabs = function(options) {
         if (typeof options === 'string') {
             var method = options;
             var method_arguments = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : undefined;
 
             if (/^(getTabs|getPanes_wrap|getCurrentPane|getCurrentTab|getIndex)$/.test(method)) {
-                var api = this.first().data('tabs');
+                var api = this.first().data('asTabs');
                 if (api && typeof api[method] === 'function') {
                     return api[method].apply(api, method_arguments);
                 }
             } else {
                 return this.each(function() {
-                    var api = $.data(this, 'tabs');
+                    var api = $.data(this, 'asTabs');
                     if (api && typeof api[method] === 'function') {
                         api[method].apply(api, method_arguments);
                     }
@@ -225,8 +225,8 @@
             }
         } else {
             return this.each(function() {
-                if (!$.data(this, 'tabs')) {
-                    $.data(this, 'tabs', new Tabs(this, options));
+                if (!$.data(this, 'asTabs')) {
+                    $.data(this, 'asTabs', new AsTabs(this, options));
                 }
             });
         }

@@ -1,5 +1,35 @@
-.tabs {
+/* core */
+.asTabs {
   position: relative;
+  overflow: hidden;
+}
+
+.asTabs li {
+  display: block;
+  float: left;
+}
+
+.asTabs-panes > div {
+  display: none;
+  visibility: hidden;
+}
+
+.asTabs-panes .asTabs_active {
+  display: block;
+  visibility: visible;
+}
+
+.asTabs-loading {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+}
+
+/* extra */
+.asTabs {
   height: 32px;
   padding: 0;
   margin: 0;
@@ -8,9 +38,7 @@
   -moz-box-sizing: border-box;
 }
 
-.tabs li {
-  display: block;
-  float: left;
+.asTabs li {
   width: 138px;
   height: 30px;
   font-size: 12px;
@@ -24,37 +52,21 @@
   border-radius: 6px 6px 0 0;
 }
 
-.tabs .tabs_active {
+.asTabs .asTabs_active {
   background-color: #fff;
   border-bottom-color: transparent;
 }
 
-.tabs-panes > div {
-  display: none;
+.asTabs-panes > div {
   word-wrap: break-word;
-  visibility: hidden;
 }
 
-.tabs-panes .tabs_active {
-  display: block;
-  visibility: visible;
-}
-
-.tabs-loading {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  display: block;
+.asTabs-loading {
   width: 30px;
   height: 30px;
-  margin-top: -15px;
-  margin-left: -15px;
   background-color: #333;
 }
 
-.tabs:focus {
-  box-shadow: 0 0 5px rgba(81, 203, 238, 1);
-}
-.tabs-panes:focus {
-  box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+.skin-1 li {
+  background-color: green;
 }

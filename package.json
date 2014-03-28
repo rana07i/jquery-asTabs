@@ -1,23 +1,23 @@
 {
-    "name": "jquery-tabs",
-    "title": "jQuery tabs",
+    "name": "jquery-asTabs",
+    "title": "jQuery asTabs",
     "description": "The powerful jQuery plugin that creates a tab",
     "version": "0.1.0",
-    "homepage": "https://github.com/amazingSurge/jquery-tabs",
+    "homepage": "https://github.com/amazingSurge/jquery-asTabs",
     "author": {
         "name": "amazingSurge",
         "email": "amazingSurge@yahoo.com"
     },
     "repository": {
         "type": "git",
-        "url": "git@github.com:amazingSurge/jquery-tabs.git"
+        "url": "git@github.com:amazingSurge/jquery-asTabs.git"
     },
     "bugs": {
-        "url": "https://github.com/amazingSurge/jquery-tabs/issues"
+        "url": "https://github.com/amazingSurge/jquery-asTabs/issues"
     },
     "licenses": [{
         "type": "GPL",
-        "url": "https://github.com/amazingSurge/jquery-tabs/blob/master/LICENSE-GPL"
+        "url": "https://github.com/amazingSurge/jquery-asTabs/blob/master/LICENSE-GPL"
     }],
     "devDependencies": {
         "grunt-contrib-jshint": "~0.1.1",

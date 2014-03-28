@@ -17,7 +17,7 @@ module.exports = function(grunt) {
                 stripBanners: true
             },
             dist: {
-                src: ['src/<%= pkg.name %>-core.js', 'src/jquery-tabs-history.js', 'src/jquery-tabs-keyboard.js', 'src/jquery-tabs-effect.js'],
+                src: ['src/<%= pkg.name %>.js', 'src/jquery-asTabs-history.js', 'src/jquery-asTabs-keyboard.js', 'src/jquery-asTabs-effect.js'],
                 dest: 'dist/<%= pkg.name %>.js'
             }
         },
@@ -28,17 +28,6 @@ module.exports = function(grunt) {
             dist: {
                 src: '<%= concat.dist.dest %>',
                 dest: 'dist/<%= pkg.name %>.min.js'
-            },
-            core: {
-                src: 'src/<%= pkg.name %>-core.js',
-                dest: 'dist/<%= pkg.name %>-core.min.js'
-            },
-            all: {
-                files: {
-                    'dist/jquery-tabs-effect.min.js': ['src/jquery-tabs-effect.js'],
-                    'dist/jquery-tabs-history.min.js': ['src/jquery-tabs-history.js'],
-                    'dist/jquery-tabs-keyboard.min.js': ['src/jquery-tabs-keyboard.js']
-                }
             }
         },
         qunit: {
@@ -116,7 +105,7 @@ module.exports = function(grunt) {
                 }]
             },
             jquery: {
-                src: ['tabs.jquery.json'],
+                src: ['asTabs.jquery.json'],
                 overwrite: true, // overwrite matched source files
                 replacements: [{
                     from: /("version": ")([0-9\.]+)(")/g,

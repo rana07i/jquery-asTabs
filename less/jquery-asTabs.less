@@ -1,5 +1,5 @@
 /* core */ 
-.tabs {
+.asTabs {
 	position: relative;
 	overflow: hidden;
 	li {
@@ -7,17 +7,17 @@
 		float: left;
 	}
 }
-.tabs-panes {
-	div {
+.asTabs-panes {
+	> div {
 		display: none;
 		visibility: hidden;
 	}
-	.tabs_active {
+	.asTabs_active {
 		visibility: visible;
 		display: block;
 	}
 }
-.tabs-loading {
+.asTabs-loading {
 	display: block;
 	position: absolute;
 	top: 0;
@@ -28,7 +28,7 @@
 
 
 /* extra */ 
-.tabs {
+.asTabs {
 	margin: 0;
 	padding: 0;
 	height: 32px;
@@ -39,7 +39,7 @@
 	
 }
 
-.tabs li {
+.asTabs li {
 	
 	border: 1px solid #252525;
 	
@@ -55,18 +55,18 @@
 	cursor: pointer;
 }
 
-.tabs .tabs_active {
+.asTabs .asTabs_active {
 	background-color: #fff;
 	border-bottom-color: transparent;
 }
 
 
-.tabs-panes > div {	
+.asTabs-panes > div {	
 	word-wrap: break-word;
 }
 
 
-.tabs-loading {
+.asTabs-loading {
 	width: 30px;
 	height: 30px;
 	background-color: #333;

@@ -1,14 +1,14 @@
-# jQuery tabs
+# jQuery asTabs
 
-The powerful jQuery plugin that creates a tab. <a href="http://amazingsurge.github.io/jquery-tabs/">Project page and demos</a><br />
-Download: <a href="https://github.com/amazingSurge/jquery-tabs/archive/master.zip">jquery-tabs-master.zip</a>
+The powerful jQuery plugin that creates a tab. <a href="http://amazingsurge.github.io/jquery-asTabs/">Project page and demos</a><br />
+Download: <a href="https://github.com/amazingSurge/jquery-asTabs/archive/master.zip">jquery-asTabs-master.zip</a>
 
 ***
 
 ## Features
 
-* **History support** — tabs can handle browser's back and forward buttons
-* **AJAXed tabs support** — ajax load content support
+* **History support** — asTabs can handle browser's back and forward buttons
+* **AJAXed asTabs support** — ajax load content support
 * **Keyboard navigation support** — use `Arrow left/right` to navigate
 * **Lightweight size** — 1 kb gzipped
 
@@ -19,15 +19,15 @@ Download: <a href="https://github.com/amazingSurge/jquery-tabs/archive/master.zi
 
 Import this libraries:
 * jQuery
-* jquery-tabs.min.js
+* jquery-asTabs.min.js
 
 And CSS:
-* jquery-tabs.css - desirable if you have not yet connected one
+* jquery-asTabs.css - desirable if you have not yet connected one
 
 
 Create base html element:
 ```html
-<ul class="demo tabs">
+<ul class="demo asTabs">
     <li>tab1</li>
     <li>tab2</li>
     <li>tab3</li>
@@ -39,15 +39,15 @@ Create base html element:
 </div>
 ```
 
-Initialize tabs:
+Initialize asTabs:
 ```javascript
-$(".demo").tabs({panes: '.panes'});
+$(".demo").asTabs({panes: '.panes'});
 ```
 
-Or initialize tabs with custom settings:
+Or initialize asTabs with custom settings:
 ```javascript
-$(".demo").tabs({
-        namespace: 'tabs',  // namespace for css class
+$(".demo").asTabs({
+        namespace: 'asTabs',  // namespace for css class
         panes: '.panes',
         skin: null,         // set custom skin
         initialIndex: 0,    // set initial index when first open
@@ -79,12 +79,12 @@ the most important thing is you should set panes value to let plugin find his pa
         <tr>
             <td>panes</td>
             <td>'.panes'</td>
-            <td>compulsory property, specify the content to tabs</td>
+            <td>compulsory property, specify the content to asTabs</td>
         </tr>
         <tr>
             <td>namespace</td>
-            <td>"tabs"</td>
-            <td>Optional property, set a namspace for css class, for example, we have <code>.tabs_active</code> class for active effect, if namespace set to 'as-tabs', then it will be <code>.as-tabs_active</code></td>
+            <td>"asTabs"</td>
+            <td>Optional property, set a namspace for css class, for example, we have <code>.asTabs_active</code> class for active effect, if namespace set to 'as-asTabs', then it will be <code>.as-asTabs_active</code></td>
         </tr>
         <tr>
             <td>skin</td>
@@ -94,7 +94,7 @@ the most important thing is you should set panes value to let plugin find his pa
         <tr>
             <td>initialIndex</td>
             <td>0</td>
-            <td>Optional property, set initial index when tabs initilize</td>
+            <td>Optional property, set initial index when asTabs initilize</td>
         </tr>
         <tr>
             <td>effect</td>
@@ -109,7 +109,7 @@ the most important thing is you should set panes value to let plugin find his pa
         <tr>
             <td>cached</td>
             <td>false</td>
-            <td>Optional property, it works only when ajax is set to true, if true, tabs will cach loaded content</td>
+            <td>Optional property, it works only when ajax is set to true, if true, asTabs will cach loaded content</td>
         </tr>
         <tr>
             <td>history</td>
@@ -124,12 +124,12 @@ the most important thing is you should set panes value to let plugin find his pa
         <tr>
             <td>event</td>
             <td>'click'</td>
-            <td>Optional property, the way to active tabs index, optioal 'mouseover'</td>
+            <td>Optional property, the way to active asTabs index, optioal 'mouseover'</td>
         </tr>  
         <tr>
             <td>onInit</td>
             <td>null</td>
-            <td>Optional property, callback, call when tabs is initilized</td>
+            <td>Optional property, callback, call when asTabs is initilized</td>
         </tr> 
         <tr>
             <td>onActive</td>
@@ -146,52 +146,52 @@ the most important thing is you should set panes value to let plugin find his pa
 
 ## Public methods
 
-jquery tabs has different methods , we can use it as below :
+jquery asTabs has different methods , we can use it as below :
 ```javascript
 // active index
-$(".demo").tabs("active", index);
+$(".demo").asTabs("active", index);
 
-// get all tabs element
-$(".demo").tabs("getTabs");
+// get all asTabs element
+$(".demo").asTabs("getasTabs");
 
 // get all panes element
-$(".demo").tabs("getPanes");
+$(".demo").asTabs("getPanes");
 
 // get current index, start from 0
-$(".demo").tabs("getIndex");
+$(".demo").asTabs("getIndex");
 
 // get current pane element
-$(".demo").tabs("getCurrentPane");
+$(".demo").asTabs("getCurrentPane");
 
 // get current tab elemnt
-$(".demo").tabs("getCurrentTab");
+$(".demo").asTabs("getCurrentTab");
 
 // goto the next tab, the last will goto the first
-$(".demo").tabs("next");
+$(".demo").asTabs("next");
 
 // goto the prevous tab, the first will goto the last
-$(".demo").tabs("prev");
+$(".demo").asTabs("prev");
 
-// remove tabs Dom element and unbound all events
-$(".demo").tabs("destroy");
+// remove asTabs Dom element and unbound all events
+$(".demo").asTabs("destroy");
 ```
 
 ## Event / Callback
 
-* <code>tabs::init</code>: trigger when tabs initilize
-* <code>tabs::active</code>: trigger when tabs is selected
-* <code>tabs::afterActive</code>:  trigger after acitve
+* <code>asTabs::init</code>: trigger when asTabs initilize
+* <code>asTabs::active</code>: trigger when asTabs is selected
+* <code>asTabs::afterActive</code>:  trigger after acitve
 
 how to use event:
 ```javascript
-$(document).on('tabs::init', function(event,instance) {
-    // instance means current tabs instance 
+$(document).on('asTabs::init', function(event,instance) {
+    // instance means current asTabs instance 
     // some stuff
 });
 ```
 
 ## Browser support
-jquery-tabs is verified to work in Internet Explorer 7+, Firefox 2+, Opera 9+, Google Chrome and Safari browsers. Should also work in many others.
+jquery-asTabs is verified to work in Internet Explorer 7+, Firefox 2+, Opera 9+, Google Chrome and Safari browsers. Should also work in many others.
 
 Mobile browsers (like Opera mini, Chrome mobile, Safari mobile, Android browser and others) is coming soon.
 
@@ -203,13 +203,13 @@ Mobile browsers (like Opera mini, Chrome mobile, Safari mobile, Android browser 
 |   0.1.x | ([compare][compare-1.1]) add keyboard function                   |
 |     ... | ...                                                              |
 
-[compare-1.2]: https://github.com/amazingSurge/jquery-tabs/compare/v1.2.0...v1.3.0
-[compare-1.1]: https://github.com/amazingSurge/jquery-tabs/compare/v1.1.0...v1.2.0
+[compare-1.2]: https://github.com/amazingSurge/jquery-asTabs/compare/v1.2.0...v1.3.0
+[compare-1.1]: https://github.com/amazingSurge/jquery-asTabs/compare/v1.1.0...v1.2.0
 
 ## Author
 [amazingSurge](http://amazingSurge.com)
 
 ## License
-jQuery-tabs plugin is released under the <a href="https://github.com/amazingSurge/jquery-tabs/blob/master/LICENCE.GPL" target="_blank">GPL licence</a>.
+jQuery-asTabs plugin is released under the <a href="https://github.com/amazingSurge/jquery-asTabs/blob/master/LICENCE.GPL" target="_blank">GPL licence</a>.
 
 
