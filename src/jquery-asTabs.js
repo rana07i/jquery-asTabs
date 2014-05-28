@@ -57,8 +57,6 @@
 
         this.init();
     };
-
-
     // Default options for the plugin as a simple object
     AsTabs.defaults = {
         namespace: 'asTabs',
@@ -72,7 +70,6 @@
         effect: false, // slideIn, scaleUp, scaleUpDown, scaleUpCenter, flipInLeft, flipInRight, flipInRight, flipInBottom, flipInTop
         event: 'click'
     };
-
     AsTabs.prototype = {
         constructor: AsTabs,
         init: function() {
@@ -203,7 +200,6 @@
         disable: function() {},
         destroy: function() {}
     };
-
     // Collection method.
     $.fn.asTabs = function(options) {
         if (typeof options === 'string') {
