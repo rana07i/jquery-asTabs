@@ -14,7 +14,7 @@
   visibility: hidden;
 }
 
-.asTabs-panes .asTabs_active {
+.asTabs-panes > div.asTabs_active {
   display: block;
   visibility: visible;
 }
