@@ -1,36 +1,47 @@
 {
-    "name": "jquery-asTabs",
-    "title": "jQuery asTabs",
-    "description": "The powerful jQuery plugin that creates a tab",
-    "version": "0.1.0",
-    "homepage": "https://github.com/amazingSurge/jquery-asTabs",
-    "author": {
-        "name": "amazingSurge",
-        "email": "amazingSurge@yahoo.com"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git@github.com:amazingSurge/jquery-asTabs.git"
-    },
-    "bugs": {
-        "url": "https://github.com/amazingSurge/jquery-asTabs/issues"
-    },
-    "licenses": [{
-        "type": "GPL",
-        "url": "https://github.com/amazingSurge/jquery-asTabs/blob/master/LICENSE-GPL"
-    }],
-    "devDependencies": {
-        "grunt-contrib-jshint": "~0.1.1",
-        "grunt-contrib-qunit": "~0.2.0",
-        "grunt-contrib-concat": "~0.1.2",
-        "grunt-contrib-uglify": "~0.1.1",
-        "grunt-contrib-watch": "~0.2.0",
-        "grunt-contrib-clean": "~0.4.0",
-        "grunt": "~0.4.1",
-        "grunt-jsbeautifier": "~0.1.6",
-        "grunt-recess": "~0.3.1"
-    },
-    "dependencies": {
-        "grunt-text-replace": "~0.3.6"
+  "name": "jquery-asTabs",
+  "title": "jQuery asTabs",
+  "description": "The powerful jQuery plugin that creates a tab",
+  "version": "0.1.0",
+  "homepage": "https://github.com/amazingSurge/jquery-asTabs",
+  "author": {
+    "name": "amazingSurge",
+    "email": "amazingSurge@yahoo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:amazingSurge/jquery-asTabs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/amazingSurge/jquery-asTabs/issues"
+  },
+  "licenses": [
+    {
+      "type": "GPL",
+      "url": "https://github.com/amazingSurge/jquery-asTabs/blob/master/LICENSE-GPL"
     }
+  ],
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-cssmin": "*",
+    "grunt-contrib-csslint": "*",
+    "grunt-contrib-compress": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-less": "*",
+    "grunt-lesslint": "*",
+    "grunt-lessimportfile": "*",
+    "grunt-csscomb": "*",
+    "load-grunt-tasks": "*",
+    "grunt-jsbeautifier": "*",
+    "grunt-text-replace": "*",
+    "grunt-autoprefixer": "~0.8.1",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-uglify": "~0.5.0"
+  },
+  "dependencies": {
+    "grunt-jquery-builder": "*"
+  }
 }

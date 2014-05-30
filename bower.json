@@ -1,15 +1,16 @@
 {
-    "name": "jquery-asTabs",
-    "version": "0.3.0",
-    "main": "dist/jquery-asTabs.js",
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "test",
-        "tests"
-    ],
-    "dependencies": {
-        "jquery": ">=1.8.3"
-    }
+  "name": "jquery-asTabs",
+  "version": "0.3.0",
+  "main": "dist/jquery-asTabs.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": ">=1.8.3",
+    "animate.css": "git@github.com:daneden/animate.css.git#~3.2.0"
+  }
 }

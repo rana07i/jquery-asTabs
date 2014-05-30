@@ -2,49 +2,59 @@
  * https://github.com/amazingSurge/jquery-asTabs
  * Copyright (c) 2013 amazingSurge; Licensed GPL */
 
-(function(window, document, $, undefined) {
+(function($, document, window, undefined) {
     "use strict";
 
-    // Constructor
-    var AsTabs = $.asTabs = function(element, options) {
+    var pluginName = 'asTabs';
+    // main constructor
+    var Plugin = $[pluginName] = function(element, options) {
+
         var self = this;
 
         this.element = element;
         this.$element = $(element);
-
-        // options
-        var meta_data = [];
-        $.each(this.$element.data(), function(k, v) {
-            var re = new RegExp("^asTabs", "i");
-            if (re.test(k)) {
-                meta_data[k.toLowerCase().replace(re, '')] = v;
-            }
-        });
-
-        this.options = $.extend(true, {}, AsTabs.defaults, options, meta_data);
+        this.options = $.extend(true, {}, Plugin.defaults, options, this.$element.data('options'));
         this.namespace = this.options.namespace;
+        this.initialIndex = this.options.initialIndex;
         this.initialized = false;
+        this.actived = false;
+        this.current = null;
 
         // Class
         this.classes = {
-            activeTab: this.namespace + '_active',
-            activePane: this.namespace + '_active',
-            panes_wrap: this.namespace + '-panes',
+            withJs: 'with-js',
+            activeTab: 'is-active',
+            activePane: 'is-active',
+            nav: this.namespace + '-nav',
+            content: this.namespace + '-content',
             skin: this.namespace + '_' + this.options.skin
         };
 
-        this.$tabs = this.$element.children();
-        this.$panes_wrap = $(this.options.panes_wrap).addClass(this.classes.panes_wrap);
-        this.$panes = this.$panes_wrap.children();
+        if (this.options.navSelector) {
+            this.$nav = this.$element.find(this.options.navSelector);
+            this.$content = this.$element.find(this.options.contentSelector)
+        } else {
+            this.$nav = this.$element;
+            if (this.options.contentSelector === '+') {
+                this.$content = this.$nav.next();
+            } else {
+                this.$content = $(this.options.contentSelector);
+            }
+        }
+
+        this.$nav.addClass(this.classes.nav).addClass(this.classes.withJs);
+        this.$content.addClass(this.classes.content).addClass(this.classes.withJs);
+
+        this.$tabs = this.$nav.children();
+        this.$panes = this.$content.children();
         this.$loading = $('<span class="' + this.namespace + '-loading"></span>');
 
         this.size = this.$tabs.length;
 
         if (this.options.skin) {
             this.$element.addClass(this.classes.skin);
-            this.$panes_wrap.addClass(this.classes.skin);
+            this.$content.addClass(this.classes.skin);
         }
-
 
         if (this.options.ajax === true) {
             this.ajax = [];
@@ -57,65 +67,110 @@
 
         this.init();
     };
+
     // Default options for the plugin as a simple object
-    AsTabs.defaults = {
+    Plugin.defaults = {
         namespace: 'asTabs',
-        panes_wrap: '.panes_wrap',
+        navSelector: null,
+        contentSelector: '+',
         skin: null,
         initialIndex: 0,
         ajax: false,
         cached: false,
         history: false,
+        historyAttr: 'id',
         keyboard: false,
-        effect: false, // slideIn, scaleUp, scaleUpDown, scaleUpCenter, flipInLeft, flipInRight, flipInRight, flipInBottom, flipInTop
+        effect: false,
+        duration: 300,
         event: 'click'
     };
-    AsTabs.prototype = {
-        constructor: AsTabs,
+    Plugin.prototype = {
+        constructor: Plugin,
         init: function() {
             var self = this;
 
             // Bind logic
-            this.$element.on(this.options.event, '> *', function(e) {
+            this.$nav.on(this.options.event, '> *', function(e) {
                 var index = $(e.target).index();
                 self.active(index);
-                self.afterActive();
                 return false;
             });
 
-            this.$element.trigger('asTabs::init', this);
+            this._trigger('init');
 
-            this.active(this.options.initialIndex);
+            this.active(this.initialIndex);
+            this.actived = true;
+
             this.initialized = true;
 
-            this.$element.trigger('asTabs::ready', this);
+            this._trigger('ready');
         },
-        // This is a public function that users can call
-        // Prototype methods are shared across all instances
-        active: function(index) {
-            if (this.current === index) {
-                return;
+        _trigger: function(eventType) {
+            var method_arguments,
+                trigger_arguments = [this];
+            if (arguments.length > 1) {
+                method_arguments = Array.prototype.slice.call(arguments, 1);
+                trigger_arguments = trigger_arguments.concat(method_arguments);
             }
 
-            this.last = this.current;
-            this.current = index;
+            // event
+            this.$element.trigger(pluginName + '::' + eventType, trigger_arguments);
+            this.$element.trigger(eventType + '.' + pluginName, trigger_arguments);
+
+            // callback
+            eventType = eventType.replace(/\b\w+\b/g, function(word) {
+                return word.substring(0, 1).toUpperCase() + word.substring(1);
+            });
+            var onFunction = 'on' + eventType;
+
+            if (typeof this.options[onFunction] === 'function') {
+                this.options[onFunction].apply(this, method_arguments);
+            }
+        },
+        active: function(index, update) {
+            if (this.current) {
+                if (this.current === index || index >= this.size || index < 0) {
+                    return;
+                }
+            } else {
+                if (index >= this.size) {
+                    index = this.size - 1;
+                } else if (index < 0) {
+                    index = 0;
+                }
+            }
+
             this.$tabs.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
-            this.$panes.eq(index).addClass(this.classes.activePane).siblings().removeClass(this.classes.activePane);
 
-            this.$element.trigger('asTabs::active', this);
+            var self = this;
 
-            if ($.type(this.options.onActive) === 'function') {
-                this.options.onActive(this);
+            if (this.current === null) {
+                this.$panes.eq(index).addClass(this.classes.activePane).siblings().removeClass(this.classes.activePane);
+            } else {
+                self._trigger('animation', self.current, index);
+
+                if (!self.effects) {
+                    self.$panes.eq(self.current).fadeOut(self.options.duration, function() {
+                        $(this).removeClass('is-active');
+
+                        self.$panes.eq(index).fadeIn(self.options.duration, function() {
+                            $(this).addClass('is-active');
+                        });
+                    });
+                }
             }
 
-            if (this.options.ajax === true) {
-                this.ajaxLoad(index);
+            self.previous = self.current;
+            self.current = index;
+
+            if (self.options.ajax === true) {
+                self.ajaxLoad(index);
             }
-        },
-        afterActive: function() {
-            this.$element.trigger('asTabs::afterActive', this);
-            if ($.type(this.options.onAfterActive) === 'function') {
-                this.options.onAfterActive(this);
+
+            self._trigger('active', index);
+
+            if (update !== false) {
+                self._trigger('update', index);
             }
         },
         ajaxLoad: function(index) {
@@ -137,10 +192,13 @@
                     self.hideLoading();
                     self.$panes.eq(index).html('failed');
                 });
+                dtd.always(function() {
+                    self._trigger('loaded', index);
+                });
             }
         },
         showLoading: function() {
-            this.$loading.appendTo(this.$panes_wrap);
+            this.$loading.appendTo(this.$content);
         },
         hideLoading: function() {
             this.$loading.remove();
@@ -148,7 +206,7 @@
         getTabs: function() {
             return this.$tabs;
         },
-        getPanes_wrap: function() {
+        getPanes: function() {
             return this.$panes;
         },
         getCurrentPane: function() {
@@ -170,14 +228,13 @@
             this.$tabs.eq(index - 1).after(this.$tabs.eq(0).clone().removeClass(this.classes.activeTab).html(title));
             this.$panes.eq(index - 1).after(this.$panes.eq(0).clone().removeClass(this.classes.activePane).html(content));
 
-            this.$tabs = this.$element.children();
-            this.$panes = this.$panes_wrap.children();
+            this.$tabs = this.$nav.children();
+            this.$panes = this.$content.children();
             this.size++;
         },
         next: function() {
-            var len = this.$tabs.length,
-                current = this.current;
-            if (current < len - 1) {
+            var current = this.current;
+            if (current < this.size - 1) {
                 current++;
             } else {
                 current = 0;
@@ -186,34 +243,44 @@
             this.active(current);
         },
         prev: function() {
-            var len = this.$tabs.length,
-                current = this.current;
+            var current = this.current;
             if (current === 0) {
-                current = Math.abs(1 - len);
+                current = Math.abs(1 - this.size);
             } else {
                 current = current - 1;
             }
 
             this.active(current);
         },
+        revert: function(update) {
+            var index = 0;
+            if (this.options.initialIndex) {
+                index = this.options.initialIndex;
+            }
+
+            this.active(index, update);
+        },
         enable: function() {},
         disable: function() {},
         destroy: function() {}
     };
     // Collection method.
-    $.fn.asTabs = function(options) {
+    $.fn[pluginName] = function(options) {
         if (typeof options === 'string') {
             var method = options;
             var method_arguments = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : undefined;
 
-            if (/^(getTabs|getPanes_wrap|getCurrentPane|getCurrentTab|getIndex)$/.test(method)) {
-                var api = this.first().data('asTabs');
+            if (/^\_/.test(method)) {
+                return false;
+            } else if (/^(getTabs|getPanes|getCurrentPane|getCurrentTab|getIndex|getSize)$/.test(method)) {
+
+                var api = this.first().data(pluginName);
                 if (api && typeof api[method] === 'function') {
                     return api[method].apply(api, method_arguments);
                 }
             } else {
                 return this.each(function() {
-                    var api = $.data(this, 'asTabs');
+                    var api = $.data(this, pluginName);
                     if (api && typeof api[method] === 'function') {
                         api[method].apply(api, method_arguments);
                     }
@@ -221,10 +288,10 @@
             }
         } else {
             return this.each(function() {
-                if (!$.data(this, 'asTabs')) {
-                    $.data(this, 'asTabs', new AsTabs(this, options));
+                if (!$.data(this, pluginName)) {
+                    $.data(this, pluginName, new Plugin(this, options));
                 }
             });
         }
     };
-}(window, document, jQuery));
+})(jQuery, document, window);

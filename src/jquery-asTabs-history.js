@@ -1,132 +1,104 @@
 // jquery asTabs history
-
 (function(window, document, $, undefined) {
+    "use strict";
+
+    if (!window.history || !window.history.pushState || !window.history.replaceState) {
+        return;
+    }
+
     var $doc = $(document);
-    var history = {
-        states: {},
-        refresh: false, // avoid repeating update
-        stopHashchangeEvent: false, // stop trigger hashChange when push state
-        on: function(eventType, callback) {
-            var self = this;
-            $(window).on(eventType, function(e) {
-                if (self.stopHashchangeEvent) {
-                    return false;
-                } else {
-                    callback(e);
-                    return false;
-                }
-
-            });
-        },
-        off: function(eventType) {
-            $(window).off(eventType);
-        },
-        pushState: function(state) {
-            var id;
-            for (id in state) {
-                this.states[id] = state[id];
-            }
-            this.refresh = false;
-            this.stopHashchangeEvent = true;
-            setTimeout($.proxy(this.changeStates, this), 0);
-        },
-        changeStates: function() {
-            var self = this,
-                hash = '';
-            if (this.refresh === true) {
-                return;
-            }
-
-            $.each(this.states, function(id, index) {
-                hash += id + '=' + index + '&';
-            });
-
-            window.location.hash = hash.substr(0, hash.length - 1);
-            this.refresh = true;
-            setTimeout(function() {
-                self.stopHashchangeEvent = false;
-            }, 0);
-        },
-        getState: function() {
-            var hash = window.location.hash.replace('#', '').replace('!', ''),
-                queryString, param = {};
-
-            if (hash === '') {
-                return {};
-            }
-
-            queryString = hash.split("&");
-
-            $.each(queryString, function(i, v) {
-                if (v === false) {
-                    return;
-                }
-                var args = v.match("#?(.*)=(.*)");
-
-                if (args) {
-                    param[args[1]] = args[2];
-                }
-
-            });
-
-            return param;
-        },
-        reset: function() {
-            if (this.refresh === true) {
-                return;
-            }
-            this.states = {};
-            window.location.hash = "#/";
-
-            this.refresh = true;
-        }
-    };
+    var id_count = 1;
 
     $doc.on('asTabs::init', function(event, instance) {
         if (instance.options.history === false) {
             return;
         }
-        var hashchange = function() {
-            var states = history.getState(),
-                tabs,
-                id = instance.$element.attr('id');
+        if (instance.options.history !== true) {
+            instance.historyId = instance.options.history;
+        } else {
+            var id = instance.$element.attr('id');
 
-            if (states[id]) {
-                tabs = $('#' + id).data('asTabs');
-                if (tabs) {
-                    var $tab = instance.$element.find('#' + states[id]);
-                    if ($tab.length >= 1) {
-                        tabs.active(instance.$tabs.index($tab));
-                    } else {
-                        tabs.active(states[id]);
-                    }
-
-                }
+            if (id) {
+                instance.historyId = id;
+            } else {
+                instance.historyId = 'tabs_' + id_count;
+                id_count++;
             }
-        };
+        }
 
-        history.on('hashchange.asTabs', hashchange);
+        // active the matched tab
+        var match = new RegExp('[#&]*' + instance.historyId + '=([^&]*)', 'i')
+            .exec(window.location.hash);
+
+        if (match) {
+            var slug = decodeURIComponent(match[1].replace(/\+/g, ' '));
+            var $tab = instance.$nav.find('[' + instance.options.historyAttr + '="' + slug + '"]');
+
+            if ($tab.length >= 1) {
+                instance.initialIndex = instance.$tabs.index($tab);
+            } else if (!isNaN(parseFloat(slug)) && isFinite(slug)) {
+                instance.initialIndex = slug;
+            }
+        }
+
+        $(window).on('popstate', function(event) {
+            var state = event.originalEvent.state;
+            if (state && typeof state[instance.historyId] !== 'undefined') {
+                if (state[instance.historyId].index) {
+                    instance.active(state[instance.historyId].index, false);
+                }
+                event.preventDefault();
+            } else {
+                instance.revert(false);
+            }
+        });
     });
 
-    $doc.on('asTabs::afterActive', function(event, instance) {
-        var index = instance.current,
-            state = {},
-            id = instance.$element.attr('id'),
-            content = instance.$tabs.eq(index).attr('id');
-
-        if (instance.options.history === false) {
+    $doc.on('asTabs::update', function(event, instance) {
+        if (instance.options.history === false || typeof instance.historyId === 'undefined') {
             return;
         }
+        if (instance.actived === false) {
+            return;
+        }
+        var index = instance.current,
+            state = {
+                index: index
+            },
+            content = instance.$tabs.eq(index).attr(instance.options.historyAttr);
 
         if (content) {
-            state[id] = content;
+            state.slug = content;
         } else {
-            state[id] = index;
+            state.slug = index;
         }
-        history.pushState(state);
-    });
+        if (index === instance.options.initialIndex) {
+            state.initial = true;
+        }
 
-    setTimeout(function() {
-        $(window).trigger('hashchange.asTabs');
-    }, 0);
+        var url = window.location.hash;
+
+        if (url === '') {
+            url = '#';
+        }
+
+        var reg = new RegExp('&*' + instance.historyId + '=[^&]+', "i");
+        if (state.initial) {
+            url = url.replace(reg, '');
+        } else {
+            if (url.match(reg)) {
+                url = url.replace(reg, '&' + instance.historyId + '=' + state.slug);
+            } else {
+                url = url + '&' + instance.historyId + '=' + state.slug;
+            }
+        }
+        var states = history.state;
+        if (!states) {
+            states = {};
+        }
+        states[instance.historyId] = state;
+
+        url = url.replace(/^#&/, '#');
+        window.history.pushState(states, "", url);
+    });
 })(window, document, jQuery);

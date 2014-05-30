@@ -1,0 +1,147 @@
+@tabs: tabs;
+@tabs-nav-bgColor: transparent;
+@tabs-nav-hover-bgColor: #F6F7F8;
+@tabs-nav-active-bgColor: #3399dd;
+
+@tabs-nav-color: rgb(44, 62, 80);
+@tabs-nav-hover-color: @tabs-nav-color;
+@tabs-nav-active-color: rgb(255,255,255);
+
+@tabs-nav-line-color: @tabs-nav-active-bgColor;
+
+/* without js */
+.@{tabs} {
+	&-nav {
+		position: relative;
+		overflow: hidden;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		box-sizing: border-box;
+
+		border-bottom: 3px solid @tabs-nav-line-color;
+
+		li {
+			display: block;
+			float: left;
+			text-align: center;
+			text-decoration: none;
+			cursor: pointer;
+
+			border-radius: 3px 3px 0 0;
+			padding: 12px 20px;
+
+			background-color: @tabs-nav-bgColor;
+			color: @tabs-nav-color;
+
+			&:hover {
+				background-color: @tabs-nav-hover-bgColor;
+				color: @tabs-nav-hover-color;
+			}
+
+			&:first-child {
+				background-color: @tabs-nav-active-bgColor;
+				color: @tabs-nav-active-color;
+			}
+		}
+	}
+	&-content {
+		> div {
+			display: none;
+			padding: 15px;
+
+			&:first-child {
+				display: block;
+			}
+		}
+	}
+}
+
+/* with js inited */
+.@{tabs} {
+	&-nav.with-js {
+		li {
+			background-color: @tabs-nav-bgColor;
+			color: @tabs-nav-color;
+
+			&:first-child {
+				background-color: @tabs-nav-bgColor;
+				color: @tabs-nav-color;
+			}
+
+			&.is-active {
+				background-color: @tabs-nav-active-bgColor;
+				color: @tabs-nav-active-color;
+			}
+		}
+	}
+
+	&-loading {
+		width: 30px;
+		height: 30px;
+		background-color: #333;
+	}
+
+	&-content.with-js {	
+		transition: all .5s ease-in-out;
+
+		> div {
+			&:first-child {
+				display: none;
+			}
+
+			&.is-active {
+				display: block;
+			}
+		}
+	}
+}
+/** effects */
+.@{tabs} {
+	&-content.with-effects {	
+		position: relative;
+		-webkit-perspective: 1200px;
+		perspective: 1200px;
+		-webkit-backface-visibility: hidden;
+		backface-visibility: hidden;
+		overflow: hidden;
+
+		> div {
+			display: block;
+			position: absolute;
+			top: 0;
+			
+			transform: translateX(-100%);
+			-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+			filter: alpha(opacity=0);
+			opacity: 0;
+
+			&:first-child {
+				display: block;
+			}
+
+			&.is-active {
+				transform: translateX(0px);
+				-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+				filter: alpha(opacity=100);
+				opacity: 1;
+			}
+
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
+
+			-webkit-transform-style: preserve-3d;
+			transform-style: preserve-3d;
+
+			-webkit-animation-duration: .5s;
+			animation-duration: .5s;
+		}
+	}
+}
+
+.@{tabs} {
+	&-content {
+		background: #fcfcfc;
+	}
+}
+

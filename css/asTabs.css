@@ -1,0 +1,109 @@
+/* without js */
+.tabs-nav {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-bottom: 3px solid #3399dd;
+}
+.tabs-nav li {
+  display: block;
+  float: left;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 3px 3px 0 0;
+  padding: 12px 20px;
+  background-color: transparent;
+  color: #2c3e50;
+}
+.tabs-nav li:hover {
+  background-color: #f6f7f8;
+  color: #2c3e50;
+}
+.tabs-nav li:first-child {
+  background-color: #3399dd;
+  color: #ffffff;
+}
+.tabs-content > div {
+  display: none;
+  padding: 15px;
+}
+.tabs-content > div:first-child {
+  display: block;
+}
+/* with js inited */
+.tabs-nav.with-js li {
+  background-color: transparent;
+  color: #2c3e50;
+}
+.tabs-nav.with-js li:first-child {
+  background-color: transparent;
+  color: #2c3e50;
+}
+.tabs-nav.with-js li.is-active {
+  background-color: #3399dd;
+  color: #ffffff;
+}
+.tabs-loading {
+  width: 30px;
+  height: 30px;
+  background-color: #333;
+}
+.tabs-content.with-js {
+  -webkit-transition: all 0.5s ease-in-out;
+       -o-transition: all 0.5s ease-in-out;
+          transition: all 0.5s ease-in-out;
+}
+.tabs-content.with-js > div:first-child {
+  display: none;
+}
+.tabs-content.with-js > div.is-active {
+  display: block;
+}
+/** effects */
+.tabs-content.with-effects {
+  position: relative;
+  -webkit-perspective: 1200px;
+  perspective: 1200px;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+.tabs-content.with-effects > div {
+  display: block;
+  position: absolute;
+  top: 0;
+  -webkit-transform: translateX(-100%);
+      -ms-transform: translateX(-100%);
+       -o-transform: translateX(-100%);
+          transform: translateX(-100%);
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: alpha(opacity=0);
+  opacity: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-animation-duration: .5s;
+  -o-animation-duration: .5s;
+     animation-duration: .5s;
+}
+.tabs-content.with-effects > div:first-child {
+  display: block;
+}
+.tabs-content.with-effects > div.is-active {
+  -webkit-transform: translateX(0px);
+      -ms-transform: translateX(0px);
+       -o-transform: translateX(0px);
+          transform: translateX(0px);
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: alpha(opacity=100);
+  opacity: 1;
+}
+.tabs-content {
+  background: #fcfcfc;
+}

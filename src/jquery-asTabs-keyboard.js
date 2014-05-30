@@ -1,6 +1,7 @@
 // jquery asTabs keyboard
-;
 (function(window, document, $, undefined) {
+    "use strict";
+
     var $doc = $(document);
     var keyboard = {
         keys: {
@@ -68,9 +69,11 @@
                 left: $.proxy(instance.prev, instance),
                 right: $.proxy(instance.next, instance)
             });
+            e.preventDefault();
             return false;
         }).on('blur', function(e) {
             keyboard.detach();
+            e.preventDefault();
             return false;
         });
     });

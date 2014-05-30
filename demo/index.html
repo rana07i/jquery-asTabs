@@ -2,277 +2,340 @@
 <html>
 	<head>
 		<title>asTabs</title>
-		<link rel="stylesheet" type="text/css" href="../css/jquery-asTabs.css" />
+		<link rel="stylesheet" type="text/css" href="../css/asTabs.css" />
 		<link rel="stylesheet" type="text/css" href="css/demo.css">
-		<link rel="stylesheet" type="text/css" href="../css/effects.css">
+		<link rel="stylesheet" type="text/css" href="../css/animate.css">
 	</head>
 	<body>
-
-		<div class="wrapper">
-			<h2>default(click)</h2>
-			<p>This is a demo description.</p>
-			<div class="">
-				<ul class="demo0 asTabs">
-					<li>tab1</li>
-					<li>tab2</li>
-					<li>tab3</li>
-				</ul>
-				<div class="panes0">
-					<div>tab1</div>
-					<div>tab2</div>
-					<div>tab3</div>
+		<div class="container">
+			<h1>jQuery asTabs</h1>
+			<section class="section">
+				<h2>default(click)</h2>
+				<div class="tabs">
+					<ul class="tabs-nav">
+						<li>tab1</li>
+						<li>tab2</li>
+						<li>tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div>Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</div>
+						<div>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div>
+						<div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat</div>
+					</div>
 				</div>
-			</div>
+			</section>
 
-			<h2>ajax content</h2>
-			<p>This is a demo description.</p>
-			<div class="">
-				<ul class="demo1 asTabs">
-					<li data-href="ajax1.txt">tab1</li>
-					<li data-href="ajax2.txt">tab2</li>
-					<li data-href="ajax3.txt">tab3</li>
-				</ul>
-				<div class="panes1">
-					<div></div>
-					<div></div>
-					<div></div>
+			<section class="section">
+				<h2>ajax content</h2>
+				<div class="tabs" data-options='{"ajax": true, "cache": true}'>
+					<ul class="tabs-nav">
+						<li data-href="ajax1.txt">tab1</li>
+						<li data-href="ajax2.txt">tab2</li>
+						<li data-href="ajax3.txt">tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
 				</div>
-			</div>
+			</section>
 
-			<h2>mouseover</h2>
-			<p>This is a demo description.</p>
-			<div class="">
-				<ul class="demo2 asTabs">
-					<li>tab1</li>
-					<li>tab2</li>
-					<li>tab3</li>
-				</ul>
-				<div class="panes2">
-					<div>panes</div>
-					<div>panle2</div>
-					<div>panle3</div>
+			<section class="section">
+				<h2>mouseover</h2>
+				<div class="tabs" data-options='{"event": "mouseover"}'>
+					<ul class="tabs-nav">
+						<li>tab1</li>
+						<li>tab2</li>
+						<li>tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div>Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</div>
+						<div>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div>
+						<div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat</div>
+					</div>
 				</div>
-			</div>
+			</section>
 
-			<h2>initialIndex</h2>
-			<p>This is a demo description.</p>
-			<div class="">
-				<ul class="demo3 asTabs">
-					<li>tab1</li>
-					<li>tab2</li>
-					<li>tab3</li>
-				</ul>
-				<div class="panes3">
-					<div>panes</div>
-					<div>panle2</div>
-					<div>panle3</div>
+			<section class="section">
+				<h2>initialIndex</h2>
+				<div class="tabs" data-options='{"initialIndex": 2}'>
+					<ul class="tabs-nav">
+						<li>tab1</li>
+						<li>tab2</li>
+						<li>tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div>Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</div>
+						<div>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div>
+						<div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat</div>
+					</div>
 				</div>
-			</div>
+			</section>
 
-			<h2>skin</h2>
-			<p>This is a demo description.</p>
-			<div class="">
-				<ul class="demo4 asTabs">
-					<li>tab1</li>
-					<li>tab2</li>
-					<li>tab3</li>
-				</ul>
-				<div class="panes4">
-					<div>panes</div>
-					<div>panle2</div>
-					<div>panle3</div>
+			<section class="section">
+				<h2>skin</h2>
+				<div class="tabs" data-options='{"skin": "blue"}'>
+					<ul class="tabs-nav">
+						<li>tab1</li>
+						<li>tab2</li>
+						<li>tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div>Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</div>
+						<div>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div>
+						<div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat</div>
+					</div>
 				</div>
-			</div>
+			</section>
 
-			<h2>History</h2>
-			<p>This is a demo description.</p>
-			<div class="">
-				<ul class="demo5 asTabs" id="tab1">
-					<li id="hello">tab1</li>
-					<li id="world">tab2</li>
-					<li id="too">tab3</li>
-				</ul>
-				<div class="panes5">
-					<div>panes</div>
-					<div>panle2</div>
-					<div>panle3</div>
+			<section class="section">
+				<h2>History</h2>
+				<div class="tabs" data-options='{"history": "first-tab"}'>
+					<ul class="tabs-nav">
+						<li id="hello">tab1</li>
+						<li id="world">tab2</li>
+						<li id="too">tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div>Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</div>
+						<div>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div>
+						<div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat</div>
+					</div>
 				</div>
-			</div>
 
-			<div class="">
-				<ul class="demo6 asTabs" id="tab2">
-					<li>tab1</li>
-					<li>tab2</li>
-					<li>tab3</li>
-				</ul>
-				<div class="panes6">
-					<div>panes</div>
-					<div>panle2</div>
-					<div>panle3</div>
+				<div class="tabs" data-options='{"history": true, "historyAttr": "data-slug"}'>
+					<ul class="tabs-nav">
+						<li data-slug="first">tab1</li>
+						<li data-slug="second">tab2</li>
+						<li data-slug="third">tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div>Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</div>
+						<div>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div>
+						<div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat</div>
+					</div>
 				</div>
-			</div>
+			</section>
 
-			<h2>Keyboard</h2>
-			<p>This is a demo description.</p>
-			<div class="">
-				<ul class="demo7 asTabs">
-					<li>tab1</li>
-					<li>tab2</li>
-					<li>tab3</li>
-				</ul>
-				<div class="panes7">
-					<div>panes</div>
-					<div>panle2</div>
-					<div>panle3</div>
+			<section class="section">
+				<h2>Keyboard</h2>
+				<div class="tabs" data-options='{"keyboard": "true"}'>
+					<ul class="tabs-nav">
+						<li>tab1</li>
+						<li>tab2</li>
+						<li>tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div>Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</div>
+						<div>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div>
+						<div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat</div>
+					</div>
 				</div>
-			</div>
+			</section>
 
-			<h2>effects</h2>
-			<p>This is a demo description.</p>
-			<div class="">
-				<ul class="demo8 asTabs">
-					<li>tab1</li>
-					<li>tab2</li>
-					<li>tab3</li>
-				</ul>
-				<div class="panes8">
-					<div class="page0">panes</div>
-					<div class="page1">panle2</div>
-					<div class="page2">panle3</div>
+			<section class="section">
+				<h2>effects fadeIn</h2>
+				<div class="tabs" data-options='{"effect": "fadeIn"}'>
+					<ul class="tabs-nav">
+						<li>tab1</li>
+						<li>tab2</li>
+						<li>tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div>Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</div>
+						<div>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div>
+						<div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat</div>
+					</div>
 				</div>
-			</div>
+			</section>
 
-			<div class="">
-				<ul class="demo9 asTabs">
-					<li>tab1</li>
-					<li>tab2</li>
-					<li>tab3</li>
-				</ul>
-				<div class="panes9">
-					<div class="page0">panes</div>
-					<div class="page1">panle2</div>
-					<div class="page2">panle3</div>
+			<section class="section">
+				<h2>effects bounceIn</h2>
+				<div class="tabs" data-options='{"effect": "bounceIn"}'>
+					<ul class="tabs-nav">
+						<li>tab1</li>
+						<li>tab2</li>
+						<li>tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div>Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</div>
+						<div>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div>
+						<div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat</div>
+					</div>
 				</div>
-			</div>
+			</section>
 
-			<div class="">
-				<ul class="demo10 asTabs">
-					<li>tab1</li>
-					<li>tab2</li>
-					<li>tab3</li>
-				</ul>
-				<div class="panes10">
-					<div class="page0">panes</div>
-					<div class="page1">panle2</div>
-					<div class="page2">panle3</div>
+			<section class="section">
+				<h2>effects rotateIn</h2>
+				<div class="tabs" data-options='{"effect": "rotateIn"}'>
+					<ul class="tabs-nav">
+						<li>tab1</li>
+						<li>tab2</li>
+						<li>tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div>Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</div>
+						<div>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div>
+						<div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat</div>
+					</div>
 				</div>
-			</div>
+			</section>
 
-			<h2>test</h2>
-			<p>This is a demo description.</p>
-			<div "demo-test">
-				<button id="testGetTabs">Test Get Tabs</button>
-				<button id="testGetPanes">Test Get Panes</button>
-				<button id="testGetCurrentPane">Test Get Current Pane</button>
-				<button id="testGetCurrentTab">Test Current Tab</button>
-				<button id="testGetIndex">Test Get Index</button>
-				<button id="testNext">Test Next</button>
-				<button id="testPrev">Test Prev</button>
-				<button id="testAppend">Test Append</button>
-				<button id="testDestroy">Test Destroy</button>
-			</div>
+			<section class="section">
+				<h2>effects zoomIn</h2>
+				<div class="tabs" data-options='{"effect": "zoomIn"}'>
+					<ul class="tabs-nav">
+						<li>tab1</li>
+						<li>tab2</li>
+						<li>tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div>Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</div>
+						<div>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div>
+						<div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="section">
+				<h2>effects flipInX</h2>
+				<div class="tabs" data-options='{"effect": "flipInX"}'>
+					<ul class="tabs-nav">
+						<li>tab1</li>
+						<li>tab2</li>
+						<li>tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div>Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</div>
+						<div>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div>
+						<div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="section">
+				<h2>effects lightSpeedIn</h2>
+				<div class="tabs" data-options='{"effect": "lightSpeedIn"}'>
+					<ul class="tabs-nav">
+						<li>tab1</li>
+						<li>tab2</li>
+						<li>tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div>Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</div>
+						<div>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div>
+						<div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="section">
+				<h2>effects bounce</h2>
+				<div class="tabs" data-options='{"effect": "bounce"}'>
+					<ul class="tabs-nav">
+						<li>tab1</li>
+						<li>tab2</li>
+						<li>tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div>Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</div>
+						<div>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div>
+						<div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="section">
+				<h2>test</h2>
+				<p>This is a demo description.</p>
+				<div class="demo-tabs">
+					<ul class="tabs-nav">
+						<li>tab1</li>
+						<li>tab2</li>
+						<li>tab3</li>
+					</ul>
+					<div class="tabs-content">
+						<div>Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</div>
+						<div>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor.Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem.</div>
+						<div>Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat</div>
+					</div>
+				</div>
+				<div class="demo-test">
+					<button id="testGetTabs">Test Get Tabs</button>
+					<button id="testGetPanes">Test Get Panes</button>
+					<button id="testGetCurrentPane">Test Get Current Pane</button>
+					<button id="testGetCurrentTab">Test Current Tab</button>
+					<button id="testGetIndex">Test Get Index</button>
+					<button id="testGetSize">Test Get Size</button>
+					<button id="testNext">Test Next</button>
+					<button id="testPrev">Test Prev</button>
+					<button id="testAppend">Test Append</button>
+					<button id="testDestroy">Test Destroy</button>
+				</div>
+			</section>
 		</div>
 
 		
 		<script type="text/javascript" src="js/vendor/jquery-1.8.3.min.js"></script>
-		<script type="text/javascript" src="js/vendor/jquery.history.js"></script>
-		<script type="text/javascript" src="../dist/jquery-asTabs.js"></script>
+		
+		<script type="text/javascript" src="../src/jquery-asTabs.js"></script>
+		<script type="text/javascript" src="../src/jquery-asTabs-history.js"></script>
+		<script type="text/javascript" src="../src/jquery-asTabs-keyboard.js"></script>
+		<script type="text/javascript" src="../src/jquery-asTabs-effect.js"></script>
 
 		<script>
 			$(function(){
-				$('.demo0').asTabs({panes_wrap: '.panes0'});
-				$('.demo1').asTabs({
-					panes_wrap: '.panes1', 
-					ajax: true, 
-					cached: true
-				});
-				$('.demo2').asTabs({
-					panes_wrap: '.panes2',
-					event:'mouseover'
-				});
-				$('.demo3').asTabs({
-					panes_wrap: '.panes3',
-					initialIndex: 2
-				});
-				$('.demo4').asTabs({
-					panes_wrap: '.panes4',
-					skin: 'skin-1'
+				$('.tabs').asTabs({
+					namespace: 'tabs',
+					navSelector: '> ul',
+					contentSelector: '> div'
 				});
 
-				$('.demo5').asTabs({
-					panes_wrap: '.panes5',
-					history: true
-				});
-				$('.demo6').asTabs({
-					panes_wrap: '.panes6',
-					history: true
-				});
-
-				$('.demo7').asTabs({
-					panes_wrap: '.panes7',
-					keyboard: true
-				});
-
-				$('.demo8').asTabs({
-					panes_wrap: '.panes8',
-					effect: 'slideIn'
-				});
-
-				$('.demo9').asTabs({
-					panes_wrap: '.panes9',
-					effect: 'scaleUp'
-				});
-
-				$('.demo10').asTabs({
-					panes_wrap: '.panes10',
-					effect: 'scaleUpDown'
-				});
-
+				$('.demo-tabs').asTabs({
+					navSelector: '> ul',
+					contentSelector: '> div'
+				})
 
 				$('#testGetTabs').click(function(){
-					console.info($('.demo4').asTabs('getTabs'));
+					console.info($('.demo-tabs').asTabs('getTabs'));
 				});
 
 				$('#testGetPanes').click(function(){
-					console.info($('.demo4').asTabs('getPanes'));
+					console.info($('.demo-tabs').asTabs('getPanes'));
 				});
 
 				$('#testGetIndex').click(function(){
-					console.info($('.demo4').asTabs('getIndex'));
+					console.info($('.demo-tabs').asTabs('getIndex'));
+				});
+
+				$('#testGetSize').click(function(){
+					console.info($('.demo-tabs').asTabs('getSize'));
 				});
 
 				$('#testGetCurrentPane').click(function(){
-					console.info($('.demo4').asTabs('getCurrentPane'));
+					console.info($('.demo-tabs').asTabs('getCurrentPane'));
 				});
 
 				$('#testGetCurrentTab').click(function(){
-					console.info($('.demo4').asTabs('getCurrentTab'));
+					console.info($('.demo-tabs').asTabs('getCurrentTab'));
 				});
 
+
 				$('#testNext').click(function(){
-					console.info($('.demo4').asTabs('next'));
+					console.info($('.demo-tabs').asTabs('next'));
 				});
 
 				$('#testPrev').click(function(){
-					console.info($('.demo4').asTabs('prev'));
+					console.info($('.demo-tabs').asTabs('prev'));
 				});
 
 				$('#testDestroy').click(function(){
-					console.info($('.demo4').asTabs('destroy'));
+					console.info($('.demo-tabs').asTabs('destroy'));
 				});
 
 				$('#testAppend').click(function(){
-					$('.demo7').asTabs('append','hello','<p>world</p>');
+					$('.demo-tabs').asTabs('append','hello','<p>world</p>');
 				});
 			});	
 		</script>
