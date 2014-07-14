@@ -1,7 +1,10 @@
-/*! jQuery asTabs - v0.3.0 - 2013-09-09
+/*
+ * jquery-asTabs
  * https://github.com/amazingSurge/jquery-asTabs
- * Copyright (c) 2013 amazingSurge; Licensed GPL */
-
+ *
+ * Copyright (c) 2014 AmazingSurge
+ * Licensed under the GPL license.
+ */
 (function($, document, window, undefined) {
     "use strict";
 

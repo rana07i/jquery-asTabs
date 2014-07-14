@@ -2,7 +2,7 @@
   "name": "jquery-asTabs",
   "title": "jQuery asTabs",
   "description": "The powerful jQuery plugin that creates a tab",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/amazingSurge/jquery-asTabs",
   "author": {
     "name": "amazingSurge",
@@ -37,9 +37,9 @@
     "load-grunt-tasks": "*",
     "grunt-jsbeautifier": "*",
     "grunt-text-replace": "*",
-    "grunt-autoprefixer": "~0.8.1",
-    "grunt-contrib-jshint": "~0.10.0",
-    "grunt-contrib-uglify": "~0.5.0"
+    "grunt-autoprefixer": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-uglify": "*"
   },
   "dependencies": {
     "grunt-jquery-builder": "*"

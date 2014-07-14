@@ -1,10 +1,6 @@
-/*! jQuery asTabs - v0.1.0 - 2014-07-09
+/*! jQuery asTabs - v0.3.0 - 2014-07-14
 * https://github.com/amazingSurge/jquery-asTabs
 * Copyright (c) 2014 amazingSurge; Licensed GPL */
-/*! jQuery asTabs - v0.3.0 - 2013-09-09
- * https://github.com/amazingSurge/jquery-asTabs
- * Copyright (c) 2013 amazingSurge; Licensed GPL */
-
 (function($, document, window, undefined) {
     "use strict";
 
@@ -83,7 +79,8 @@
         history: false,
         historyAttr: 'id',
         keyboard: false,
-        effect: false, // slideIn, scaleUp, scaleUpDown, scaleUpCenter, flipInLeft, flipInRight, flipInRight, flipInBottom, flipInTop
+        effect: false,
+        duration: 300,
         event: 'click'
     };
     Plugin.prototype = {
@@ -92,7 +89,7 @@
             var self = this;
 
             // Bind logic
-            this.$element.on(this.options.event, '> *', function(e) {
+            this.$nav.on(this.options.event, '> *', function(e) {
                 var index = $(e.target).index();
                 self.active(index);
                 return false;
@@ -100,25 +97,31 @@
 
             this._trigger('init');
 
-
             this.active(this.initialIndex);
-
             this.actived = true;
+
             this.initialized = true;
 
             this._trigger('ready');
         },
         _trigger: function(eventType) {
+            var method_arguments,
+                trigger_arguments = [this];
+            if (arguments.length > 1) {
+                method_arguments = Array.prototype.slice.call(arguments, 1);
+                trigger_arguments = trigger_arguments.concat(method_arguments);
+            }
+
             // event
-            this.$element.trigger(pluginName + '::' + eventType, this);
-            this.$element.trigger(eventType + '.' + pluginName, this);
+            this.$element.trigger(pluginName + '::' + eventType, trigger_arguments);
+            this.$element.trigger(eventType + '.' + pluginName, trigger_arguments);
 
             // callback
             eventType = eventType.replace(/\b\w+\b/g, function(word) {
                 return word.substring(0, 1).toUpperCase() + word.substring(1);
             });
             var onFunction = 'on' + eventType;
-            var method_arguments = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : undefined;
+
             if (typeof this.options[onFunction] === 'function') {
                 this.options[onFunction].apply(this, method_arguments);
             }
@@ -136,19 +139,37 @@
                 }
             }
 
-            this.last = this.current;
-            this.current = index;
             this.$tabs.eq(index).addClass(this.classes.activeTab).siblings().removeClass(this.classes.activeTab);
-            this.$panes.eq(index).addClass(this.classes.activePane).siblings().removeClass(this.classes.activePane);
 
-            if (this.options.ajax === true) {
-                this.ajaxLoad(index);
+            var self = this;
+
+            if (this.current === null) {
+                this.$panes.eq(index).addClass(this.classes.activePane).siblings().removeClass(this.classes.activePane);
+            } else {
+                self._trigger('animation', self.current, index);
+
+                if (!self.effects) {
+                    self.$panes.eq(self.current).fadeOut(self.options.duration, function() {
+                        $(this).removeClass('is-active');
+
+                        self.$panes.eq(index).fadeIn(self.options.duration, function() {
+                            $(this).addClass('is-active');
+                        });
+                    });
+                }
             }
 
-            this._trigger('active', index);
+            self.previous = self.current;
+            self.current = index;
+
+            if (self.options.ajax === true) {
+                self.ajaxLoad(index);
+            }
+
+            self._trigger('active', index);
 
             if (update !== false) {
-                this._trigger('update', index);
+                self._trigger('update', index);
             }
         },
         ajaxLoad: function(index) {
@@ -169,6 +190,9 @@
                 dtd.fail(function() {
                     self.hideLoading();
                     self.$panes.eq(index).html('failed');
+                });
+                dtd.always(function() {
+                    self._trigger('loaded', index);
                 });
             }
         },
@@ -462,111 +486,116 @@
     "use strict";
 
     var $doc = $(document);
-    var effects = {
-        animationEndEventName: '',
-        isAnimating: false,
 
-        init: function(options) {
-            this.inClass = 'effect-tab-' + options.effect;
-            this.outClass = this.revertClass(options.effect);
+    var revertClass = function(str) {
+        var classes = str.split(" "),
+            len = classes.length,
+            inre = ['Up', 'Down', 'In', 'Out', 'Left', 'Right', 'Top', 'Bottom'],
+            outre = ['Down', 'Up', 'Out', 'In', 'Right', 'Left', 'Bottom', 'Top'],
+            output = "",
+            re = "",
+            re_array = [],
+            re_num = "";
 
-            this.animationEndEventName = this.getAnimationEnd();
-        },
-        animate: function($currPane, $nextPane, callback) {
-            var self = this,
-                endCurrPage = false,
-                endNextPage = false;
-
-            $currPane.removeClass(this.inClass).addClass(this.outClass).on(this.animationEndEventName, function() {
-                $currPane.off(self.animEndEventName);
-                endCurrPage = true;
-                if (endNextPage) {
-                    if (jQuery.isFunction(callback)) {
-                        callback($nextPane, $currPane);
-                    }
-                    self.onEndAnimation($currPane, $nextPane);
+        for (var n = 0; n < len; n++) {
+            for (var m = 0; m < inre.length; m++) {
+                re = new RegExp(inre[m]);
+                if (re.test(classes[n])) {
+                    re_array.push(m);
                 }
-            });
-
-            $nextPane.removeClass(this.outClass).addClass(this.inClass).on(this.animEndEventName, function() {
-                $nextPane.off(self.animEndEventName);
-                endNextPage = true;
-                if (endCurrPage) {
-                    self.onEndAnimation($currPane, $nextPane);
-                }
-            });
-        },
-        onEndAnimation: function($outPane, $inPane) {
-            this.reset($outPane, $inPane);
-            this.isAnimating = false;
-        },
-        reset: function($outPane, $inPane) {
-            $outPane.removeClass(this.outClass);
-            $inPane.removeClass(this.inClass);
-        },
-        revertClass: function(str) {
-            var classes = str.split(" "),
-                len = classes.length,
-                inre = ['Up', 'Down', 'In', 'Out', 'Left', 'Right', 'Top', 'Bottom'],
-                outre = ['Down', 'Up', 'Out', 'In', 'Right', 'Left', 'Bottom', 'Top'],
-                output = "",
-                re = "",
-                re_array = [],
-                re_num = "";
-
-            for (var n = 0; n < len; n++) {
-                for (var m = 0; m < inre.length; m++) {
-                    re = new RegExp(inre[m]);
-                    if (re.test(classes[n])) {
-                        re_array.push(m);
-                    }
-                }
-                for (var l = 0; l < re_array.length; l++) {
-                    re_num = re_array[l];
-                    classes[n] = classes[n].replace(inre[re_num], re_num);
-                }
-                for (var k = 0; k < re_array.length; k++) {
-                    re_num = re_array[k];
-                    classes[n] = classes[n].replace(re_num, outre[re_num]);
-                }
-                output += " effect-tab-" + classes[n];
             }
-            return $.trim(output);
-        },
-        getAnimationEnd: function() {
-            var t;
-            var el = document.createElement('fakeelement');
-            var animations = {
-                'animation': 'animationend',
-                '-o-animation': 'oAnimationEnd',
-                '-moz-animation': 'animationend',
-                '-webkit-animation': 'webkitAnimationEnd'
-            };
+            for (var l = 0; l < re_array.length; l++) {
+                re_num = re_array[l];
+                classes[n] = classes[n].replace(inre[re_num], re_num);
+            }
+            for (var k = 0; k < re_array.length; k++) {
+                re_num = re_array[k];
+                classes[n] = classes[n].replace(re_num, outre[re_num]);
+            }
+            output += " " + classes[n];
+        }
+        return $.trim(output);
+    };
 
-            for (t in animations) {
-                if (el.style[t] !== undefined) {
-                    return animations[t];
-                }
+    var animationend = (function() {
+        var t;
+        var el = document.createElement('fakeelement');
+        var animations = {
+            'animation': 'animationend',
+            '-o-animation': 'oAnimationEnd',
+            '-moz-animation': 'animationend',
+            '-webkit-animation': 'webkitAnimationEnd'
+        };
+
+        for (t in animations) {
+            if (el.style[t] !== undefined) {
+                return animations[t];
             }
         }
-    };
+
+        return false;
+    })();
+
+    if (animationend === false) return;
+
     $doc.on('asTabs::init', function(event, instance) {
         if (instance.options.effect === false) {
             return false;
         }
-        instance.effects = $.extend(true, {}, effects);
-        instance.effects.init({
-            effect: instance.options.effect
+
+        instance.effects = {
+            inClass: instance.options.effect,
+            outClass: revertClass(instance.options.effect)
+        };
+
+        instance.$content.children().css({
+            '-webkit-animation-duration': instance.options.duration + 'ms',
+            'animation-duration': instance.options.duration + 'ms'
+        })
+        instance.$content.addClass('with-effects');
+    });
+
+    $doc.on('asTabs::ready', function(event, instance) {
+        if (instance.options.effect === false) {
+            return false;
+        }
+        $(window).bind('resize orientationchange', function() {
+            clearTimeout(instance.resizingTimeout);
+            instance.resizingTimeout = setTimeout(function() {
+                var height = instance.getCurrentPane().outerHeight(true);
+
+                instance.$content.height(height);
+            }, 500);
         });
     });
 
-    $doc.on('asTabs::active', function(event, instance) {
+    $doc.on('asTabs::active asTabs::loaded', function(event, instance) {
+        if (instance.options.effect === false) {
+            return false;
+        }
+
+        var height = instance.getCurrentPane().outerHeight(true);
+        instance.$content.height(height);
+    });
+
+    $doc.on('asTabs::animation', function(event, instance, from, to) {
         if (instance.options.effect === false || instance.initialized === false) {
             return false;
         }
-        var $currPane = instance.$panes.eq(instance.current),
-            $lastPane = instance.$panes.eq(instance.last);
 
-        instance.effects.animate($lastPane, $currPane);
+        var $to = instance.$panes.eq(to),
+            $from = instance.$panes.eq(from);
+
+        instance.isAnimating = true;
+
+        $from.removeClass(instance.effects.inClass).addClass(instance.effects.outClass + ' animated').one(animationend, function() {
+            $from.removeClass(instance.effects.outClass + ' animated').removeClass('is-active');
+
+            $to.removeClass(instance.effects.outClass).addClass('is-active').addClass(instance.effects.inClass + ' animated').one(animationend, function() {
+                $to.removeClass(instance.effects.inClass);
+
+                instance.isAnimating = false;
+            });
+        });
     });
 })(window, document, jQuery);
