@@ -1,4 +1,4 @@
-/*! jQuery asTabs - v0.3.0 - 2014-07-14
+/*! jQuery asTabs - v0.3.1 - 2014-08-02
 * https://github.com/amazingSurge/jquery-asTabs
 * Copyright (c) 2014 amazingSurge; Licensed GPL */
 (function($, document, window, undefined) {
@@ -16,6 +16,7 @@
         this.namespace = this.options.namespace;
         this.initialIndex = this.options.initialIndex;
         this.initialized = false;
+        this.disabled = false;
         this.actived = false;
         this.current = null;
 
@@ -26,6 +27,7 @@
             activePane: 'is-active',
             nav: this.namespace + '-nav',
             content: this.namespace + '-content',
+            disabled: this.namespace + '-disabled',
             skin: this.namespace + '_' + this.options.skin
         };
 
@@ -90,6 +92,9 @@
 
             // Bind logic
             this.$nav.on(this.options.event, '> *', function(e) {
+                if (self.disabled) {
+                    return false;
+                }
                 var index = $(e.target).index();
                 self.active(index);
                 return false;
@@ -221,7 +226,7 @@
             return this.size;
         },
         append: function(title, content) {
-            this.add(title, content, this.size);
+            return this.add(title, content, this.size);
         },
         add: function(title, content, index) {
             this.$tabs.eq(index - 1).after(this.$tabs.eq(0).clone().removeClass(this.classes.activeTab).html(title));
@@ -230,6 +235,27 @@
             this.$tabs = this.$nav.children();
             this.$panes = this.$content.children();
             this.size++;
+
+            return this;
+        },
+        remove: function(index) {
+            if (index > this.size || index < 0 || this.size === 0) {
+                return this;
+            }
+            this.$tabs.eq(index).remove();
+            this.$panes.eq(index).remove();
+
+            this.$tabs = this.$nav.children();
+            this.$panes = this.$content.children();
+            this.size--;
+
+            if (this.current === index) {
+                if (index > this.size) {
+                    index = 0;
+                }
+                this.active(index);
+            }
+            return this;
         },
         next: function() {
             var current = this.current;
@@ -240,6 +266,8 @@
             }
 
             this.active(current);
+
+            return this;
         },
         prev: function() {
             var current = this.current;
@@ -250,6 +278,8 @@
             }
 
             this.active(current);
+
+            return this;
         },
         revert: function(update) {
             var index = 0;
@@ -258,10 +288,34 @@
             }
 
             this.active(index, update);
+
+            return this;
         },
-        enable: function() {},
-        disable: function() {},
-        destroy: function() {}
+        enable: function() {
+            if (this.disabled === true) {
+                this.disabled = false;
+                this.$nav.removeClass(this.classes.disabled);
+                this.$content.removeClass(this.classes.disabled);
+            }
+            return this;
+        },
+        disable: function() {
+            if (this.disabled === false) {
+                this.disabled = true;
+                this.$nav.addClass(this.classes.disabled);
+                this.$content.addClass(this.classes.disabled);
+            }
+            return this;
+        },
+        destroy: function() {
+            this.$nav.removeClass(this.classes.nav).removeClass(this.classes.withJs);
+            this.$content.removeClass(this.classes.content).removeClass(this.classes.withJs);
+
+            this.$tabs.removeClass(this.classes.activeTab);
+            this.$panes.removeClass(this.classes.activePane);
+            this.$nav.off(this.options.event);
+            $.data(this.$element, pluginName, null);
+        }
     };
     // Collection method.
     $.fn[pluginName] = function(options) {

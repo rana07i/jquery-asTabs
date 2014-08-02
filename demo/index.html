@@ -271,7 +271,11 @@
 					<button id="testNext">Test Next</button>
 					<button id="testPrev">Test Prev</button>
 					<button id="testAppend">Test Append</button>
+					<button id="testRemove">Test Remove</button>
 					<button id="testDestroy">Test Destroy</button>
+					<button id="testInit">Test Init</button>
+					<button id="testEnable">Test Enable</button>
+					<button id="testDisable">Test Disable</button>
 				</div>
 			</section>
 		</div>
@@ -330,12 +334,33 @@
 					console.info($('.demo-tabs').asTabs('prev'));
 				});
 
+				
+
+				$('#testAppend').click(function(){
+					$('.demo-tabs').asTabs('append','hello','<p>world</p>');
+				});
+
+				$('#testRemove').click(function(){
+					$('.demo-tabs').asTabs('remove',0);
+				});
+
 				$('#testDestroy').click(function(){
 					console.info($('.demo-tabs').asTabs('destroy'));
 				});
 
-				$('#testAppend').click(function(){
-					$('.demo-tabs').asTabs('append','hello','<p>world</p>');
+				$('#testEnable').click(function(){
+					$('.demo-tabs').asTabs('enable');
+				});
+
+				$('#testDisable').click(function(){
+					$('.demo-tabs').asTabs('disable');
+				});
+
+				$('#testInit').click(function(){
+					$('.demo-tabs').asTabs({
+						navSelector: '> ul',
+						contentSelector: '> div'
+					});
 				});
 			});	
 		</script>
