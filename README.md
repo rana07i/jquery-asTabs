@@ -41,28 +41,26 @@ Create base html element:
 
 Initialize asTabs:
 ```javascript
-$(".demo").asTabs({panes: '.panes'});
+$(".demo").asTabs({contentSelector: '.panes'});
 ```
 
 Or initialize asTabs with custom settings:
 ```javascript
 $(".demo").asTabs({
         namespace: 'asTabs',  // namespace for css class
-        panes: '.panes',
+        navSelector: null,
+        contentSelector: '+',
         skin: null,         // set custom skin
         initialIndex: 0,    // set initial index when first open
-        effect: 'fade',     // set transition effect
         ajax: false,        // open ajax load function
         cached: false,      // if true, cach ajax load content after first loaded
-        history: false,     // open history state function
-        keyboard: false,    // keyboard navigation
+        history: false,     // enable history or not
+        keyboard: false,    // keyboard navigation support
+        effect: false,      // set transition effect
+        duration: 300,      // set transition duration time in millisecond
         event: 'click'      // change index use 'click' or 'mouseover'
 });
 ```
-
-the most important thing is you should set panes value to let plugin find his panes content
-
-
 
 
 ## Settings
@@ -77,14 +75,14 @@ the most important thing is you should set panes value to let plugin find his pa
     </thead>
     <tbody>
         <tr>
-            <td>panes</td>
-            <td>'.panes'</td>
-            <td>compulsory property, specify the content to asTabs</td>
-        </tr>
-        <tr>
             <td>namespace</td>
             <td>"asTabs"</td>
             <td>Optional property, set a namspace for css class, for example, we have <code>.asTabs_active</code> class for active effect, if namespace set to 'as-asTabs', then it will be <code>.as-asTabs_active</code></td>
+        </tr>
+        <tr>
+            <td>contentSelector</td>
+            <td>'+'</td>
+            <td>Optional property, specify the content to asTabs</td>
         </tr>
         <tr>
             <td>skin</td>
@@ -95,11 +93,6 @@ the most important thing is you should set panes value to let plugin find his pa
             <td>initialIndex</td>
             <td>0</td>
             <td>Optional property, set initial index when asTabs initilize</td>
-        </tr>
-        <tr>
-            <td>effect</td>
-            <td>'none'</td>
-            <td>Optional property, set transition effect, you can use <code>'fade'</code>, more effects are coming</td>
         </tr>
         <tr>
             <td>ajax</td>
@@ -114,12 +107,22 @@ the most important thing is you should set panes value to let plugin find his pa
         <tr>
             <td>history</td>
             <td>false</td>
-            <td>Optional property, if true, use history state function</td>
+            <td>Optional property, if true, it will enable history function</td>
         </tr>
         <tr>
             <td>keyboard</td>
             <td>false</td>
-            <td>Optional property, if true , open keyboard navigation function</td>
+            <td>Optional property, if true , keyboard navigation function will be enabled</td>
+        </tr>
+        <tr>
+            <td>effect</td>
+            <td>'none'</td>
+            <td>Optional property, set transition effect</td>
+        </tr>
+        <tr>
+            <td>duration</td>
+            <td>300</td>
+            <td>Optional property, set transition effect time in millisecond</td>
         </tr>
         <tr>
             <td>event</td>
@@ -132,15 +135,20 @@ the most important thing is you should set panes value to let plugin find his pa
             <td>Optional property, callback, call when asTabs is initilized</td>
         </tr> 
         <tr>
+            <td>onInit</td>
+            <td>null</td>
+            <td>Optional property, callback, call when tab is initilize</td>
+        </tr>
+        <tr>
+            <td>onReady</td>
+            <td>null</td>
+            <td>Optional property, callback, call when tab is ready</td>
+        </tr>
+        <tr>
             <td>onActive</td>
             <td>null</td>
             <td>Optional property, callback, call when tab is actived</td>
-        </tr> 
-        <tr>
-            <td>onAfterAcitve</td>
-            <td>null</td>
-            <td>Optional property, callback, call after tab is actived</td>
-        </tr>   
+        </tr>
     </tbody>
 </table>
 
@@ -157,7 +165,7 @@ $(".demo").asTabs("getasTabs");
 // get all panes element
 $(".demo").asTabs("getPanes");
 
-// get current index, start from 0
+// get current index
 $(".demo").asTabs("getIndex");
 
 // get current pane element
@@ -172,6 +180,21 @@ $(".demo").asTabs("next");
 // goto the prevous tab, the first will goto the last
 $(".demo").asTabs("prev");
 
+// disable the tabs
+$(".demo").asTabs("disable");
+
+// enable the tabs
+$(".demo").asTabs("enable");
+
+// add a new tab to the bottom of the tabs
+$(".demo").asTabs("append", "title", "content");
+
+// add a new tab after first tab
+$(".demo").asTabs("add", "title", "content", 1);
+
+// remove the second tab
+$(".demo").asTabs("remove", 1);
+
 // remove asTabs Dom element and unbound all events
 $(".demo").asTabs("destroy");
 ```
@@ -179,8 +202,9 @@ $(".demo").asTabs("destroy");
 ## Event / Callback
 
 * <code>asTabs::init</code>: trigger when asTabs initilize
+* <code>asTabs::ready</code>:  trigger when asTabs is ready
 * <code>asTabs::active</code>: trigger when asTabs is selected
-* <code>asTabs::afterActive</code>:  trigger after acitve
+* <code>asTabs::update</code>:  trigger when tab is changed
 
 how to use event:
 ```javascript
@@ -193,18 +217,7 @@ $(document).on('asTabs::init', function(event,instance) {
 ## Browser support
 jquery-asTabs is verified to work in Internet Explorer 7+, Firefox 2+, Opera 9+, Google Chrome and Safari browsers. Should also work in many others.
 
-Mobile browsers (like Opera mini, Chrome mobile, Safari mobile, Android browser and others) is coming soon.
-
-## Changes
-
-| Version | Notes                                                            |
-|---------|------------------------------------------------------------------|
-|   0.2.x | ([compare][compare-1.2]) add history function                    |
-|   0.1.x | ([compare][compare-1.1]) add keyboard function                   |
-|     ... | ...                                                              |
-
-[compare-1.2]: https://github.com/amazingSurge/jquery-asTabs/compare/v1.2.0...v1.3.0
-[compare-1.1]: https://github.com/amazingSurge/jquery-asTabs/compare/v1.1.0...v1.2.0
+Mobile browsers (like Opera mini, Chrome mobile, Safari mobile, Android browser and others) is also works.
 
 ## Author
 [amazingSurge](http://amazingSurge.com)
