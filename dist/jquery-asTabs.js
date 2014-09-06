@@ -1,4 +1,4 @@
-/*! jQuery asTabs - v0.3.1 - 2014-09-04
+/*! jQuery asTabs - v0.3.1 - 2014-09-06
 * https://github.com/amazingSurge/jquery-asTabs
 * Copyright (c) 2014 amazingSurge; Licensed GPL */
 (function($, document, window, undefined) {
@@ -110,16 +110,12 @@
             this._trigger('ready');
         },
         _trigger: function(eventType) {
-            var method_arguments,
-                trigger_arguments = [this];
-            if (arguments.length > 1) {
-                method_arguments = Array.prototype.slice.call(arguments, 1);
-                trigger_arguments = trigger_arguments.concat(method_arguments);
-            }
+            var method_arguments = Array.prototype.slice.call(arguments, 1),
+                data = method_arguments.concat([this]);
 
             // event
-            this.$element.trigger(pluginName + '::' + eventType, trigger_arguments);
-            this.$element.trigger(eventType + '.' + pluginName, trigger_arguments);
+            this.$element.trigger(pluginName + '::' + eventType, data);
+            this.$element.trigger(eventType + '.' + pluginName, data);
 
             // callback
             eventType = eventType.replace(/\b\w+\b/g, function(word) {
@@ -321,7 +317,7 @@
     $.fn[pluginName] = function(options) {
         if (typeof options === 'string') {
             var method = options;
-            var method_arguments = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
+            var method_arguments = Array.prototype.slice.call(arguments, 1);
 
             if (/^\_/.test(method)) {
                 return false;
