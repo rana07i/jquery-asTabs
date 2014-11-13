@@ -1,4 +1,4 @@
-/*! jQuery asTabs - v0.3.1 - 2014-09-06
+/*! jQuery asTabs - v0.3.1 - 2014-11-13
 * https://github.com/amazingSurge/jquery-asTabs
 * Copyright (c) 2014 amazingSurge; Licensed GPL */
 (function($, document, window, undefined) {
@@ -127,7 +127,7 @@
             }
         },
         active: function(index, update) {
-            if (this.current) {
+            if (this.current >= 0) {
                 if (this.current === index || index >= this.size || index < 0) {
                     return;
                 }
@@ -224,8 +224,24 @@
             return this.add(title, content, this.size);
         },
         add: function(title, content, index) {
-            this.$tabs.eq(index - 1).after(this.$tabs.eq(0).clone().removeClass(this.classes.activeTab).html(title));
-            this.$panes.eq(index - 1).after(this.$panes.eq(0).clone().removeClass(this.classes.activePane).html(content));
+            if (index > this.size + 1) {
+                index = this.size + 1;
+            } else if (index < 0) {
+                index = 0;
+            }
+
+            if (index === 0) {
+                this.$nav.append($('<li/>', {
+                    class: this.classes.activeTab
+                }).html(title));
+                this.$content.append($('<div/>', {
+                    class: this.classes.activePane
+                }).html(content));
+                this.current = 0;
+            } else {
+                this.$tabs.eq(index - 1).after(this.$tabs.eq(0).clone().removeClass(this.classes.activeTab).html(title));
+                this.$panes.eq(index - 1).after(this.$panes.eq(0).clone().removeClass(this.classes.activePane).html(content));
+            }
 
             this.$tabs = this.$nav.children();
             this.$panes = this.$content.children();
