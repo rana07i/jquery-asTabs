@@ -99,7 +99,7 @@
                 if (self.disabled) {
                     return false;
                 }
-                var index = $(e.target).index();
+                var index = $(this).index();
                 self.active(index);
                 return false;
             });
