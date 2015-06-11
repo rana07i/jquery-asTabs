@@ -1,6 +1,6 @@
 # jQuery asTabs
 
-The powerful jQuery plugin that creates a tab. <a href="http://amazingsurge.github.io/jquery-asTabs/">Project page and demos</a><br />
+The powerful jQuery plugin that creates a tab. <a href="http://amazingSurge.github.io/jquery-asTabs/">Project page and demos</a><br />
 Download: <a href="https://github.com/amazingSurge/jquery-asTabs/archive/master.zip">jquery-asTabs-master.zip</a>
 
 ***
